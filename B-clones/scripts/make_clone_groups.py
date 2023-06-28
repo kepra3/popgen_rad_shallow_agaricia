@@ -1,10 +1,8 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.cluster.hierarchy as sch
-import scipy.spatial.distance as ssd
-from sklearn.cluster import AgglomerativeClustering
-import argparse
+import pandas as pd  # version 0.24.2
+import matplotlib.pyplot as plt  # version 3.1.0
+import scipy.cluster.hierarchy as sch  # version 1.3.0 (scipy)
+import scipy.spatial.distance as ssd  # version 1.3.0 (scipy)
+import argparse  # included within python
 
 # updated: 16/6/23
 # Information:
@@ -13,11 +11,10 @@ import argparse
 # e.g, ac_1d_wc_20, lm_1d-pure_wc, hu_1d_wc
 
 # Arguments
-#parser = argparse.ArgumentParser(prog="Make numbered clone groups", usage="[options]")
-#parser.add_argument("name")
-#args = parser.parse_args()
-#name = args.name
-name = "lm_1d-pure_wc_20"
+parser = argparse.ArgumentParser(prog="Make numbered clone groups", usage="[options]")
+parser.add_argument("name")
+args = parser.parse_args()
+name = args.name
 
 # Conditions
 if name == 'lm_1d-pure_wc_20':
@@ -51,7 +48,7 @@ gd_link = sch.linkage(gd_mat_cond)
 gd_dendro = sch.dendrogram(gd_link)
 
 # finding groups of clones
-groups = pd.DataFrame(sch.fcluster(gd_link, 1-clone_threshold, criterion='distance'))
+groups = pd.DataFrame(sch.fcluster(gd_link, 1 - clone_threshold, criterion='distance'))
 
 # Sort clone file with individual popfile
 all_indiv = pd.read_csv('../data/pop_{}.txt'.format(name), sep='\t', header=None)

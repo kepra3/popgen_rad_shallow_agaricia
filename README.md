@@ -2,10 +2,12 @@
 
 TODO:
 
-- [ ] clean make_clone_groups.py
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
+- [x] place on github
+- [x] clean make_clone_groups.py
+  - [x] make sure everything runs
+  - [x] annotate everything
+  - [ ] check inconsistencies with newly generated files and original files
+  - [x] add versions for each package
 - [ ] clean PCA script
   - [ ] make sure everything runs
   - [ ] annotate everything
@@ -39,13 +41,17 @@ TODO:
   - [ ] annotate everything
   - [ ] add versions for each package
 
+
+
+- script process, copy over files from previous directory, then edit to make result files
+
+
+
 ## raw files
 
 Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository (hyperlink)
 
 TODO: add ipyrad settings file to RDM
-
-
 
 - can upload large files special way (LFS)
 
@@ -93,15 +99,27 @@ $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac
 
 ## B - Clones
 
-**File structure:**
+**File structure**
 
 |--data/
 
 ​		|--ac_1d_wc_20_gdmatrix.tsv
 
+​		|--clone_matches_ac_1d_wc_20.csv
+
+​		|--clone_matches_hu_1d_wc_20.csv
+
+​		|--clone_matches_lm_1d_wc_20.csv
+
 ​		|--hu_1d_wc_20_gdmatrix.tsv
 
-​		|--lm_1d_wc_20_gdmatrix.tsv
+​		|--lm_1d-pure_wc_20_gdmatrix.tsv
+
+​		|--pop_ac_1d_wc_20.txt
+
+​		|--pop_hu_1d_wc_20.txt
+
+​		|--pop_lm_1d-pure_wc_20.txt
 
 |--scripts
 
@@ -121,13 +139,17 @@ $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac
 
 ​		|--clone_groups_lm.csv
 
+​		|--distribution_pairwise_sum_ac_1d_wc.pdf
+
+​		|--distribution_pairwise_sum_hu_1d_wc.pdf
+
+​		|--distribution_pairwise_sum_lm_1d-pure_wc.pdf
+
 ​		|--individuals2keep_ac.txt
 
 ​		|--individuals2keep_hu.txt
 
 ​		|--individuals2keep_lm.txt
-
-TODO: Do I need plot directory & files???
 
 **Steps**
 
@@ -137,9 +159,23 @@ These datasets were not filtered for unlinked and neutral SNPs.
 2. Run make_clone_groups.py to assess similarity distribution threshold, based upon breaks in distribution and similarity to technical replicates
 3. Retain one individual per clone groups with the highest number of SNPs to create no clones datasets ('nc')
 
+**Notes**
+
+This was run using a conda environment radkat see appendix for details
+
+The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes the `clone_matches_*` files
+
+**Code**
+
+```bash
+$ make_clone_groups.py "ac_1d_wc_20" # make files for A. agaricites
+$ make_clone_groups.py "hu_1d_wc_20" # make files for A. humilis
+$ make_clone_groups.py "lm_1d-pure_wc_20" # make files for A. lamarcki
+```
+
 ## C - Population structure
 
-**File structure:**
+**File structure**
 
 population_structure/
 
@@ -155,9 +191,15 @@ population_structure/
 
 ​			|--lm_1div_nc-wnr_20_2.csv [*A. lamarcki* with NextRAD samples* metadata]
 
+​			|--pop_lm_1div_nc-wnr.txt
+
+​			|--pop_lm_1div_nc.txt
+
 ​	|--scripts/
 
-​			|--(todo) add clean PCA, admix and combination plot scripts
+​			|--basic_pca.R
+
+​			|--func-k.R
 
 ​	|--vcf/
 
@@ -177,11 +219,27 @@ These analysis datasets do not include clones, have 1 SNP per locus and have out
 
 **Steps**
 
-1. PCA.
+1. PCA
 2. Admixture
 3. Combination plot
 
-1. 
+**Note**
+
+
+
+**Code**
+
+```bash
+## PCA
+$ Rscript basic_pca.R ac_1div_nc_20 4 depth
+$ Rscript basic_pca.R hu_1div_nc_20 4 depth
+$ Rscript basic_pca.R lm_1div_nc-wnr_20 4 depth
+$ Rscript basic_pca.R lm_1div_nc_20 2 depth
+$ Rscript basic_pca.R all-aga_1div_nc-wnr_20 6 species
+## Admixture
+
+## Combination plot
+```
 
 
 
@@ -242,3 +300,6 @@ For IBD and Kinship vcf files had to be converted into
 
 
 
+## Appendix
+
+Details for different conda environments
