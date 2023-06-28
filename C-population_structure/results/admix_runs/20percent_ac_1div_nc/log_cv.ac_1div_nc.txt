@@ -1,0 +1,12 @@
+Loglikelihood: -214408.255089
+CV error (K=1): 0.27841
+\n\n
+\n\n
+\n\n
+\n\n
+\n\n
+\n\n
+\n\n
+\n\n
+\n\n
+\n\n

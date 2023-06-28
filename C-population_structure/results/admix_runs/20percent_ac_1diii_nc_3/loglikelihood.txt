@@ -1,0 +1,10 @@
+Loglikelihood: -208171.818424
+Loglikelihood: -173135.271161
+Loglikelihood: -187622.368901
+Loglikelihood: -182150.483228
+Loglikelihood: -179719.468342
+Loglikelihood: -178090.806008
+Loglikelihood: -176970.528781
+Loglikelihood: -176094.328484
+Loglikelihood: -174775.035785
+Loglikelihood: -173994.328177

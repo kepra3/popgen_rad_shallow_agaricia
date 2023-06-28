@@ -206,7 +206,7 @@ plot_type <- args[3]
 DATA_PARAMS <- str_split_fixed(VCF_NAME, "_", n = 4) # split all of the vcf name
 DATA_NAME <- str_c(DATA_PARAMS[1:4], collapse = "_")
 # path for outputs
-PATH = paste0("results/",DATA_PARAMS[1], "_stats/", VCF_NAME)
+PATH = paste0("results/pca/",DATA_PARAMS[1], "_stats/", VCF_NAME)
 
 # Import data and formatting  =================================
 # GENLIGHT object
@@ -273,18 +273,18 @@ if (DATA_PARAMS[1] == "all-aga") {
   mislabels_AA = c("KP1139_LM_CA20", "KP0361_LM_WP20", "KP0349_LM_WP20","KP0611_LM_SB20",
                    "KP0399_LM_WP20", "KP1146_LM_CA20", "KP0109_LM_SB10", "KP0583_LM_WP20",
                    "KP0244_LM_SQ20", "KP0565_LM_WP20", "KP0406_NA_NANA", "KP0673_NA_NANA")
-  write.csv(mislabels_AA, file = "mislabels_AA.csv")
+  write.csv(mislabels_AA, file = "metadata/mislabels_AA.csv")
   for (a in 1:length(mislabels_AA)) {
     pca_info$Species[pca_info$Individual == mislabels_AA[a]] = "AA"}
   mislabels_AH = c("KP0639_LM_SB20", "KP0899_LM_WP10")
-  write.csv(mislabels_AH, file = "mislabels_AH.csv")
+  write.csv(mislabels_AH, file = "metadata/mislabels_AH.csv")
   for (h in 1:length(mislabels_AH)) {
     pca_info$Species[pca_info$Individual == mislabels_AH[h]] = "AH"}
   mislabels_AL = c("KP1124_AC_CA20", "KP0557_AC_WP20", "KP0203_AC_SQ12", "KP1095_HU_CA20",
                    "KP0186_AC_SQ12", "KP0851_AC_WP10", "KP0605_AC_SB20", "KP0609_AC_SB20",
                    "KP0096_AC_SB10", "KP0765_AC_WP10", "KP0192_AC_SQ12", "KY0578_AC_WP20",
                    "KP0671_AC_SB20", "KP0108_AC_SB10")
-  write.csv(mislabels_AL, file = "mislabels_AL.csv")
+  write.csv(mislabels_AL, file = "metadata/mislabels_AL.csv")
   for (l in 1:length(mislabels_AL)) {
     pca_info$Species[pca_info$Individual == mislabels_AL[l]] = "AL"}
   pca_info$Species <- as.factor(pca_info$Species)

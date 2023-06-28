@@ -12,6 +12,7 @@ TODO:
   - [ ] make sure everything runs
   - [ ] annotate everything
   - [ ] add versions for each package
+  - [ ] sort out mislabels...
 - [ ] clean Admixture script(s)
   - [ ] make sure everything runs
   - [ ] annotate everything
@@ -220,12 +221,26 @@ These analysis datasets do not include clones, have 1 SNP per locus and have out
 **Steps**
 
 1. PCA
+
+   -run using unlinked/neutral data and with depth category for individual species and species category for all-aga dataset
+
 2. Admixture
-3. Combination plot
+
+   -run admix_4multiple to CV error and log-likelihood
+
+   -run admix_unlinked to run on originial dataset
+
+3. PCA again
+
+   -run with admixture setting to see concordance and create input files for combination plots
+
+4. Combination plots (with NJ-tree)
 
 **Note**
 
+Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using admix_4multiple.sh. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
 
+Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb.
 
 **Code**
 
@@ -237,8 +252,25 @@ $ Rscript basic_pca.R lm_1div_nc-wnr_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc_20 2 depth
 $ Rscript basic_pca.R all-aga_1div_nc-wnr_20 6 species
 ## Admixture
+$ ./admix_unlinked.sh ac 1div nc 10 20
+$ Rscript admix_plots2.R ac 1div nc 20 4 no
+$ ./admix_unlinked.sh hu 1div nc 10 20
+$ Rscript admix_plots2.R hu 1div nc 20 4 no
+$ ./admix_unlinked.sh all-aga 1div nc-wnr 10 20
+$ Rscript admix_plots2.R all-aga 1div nc-wnr 20 6 no
+$ ./admix_unlinked.sh lm 1div nc-wnr 10 20
+$ Rscript admix_plots2.R lm 1div nc-wnr 20 4 no
+$ ./admix_unlinked.sh lm 1div nc 10 20
+$ Rscript admix_plots2.R lm 1div nc 20 4 no
+### Admixture multiple
+$ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh ac 1diii nc 10 20 $run; done
+$ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh hu 1diii nc 10 20 $run; done
+$ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc 10 20 $run; done
+$ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc-wnr 10 20 $run; done
+# $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh all-aga 1diii nc-wnr 10 20 $run; done
 
 ## Combination plot
+
 ```
 
 
