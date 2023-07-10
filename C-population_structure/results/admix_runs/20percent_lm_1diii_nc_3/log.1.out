@@ -1,0 +1,227 @@
+****                   ADMIXTURE Version 1.3.0                  ****
+****                    Copyright 2008-2015                     ****
+****           David Alexander, Suyash Shringarpure,            ****
+****                John  Novembre, Ken Lange                   ****
+****                                                            ****
+****                 Please cite our paper!                     ****
+****   Information at www.genetics.ucla.edu/software/admixture  ****
+
+Parallel execution requested.  Will use 8 threads.
+Cross-validation will be performed.  Folds=10.
+Random seed: 43
+Point estimation method: Block relaxation algorithm
+Convergence acceleration algorithm: QuasiNewton, 3 secant conditions
+Point estimation will terminate at 100 iterations
+Estimation of standard errors disabled; will compute point estimates only.
+Size of G: 92x945
+Performing five EM steps to prime main algorithm
+1 (EM) 	Elapsed: 0.001	Loglikelihood: -43125.1	(delta): 122232
+2 (EM) 	Elapsed: 0.001	Loglikelihood: -43125.1	(delta): 0
+3 (EM) 	Elapsed: 0.001	Loglikelihood: -43125.1	(delta): 0
+4 (EM) 	Elapsed: 0.001	Loglikelihood: -43125.1	(delta): 0
+5 (EM) 	Elapsed: 0.001	Loglikelihood: -43125.1	(delta): 0
+Initial loglikelihood: -43125.1
+Starting main algorithm
+1 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+2 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+3 (QN/Block) 	Elapsed: 0.008	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+4 (QN/Block) 	Elapsed: 0.009	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+5 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+6 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+7 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+8 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+9 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+10 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+11 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+12 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+13 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+14 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+15 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+16 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+17 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+18 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+19 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+20 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+21 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+22 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+23 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+24 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+25 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+26 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+27 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+28 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+29 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+30 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+31 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+32 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+33 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+34 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+35 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+36 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+37 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+38 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+39 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+40 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+41 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+42 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+43 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+44 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+45 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+46 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+47 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+48 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+49 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+50 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+51 (QN/Block) 	Elapsed: 0.008	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+52 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+53 (QN/Block) 	Elapsed: 0.009	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+54 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+55 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+56 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+57 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+58 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+59 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+60 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+61 (QN/Block) 	Elapsed: 0.007	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+62 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+63 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+64 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+65 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+66 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+67 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+68 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+69 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+70 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+71 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+72 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+73 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+74 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+75 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+76 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+77 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+78 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+79 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+80 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+81 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+82 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+83 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+84 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+85 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+86 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+87 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+88 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+89 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+90 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+91 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+92 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+93 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+94 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+95 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+96 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+97 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): -7.27596e-12
+PROBLEM INVERTING MATRIX!
+98 (QN/Block) 	Elapsed: 0.006	Loglikelihood: -43125.1	(delta): 7.27596e-12
+PROBLEM INVERTING MATRIX!
+99 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): 0
+PROBLEM INVERTING MATRIX!
+100 (QN/Block) 	Elapsed: 0.005	Loglikelihood: -43125.1	(delta): -7.27596e-12
+Summary: 
+Converged in 100 iterations (0.686 sec)
+Loglikelihood: -43125.132416
+CV error (K=1): 0.36117
+Writing output files.

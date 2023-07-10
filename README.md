@@ -2,59 +2,31 @@
 
 TODO:
 
-- [x] place on github
-- [x] clean make_clone_groups.py
-  - [x] make sure everything runs
-  - [x] annotate everything
-  - [ ] check inconsistencies with newly generated files and original files
-  - [x] add versions for each package
-- [ ] clean PCA script
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-  - [ ] sort out mislabels...
-- [ ] clean Admixture script(s)
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-- [ ] clean combination scripts
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-- [ ] clean RDA scripts
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-- [ ] clean IBD scripts
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-- [ ] clean kinship scripts
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-- [ ] clean FST scripts
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-- [ ] clean rotate annotation scripts
-  - [ ] make sure everything runs
-  - [ ] annotate everything
-  - [ ] add versions for each package
-
-
-
-- script process, copy over files from previous directory, then edit to make result files
-
-
+- [x] PCA
+- [x] Admixture
+  - [x] log/CV error
+- [ ] Combination
+- [ ] Spatial coords
+- [ ] FST
+- [ ] RDA
+- [ ] IBD
+- [ ] Kinship
+- [ ] Clone distances - where to put?
+- [ ] Add all software versions and requirements
 
 ## raw files
 
 Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository (hyperlink)
 
-TODO: add ipyrad settings file to RDM
+TODO: add ipyrad settings file to RDM & here
 
-- can upload large files special way (LFS)
+Ipyrad settings:
+
+```
+
+```
+
+
 
 # popgen_rad_shallow_agaricia
 
@@ -81,6 +53,10 @@ A git hub repository for analysis datasets, scripts and results
 ​		|--results/
 
 ​				|--ac_pcadapt_outliers.txt
+
+​				|--hu_pcadapt_outliers.txt
+
+​				|--lm_pcadapt_outliers.txt
 
 ​		|--scripts/
 
@@ -162,73 +138,105 @@ These datasets were not filtered for unlinked and neutral SNPs.
 
 **Notes**
 
-This was run using a conda environment radkat see appendix for details
+This was run using a conda environment radkat see appendix for details.
 
-The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes the `clone_matches_*` files
+The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes the `clone_matches_*` files.
 
 **Code**
 
 ```bash
-$ make_clone_groups.py "ac_1d_wc_20" # make files for A. agaricites
-$ make_clone_groups.py "hu_1d_wc_20" # make files for A. humilis
-$ make_clone_groups.py "lm_1d-pure_wc_20" # make files for A. lamarcki
+$ make_clone_groups.py ac_1d_wc_20
+$ make_clone_groups.py hu_1d_wc_20
+$ make_clone_groups.py lm_1d-pure_wc_20
 ```
 
 ## C - Population structure
 
 **File structure**
 
-population_structure/
+C-population_structure/
 
-​	|--metadata/
+​	|--data/
 
-​			|--ac_1div_nc_20_4.csv [*A. agaricites* metadata]
+​			|--ac_1div_nc_20_4.csv
 
-​			|--all-aga_1div_nc-wnr_20_4.csv [all species with NextRAD samples* metadata]
+​			|--all-aga_1div_nc-wnr_20_4.csv
 
-​			|--hu_1div_nc_20_4.csv [*A. humilis* metadata]
+​			|--hu_1div_nc_20_4.csv
 
-​			|--lm_1div_nc_20_2.csv [*A. lamarcki* metadata]
+​			|--lm_1div_nc_20_2.csv
 
-​			|--lm_1div_nc-wnr_20_2.csv [*A. lamarcki* with NextRAD samples* metadata]
+​			|--lm_1div_nc-wnr_20_2.csv
 
 ​			|--pop_lm_1div_nc-wnr.txt
 
 ​			|--pop_lm_1div_nc.txt
 
+​			|--ac_1div_nc_20.vcf
+
+​			|--all-aga_1div_nc_wnr.vcf 
+
+​			|--hu_1div_nc_20.vcf
+
+​			|--lm_1div_nc_20.vcf
+
+​			|--lm_1div_nc-wnr_20.vcf
+
+​	|--results/
+
+​			|--admix_plots/
+
+
+
+​			|--admix_runs/
+
+​			|--pca/
+
+​					|--ac_stats/
+
+​							|--ac_1div_nc_20_depth_facet_pca-x12.pdf
+
+​							|--ac_2div_nc_20_depth_facet_pca-x34.pdf
+
+​							|--ac_1div_nc_20_eig_plot.pdf
+
+​							|--ac_1div_nc_20_eig.csv
+
+​							|--ac_1div_nc_20_pcscores4.csv
+
+​					|--all-aga_stats/
+
+​					|--hu_stats/
+
+​					|--lm_stats/
+
 ​	|--scripts/
+
+​			|--admix_4multiple.sh
+
+​			|--admix_plots2.R
+
+​			|--admix_unlinked.sh
 
 ​			|--basic_pca.R
 
+​			|--compile_logs.R
+
 ​			|--func-k.R
 
-​	|--vcf/
-
-​			|--ac_1div_nc_20.vcf [*A. agaricites* vcf]
-
-​			|--all-aga_1div_nc_wnr.vcf [all species with NexRAD samples* vcf]
-
-​			|--hu_1div_nc_20.vcf [*A. humilis* vcf]
-
-​			|--lm_1div_nc_20.vcf [*A. lamarcki* vcf]
-
-​			|--lm_1div_nc-wnr_20.vcf [*A. lamarcki* with NextRAD samples* vcf]
-
-\* NextRAD samples include X *A. grahamae* and X *A. lamarcki* samples resequence with current data and provided from Prata et al. (2022) (todo: add hyperlink)
-
-These analysis datasets do not include clones, have 1 SNP per locus and have outliers removed from pcadapt.
+​			|--Qvalues.R
 
 **Steps**
 
 1. PCA
 
-   -run using unlinked/neutral data and with depth category for individual species and species category for all-aga dataset
+   -run using unlinked and neutral data and with depth category for individual species and species category for all-aga dataset.
 
 2. Admixture
 
-   -run admix_4multiple to CV error and log-likelihood
+   -run admix_4multiple to create CV error and log-likelihood
 
-   -run admix_unlinked to run on originial dataset
+   -run admix_unlinked to run on analysis dataset (*i.e.*, the sampled dataset used for all other analyses)
 
 3. PCA again
 
@@ -236,22 +244,24 @@ These analysis datasets do not include clones, have 1 SNP per locus and have out
 
 4. Combination plots (with NJ-tree)
 
-**Note**
+**Notes**
+
+These analysis datasets do not include clones (removed during B - Clones), have 1 SNP per locus and have outliers removed from pcadapt.
 
 Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using admix_4multiple.sh. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
 
-Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb.
+Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger than the size limit for github).
 
 **Code**
 
 ```bash
-## PCA
+## Run PCA and make plots
 $ Rscript basic_pca.R ac_1div_nc_20 4 depth
 $ Rscript basic_pca.R hu_1div_nc_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc-wnr_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc_20 2 depth
 $ Rscript basic_pca.R all-aga_1div_nc-wnr_20 6 species
-## Admixture
+## Run Admixture and make plots
 $ ./admix_unlinked.sh ac 1div nc 10 20
 $ Rscript admix_plots2.R ac 1div nc 20 4 no
 $ ./admix_unlinked.sh hu 1div nc 10 20
@@ -262,13 +272,19 @@ $ ./admix_unlinked.sh lm 1div nc-wnr 10 20
 $ Rscript admix_plots2.R lm 1div nc-wnr 20 4 no
 $ ./admix_unlinked.sh lm 1div nc 10 20
 $ Rscript admix_plots2.R lm 1div nc 20 4 no
-### Admixture multiple
+### Run Admixture on multiple datasets per species 
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh ac 1diii nc 10 20 $run; done
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh hu 1diii nc 10 20 $run; done
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc 10 20 $run; done
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc-wnr 10 20 $run; done
 # $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh all-aga 1diii nc-wnr 10 20 $run; done
-
+### CV error and log-likelihood plots
+$ Rscript complie_logs.R
+### Q plots
+$ Rscript Qvalues.R all-aga_2bi_1div_nc-wnr_20 3
+$ Rscript Qvalues.R ac_2bi_1div_nc_20 2
+$ Rscript Qvalues.R hu_2bi_1div_nc_20 3
+$ Rscript Qvalues.R lm_2bi_1div_nc_20 2
 ## Combination plot
 
 ```
@@ -291,20 +307,10 @@ $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc-wnr 10 20 $
 
 
 
-What to do?
-
--- mention that 3d models will be made available??
-
--- provide annotation files in data/
-
--- scripts for transformations in scripts/
-
--- results fro transformation metdata/
-
 **Steps**
 
 1. Colonies were annotated on point clouds using CloudCompare as three points, one centroid and two on the longest edge of colony.
-2. Two transformations 
+2. Two transformations were performed on coordinates.
 
 
 
@@ -322,16 +328,79 @@ What to do?
 
 |--results/
 
-
-
-(todo: clean FST, KINSHIP, RDA, IBD)
+​		|--
 
 **Steps**
 
-For IBD and Kinship vcf files had to be converted into
+1. Remove mislabels
+2. Run redundacy analysis
+3. Make separate taxa files for Fstatistics and Kinship
 
 
+
+### Redundancy analysis
+
+```bash
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do Rscript rda_geo_vs_depth.R $taxa;
+done
+```
+
+### Isolation-by-distance
+
+```bash
+# Running genepop across all locations
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do Rscript genepop.R $taxa all all; # TODO: need to alter vcf names within script, ac_3b_nc_20
+done
+# Running genepop across all locations, for within 'locations', e.g., all depths at one spatial location 
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do Rscript genepop.R ac_3b_nc_20 $taxa all within;
+done
+# Summarise results
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do ./get_genepop_results.sh $taxa all within;
+done
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do ./get_genepop_results.sh $taxa all all;
+done
+# Make plots
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do Rscript ibd_plots_new.R $taxa all all;
+done
+Rscript ibd_plots_new.R  AA1 all within
+```
+
+### Kinship
+
+```bash
+$ Rscript colony_files.R aa1_1div_nc_50
+$ for param in 0.5 0.2 0.1 0.05;
+do ./edit_dat_file.sh aa1_1div_nc_50 35 487 $param
+$ ./colony2s.out IFN:aa1_1div_nc_50_0.2.dat
+$ ./colony2s.out IFN:aa1_1div_nc_50_0.5.dat
+$ ./colony2s.out IFN:aa1_1div_nc_50_0.05.dat
+$ ./colony2s.out IFN:aa1_1div_nc_50_0.1.dat
+# all other taxa run the same except AA2 where datafile was split per location for computation time speed up.
+```
+
+###F-statistics
+
+```bash
+$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+do Rscript popgen_stats-taxa.R $taxa;
+done
+```
 
 ## Appendix
 
+### Conda environments
+
 Details for different conda environments
+
+### Script descriptions
+
+
+
+### Filename descriptions
+

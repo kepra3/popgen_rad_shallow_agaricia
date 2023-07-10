@@ -1,0 +1,57 @@
+13 populations (data/AH3_all.genepop.txt.MIG)
+
+genetic estimates ('^a' statistic):
+   6.97842
+   7.43946   7.33566
+   6.71268   7.64518    5.1772
+   6.79052   7.47342   6.77568   5.81965
+   6.97715   8.48123   5.99473   5.18179   4.48678
+   6.37757   6.46424   6.30447   5.39096   5.32748      5.26
+   5.51039   5.97047   4.29537   4.18774   4.24323    4.7043   4.66917
+   7.00158   7.08559    6.0106   5.78053   4.62131   4.76657    5.6871   3.67124
+   7.50163   6.93051   4.88287   5.57425   5.63512   5.62778   5.63797   4.29291   5.82065
+   6.59756   6.87326   5.86515   5.39293   4.81249   4.15572   5.33034   4.08043    4.4683   5.18805
+   6.67162   6.67593   5.70294   5.45861   4.67036   4.68289   5.74782   3.74958   4.98634    4.9563   4.70252
+   6.73683   7.23882   5.75887    5.6271   5.22056   4.66835   5.71948    4.6974   5.46911   5.11339   4.88875   4.24465
+
+Ln(distance):
+   2.26836
+   9.52297   9.52358
+   9.52297   9.52357 -0.364827
+   10.3583   10.3585   9.78958   9.78958
+   10.3584   10.3587    9.7898    9.7898   1.36103
+   10.3579   10.3581   9.78885   9.78886   2.56309   2.82422
+   10.3579   10.3581   9.78886   9.78886   2.55446   2.81725  -1.60379
+   10.3584   10.3587    9.7898   9.78981   3.35729   3.33568   3.48221   3.47604
+   10.3584   10.3587   9.78981   9.78981   3.35909   3.33744   3.48383   3.47766  -2.93409
+   10.3584   10.3587   9.78981   9.78982   3.35496   3.33246   3.48251   3.47634  -1.65616  -1.58929
+   10.3584   10.3587   9.78985   9.78985   3.36072   3.33572   3.49362   3.48751 -0.324123 -0.348378 -0.577389
+   10.3584   10.3587   9.78979    9.7898   3.33234   3.31099   3.46065   3.45434 -0.332859 -0.261529 -0.351262  0.140969
+
+________________________________________________________________
+
+Minimum distance between pairs in regression: 0.001
+Maximum distance between pairs in regression: 100
+
+Fitting '^a' statistic to a + b ln(distance)
+a = 5.00204, b = -0.0264902
+
+ ABC bootstrap results for SLOPE:
+ Point estimate and 95% confidence interval:
+-0.0264902 [ -0.0958253 , 0.0438342 ]
+
+Unidirectional P-value for [ slope=0 ] : 0.767033
+
+Mantel test, 1000 permutations
+NOTE: Mantel procedure not meaningful on minDist/maxDist selection.
+      Using all distances, not directly comparable to regression estimates.
+
+Test of isolation by distance (One tailed Pvalue):
+ Pr(correlation > observed correlation) =0.003 under null hypothesis
+
+Other one tailed Pvalue:
+ Pr(correlation < observed correlation) =0.997 under null hypothesis
+
+ ABC bootstrap results for INTERCEPT:
+ Point estimate and 95% confidence interval:
+5.00204 [ 4.00907 , 6.0279 ]

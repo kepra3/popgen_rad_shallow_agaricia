@@ -1,15 +1,11 @@
 library(stringr)
 
 # Arguments
-#args = commandArgs(TRUE)
-#VCF_NAME = args[1]
-#K = args[2]
+args = commandArgs(TRUE)
+VCF_NAME = args[1]
+K = args[2]
 
-VCF_NAME = "all-aga_2bi_1div_nc-wnr_20"
-K = 3
 DATA_PARAMS <- str_split_fixed(VCF_NAME, "_", n = 5)
-
-setwd("~/Dropbox/agaricia_project_2019/shalo_ag/gen_project/2 - Population Structure/2b - Admixture/")
 
 if (DATA_PARAMS[1] == "hu" & DATA_PARAMS[3] == "1div") {
   colour_palette <- c("#B06327","#FAA41A", "#F05123", "#821F27")
@@ -42,11 +38,11 @@ if (DATA_PARAMS[1] == "hu" & DATA_PARAMS[3] == "1div") {
 y_pos = threshold + 0.05
 
 for (i in 2:K) {
-  Qfile <- read.delim(paste0(DATA_PARAMS[5], "percent", "_", DATA_PARAMS[1], "_", DATA_PARAMS[3], "_", 
+  Qfile <- read.delim(paste0("../results/admix_runs/", DATA_PARAMS[5], "percent", "_", DATA_PARAMS[1], "_", DATA_PARAMS[3], "_", 
                          DATA_PARAMS[4], "/sortedQ/", DATA_PARAMS[1], "_", DATA_PARAMS[2], "_",
                          DATA_PARAMS[3], "_", DATA_PARAMS[4], "_", DATA_PARAMS[5], ".", i, ".Q"))
   for (j in 1:i) {
-    pdf(file = paste0("./Qplots/", VCF_NAME, "_K", i, "_Clust", j, "Q.pdf"))
+    pdf(file = paste0("../results/admix_plots/", VCF_NAME, "_K", i, "_Clust", j, "Q.pdf"))
     plot(sort(Qfile[, j]), xlab = "Sample",
          ylab = paste("Admixture proportion for", species[j]),
          main = paste0(main, ", K = ", i),
@@ -55,7 +51,7 @@ for (i in 2:K) {
 }}
 
 for (j in 1:K) {
-  pdf(file = paste0("./Qplots/", VCF_NAME, "_K", K, "_", species[j], "Q.pdf"), height = 4, width = 4)
+  pdf(file = paste0("../results/admix_plots/", VCF_NAME, "_K", K, "_", species[j], "Q.pdf"), height = 4, width = 4)
   par(mgp = c(1.8, 0.5, 0),mar = c(5, 4, 4, 2) + 0.1)
   plot(sort(Qfile[, j]), xlab = "Sample",
        ylab = paste("Admixture proportion for", species[j]),

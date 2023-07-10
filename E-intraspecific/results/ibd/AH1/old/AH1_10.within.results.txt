@@ -1,0 +1,51 @@
+10 populations (data/AH1_10.genepop.txt.MIG)
+
+genetic estimates ('^a' statistic):
+    2.3841
+   2.38292   2.04431
+   2.60919   1.28096    2.6797
+   2.18816   1.01111   2.01029   1.14544
+   2.39889   1.98353   4.21411    2.0312   1.86246
+   2.34712   2.03749   2.60161   1.98168   1.66425    2.8437
+   2.60651   1.74726   2.33901   2.29267   1.97351   2.13296   2.76725
+   1.61455   1.08319   2.41572   1.47641   1.13383   1.79927   1.55448   1.52537
+   2.95582   1.23843   2.79461   1.65597   0.59317   2.16982   2.06387   2.15836   1.66725
+
+Ln(distance):
+   1.68588
+   9.33954   9.33914
+   10.3582   10.3583   10.6665
+   10.3583   10.3585   10.6666    1.5801
+    10.358   10.3582   10.6664   1.64177   2.24103
+   10.3581   10.3582   10.6664   1.33759   2.11133  0.341834
+   10.3579   10.3581   10.6663   2.20056    2.6074   1.44282   1.66975
+   10.3579   10.3581   10.6663   2.14218   2.57056   1.32992    1.5718 -0.652055
+    10.358   10.3581   10.6663   1.93692   2.43103  0.700637   1.14754  0.796675  0.571263
+
+________________________________________________________________
+
+Minimum distance between pairs in regression: 0.001
+Maximum distance between pairs in regression: 100
+
+Fitting '^a' statistic to a + b ln(distance)
+a = 2.14818, b = -0.191071
+
+ ABC bootstrap results for SLOPE:
+ Point estimate and 95% confidence interval:
+-0.191071 [ -0.384713 , -7.11615e-06 ]
+
+Unidirectional P-value for [ slope=0 ] : 0.975005
+
+Mantel test, 1000 permutations
+NOTE: Mantel procedure not meaningful on minDist/maxDist selection.
+      Using all distances, not directly comparable to regression estimates.
+
+Test of isolation by distance (One tailed Pvalue):
+ Pr(correlation > observed correlation) =0.131 under null hypothesis
+
+Other one tailed Pvalue:
+ Pr(correlation < observed correlation) =0.869 under null hypothesis
+
+ ABC bootstrap results for INTERCEPT:
+ Point estimate and 95% confidence interval:
+2.14818 [ 1.23785 , 3.14742 ]

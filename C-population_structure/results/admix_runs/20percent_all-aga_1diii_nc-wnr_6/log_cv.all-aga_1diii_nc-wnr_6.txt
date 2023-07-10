@@ -1,0 +1,102 @@
+Loglikelihood: -219697.415359
+CV error (K=1): 0.54449
+nn
+Loglikelihood: -113758.705273
+Fst divergences between estimated populations: 
+	Pop0	
+Pop0	
+Pop1	0.761	
+CV error (K=2): 0.26350
+nn
+Loglikelihood: -46386.655951
+Fst divergences between estimated populations: 
+	Pop0	Pop1	
+Pop0	
+Pop1	0.806	
+Pop2	0.839	0.798	
+CV error (K=3): 0.08414
+nn
+Loglikelihood: -45147.665258
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	
+Pop0	
+Pop1	0.798	
+Pop2	0.855	0.811	
+Pop3	0.870	0.848	0.371	
+CV error (K=4): 0.08240
+nn
+Loglikelihood: -43171.250944
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	Pop3	
+Pop0	
+Pop1	0.867	
+Pop2	0.847	0.802	
+Pop3	0.877	0.852	0.297	
+Pop4	0.331	0.855	0.812	0.846	
+CV error (K=5): 0.07847
+nn
+Loglikelihood: -43062.779358
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	Pop3	Pop4	
+Pop0	
+Pop1	0.843	
+Pop2	0.822	0.315	
+Pop3	0.297	0.874	0.852	
+Pop4	0.802	0.871	0.852	0.852	
+Pop5	0.452	0.624	0.598	0.518	0.671	
+CV error (K=6): 0.08507
+nn
+Loglikelihood: -41201.424896
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	Pop3	Pop4	Pop5	
+Pop0	
+Pop1	0.065	
+Pop2	0.295	0.305	
+Pop3	0.807	0.812	0.840	
+Pop4	0.835	0.845	0.895	0.857	
+Pop5	0.840	0.849	0.898	0.862	0.576	
+Pop6	0.837	0.847	0.896	0.860	0.443	0.582	
+CV error (K=7): 0.07514
+nn
+Loglikelihood: -40241.814131
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	Pop3	Pop4	Pop5	Pop6	
+Pop0	
+Pop1	0.828	
+Pop2	0.859	0.309	
+Pop3	0.486	0.866	0.901	
+Pop4	0.883	0.848	0.901	0.922	
+Pop5	0.872	0.829	0.880	0.912	0.496	
+Pop6	0.369	0.859	0.888	0.600	0.897	0.885	
+Pop7	0.823	0.113	0.347	0.861	0.840	0.821	0.854	
+CV error (K=8): 0.07422
+nn
+Loglikelihood: -39787.865947
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	Pop3	Pop4	Pop5	Pop6	Pop7	
+Pop0	
+Pop1	0.359	
+Pop2	0.877	0.846	
+Pop3	0.897	0.866	0.496	
+Pop4	0.315	0.178	0.821	0.841	
+Pop5	0.886	0.868	0.885	0.897	0.853	
+Pop6	0.903	0.881	0.914	0.924	0.864	0.593	
+Pop7	0.328	0.147	0.832	0.852	0.118	0.861	0.873	
+Pop8	0.858	0.838	0.872	0.883	0.823	0.358	0.491	0.831	
+CV error (K=9): 0.07625
+nn
+Loglikelihood: -39162.457923
+Fst divergences between estimated populations: 
+	Pop0	Pop1	Pop2	Pop3	Pop4	Pop5	Pop6	Pop7	Pop8	
+Pop0	
+Pop1	0.826	
+Pop2	0.846	0.887	
+Pop3	0.320	0.858	0.896	
+Pop4	0.125	0.827	0.846	0.309	
+Pop5	0.138	0.830	0.852	0.322	0.091	
+Pop6	0.857	0.389	0.897	0.885	0.857	0.861	
+Pop7	0.855	0.492	0.903	0.885	0.856	0.859	0.480	
+Pop8	0.844	0.885	0.443	0.894	0.844	0.850	0.894	0.900	
+Pop9	0.848	0.888	0.583	0.898	0.849	0.854	0.897	0.904	0.575	
+CV error (K=10): 0.07594
+nn

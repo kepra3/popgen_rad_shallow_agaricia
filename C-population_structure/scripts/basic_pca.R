@@ -206,16 +206,16 @@ plot_type <- args[3]
 DATA_PARAMS <- str_split_fixed(VCF_NAME, "_", n = 4) # split all of the vcf name
 DATA_NAME <- str_c(DATA_PARAMS[1:4], collapse = "_")
 # path for outputs
-PATH = paste0("results/pca/",DATA_PARAMS[1], "_stats/", VCF_NAME)
+PATH = paste0("../results/pca/",DATA_PARAMS[1], "_stats/", VCF_NAME)
 
 # Import data and formatting  =================================
 # GENLIGHT object
-GENLIGHT <- vcfR2genlight(read.vcfR(paste0("vcf/", VCF_NAME, ".vcf")))
+GENLIGHT <- vcfR2genlight(read.vcfR(paste0("../data/", VCF_NAME, ".vcf")))
 #GENLIGHT <- as.matrix(GENLIGHT[,1:100]) # sampling for quick troubleshooting
 #GENLIGHT <- as.genlight(GENLIGHT) # sampling for quick troubleshooting
 
 # popfile
-pop <- read.table(paste0('metadata/pop_', str_c(DATA_PARAMS[1:3], collapse = "_"), '.txt'), header = FALSE)
+pop <- read.table(paste0('../data/pop_', str_c(DATA_PARAMS[1:3], collapse = "_"), '.txt'), header = FALSE)
 # popfile formatting
 if (DATA_PARAMS[1] == "all-aga") {
   colnames(pop) <- c("Individual","Population")

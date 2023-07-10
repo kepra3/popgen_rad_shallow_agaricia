@@ -1,0 +1,41 @@
+5 populations (data/AH1_20.genepop.txt.MIG)
+
+genetic estimates ('^a' statistic):
+   12.1786
+   11.3421   9.61628
+   12.5263   9.26744   7.80189
+   12.1316   11.1279   11.0094   9.31132
+
+Ln(distance):
+   1.46581
+   1.93307  0.962143
+   2.12242   1.41238  0.409448
+   9.78895   9.78871   9.78856   9.78848
+
+________________________________________________________________
+
+Minimum distance between pairs in regression: 0.001
+Maximum distance between pairs in regression: 100
+
+Fitting '^a' statistic to a + b ln(distance)
+a = 6.91919, b = 2.5547
+
+ ABC bootstrap results for SLOPE:
+ Point estimate and 95% confidence interval:
+2.5547 [ -0.557997 , 14.5877 ]
+
+Unidirectional P-value for [ slope=0 ] : 0.0760881
+
+Mantel test, 1000 permutations
+NOTE: Mantel procedure not meaningful on minDist/maxDist selection.
+      Using all distances, not directly comparable to regression estimates.
+
+Test of isolation by distance (One tailed Pvalue):
+ Pr(correlation > observed correlation) =0.219 under null hypothesis
+
+Other one tailed Pvalue:
+ Pr(correlation < observed correlation) =0.793 under null hypothesis
+
+ ABC bootstrap results for INTERCEPT:
+ Point estimate and 95% confidence interval:
+6.91919 [ 2.21409 , 18.937 ]

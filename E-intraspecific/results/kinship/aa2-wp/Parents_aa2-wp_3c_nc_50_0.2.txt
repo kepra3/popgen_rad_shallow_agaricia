@@ -1,0 +1,2 @@
+OffspringID,InferredDad1,ProbDad1
+KP0521_AC_WP20,KP0508_AC_WP20,1.0000

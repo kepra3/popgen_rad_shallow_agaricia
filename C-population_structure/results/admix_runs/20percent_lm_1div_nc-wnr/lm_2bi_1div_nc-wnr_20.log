@@ -3,31 +3,30 @@ Options in effect:
   --allow-extra-chr 0
   --const-fid
   --make-bed
-  --out ../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20
-  --vcf ../vcf/lm_1div_nc-wnr_20.vcf
+  --out 20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20
+  --vcf ../../data/lm_1div_nc-wnr_20.vcf
 
 Hostname: kprata.local
-Working directory: /Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/gen_project/popgen_rad_shallow_agaricia/C-population_structure/scripts
-Start time: Wed Jun 28 14:41:55 2023
+Working directory: /Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/gen_project/2 - Population Structure/2b - Admixture
+Start time: Mon May 30 16:03:39 2022
 
-Random number seed: 1687927315
+Random number seed: 1653890619
 16384 MB RAM detected; reserving 8192 MB for main workspace.
---vcf: ../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20-temporary.bed
-+ ../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20-temporary.bim +
-../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20-temporary.fam
-written.
-940 variants loaded from .bim file.
+--vcf: 20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20-temporary.bed +
+20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20-temporary.bim +
+20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20-temporary.fam written.
+954 variants loaded from .bim file.
 98 people (0 males, 0 females, 98 ambiguous) loaded from .fam.
 Ambiguous sex IDs written to
-../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.nosex .
+20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.nosex .
 Using 1 thread (no multithreaded calculations invoked).
 Before main variant filters, 98 founders and 0 nonfounders present.
 Calculating allele frequencies... done.
-Total genotyping rate is 0.949153.
-940 variants and 98 people pass filters and QC.
+Total genotyping rate is 0.948552.
+954 variants and 98 people pass filters and QC.
 Note: No phenotypes present.
---make-bed to ../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.bed +
-../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.bim +
-../results/20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.fam ... done.
+--make-bed to 20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.bed +
+20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.bim +
+20percent_lm_1div_nc-wnr/lm_2bi_1div_nc-wnr_20.fam ... done.
 
-End time: Wed Jun 28 14:41:55 2023
+End time: Mon May 30 16:03:40 2022

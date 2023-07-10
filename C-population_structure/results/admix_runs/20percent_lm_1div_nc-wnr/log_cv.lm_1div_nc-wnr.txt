@@ -1,5 +1,5 @@
-Loglikelihood: -45562.414718
-CV error (K=1): 0.35843
+Loglikelihood: -19114.678316
+CV error (K=1): 0.14873
 \n\n
 \n\n
 \n\n
