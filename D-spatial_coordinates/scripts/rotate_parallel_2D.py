@@ -13,8 +13,6 @@ import pandas as pd
 
 PATH = '/Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/Photogrammetry/CloudCompare/'
 
-# TODO: note doing for coordinates with X!
-
 def import_coords_compile(PATH):
     WP05 = pd.read_csv('{}WP05/scaled_HORIZ_annotations_X_cur_kal_05m_20200214.csv'.format(PATH))
     WP10 = pd.read_csv('{}WP10/scaled_HORIZ_annotations_X_cur_kal_10m_20200214.csv'.format(PATH))

@@ -342,19 +342,23 @@ $
 1. Colonies were annotated on point clouds using CloudCompare as three points, one centroid and two on the longest edge of colony.
 2. Two transformations were performed on coordinates for each analysis:
 
-   i) For Redundancy analyses, points were annotated to align with 'real world up', thus the z-axis reflected
+   i) For Redundancy analyses, points annotated were rotated to align with 'real world up', thus the z-axis reflected changes in depth. Then plots were oriented according to geographical arrangments.
 
-
-
-
+   ii) For isolation-by-distance, points annotated were rotated to onto the 2D XY-plane, thus any deviation in depth along the slope was reduced to 0. Then plots were oriented accordint to geographical arrangements.
 
 Code
 
 ```bash
 $ conda activate open3d
+# For redundancy analysis
+$ rotate_annotations_depthoriented.py cur_kal_20m_20200214_decvis_02.ply cur_kal_20m_20200214_decvis_02.txt cur_kal_20m_20200214_subsets.json
+$ rotate_parallel_depthoriented.py # TODO: fix script
+# For isolation-by-distance
+$ rotate_annotations_2D.py cur_kal_20m_20200214_decvis_02.ply cur_kal_20m_20200214_decvis_02.txt
+$ rotate_parallel_2D.py
 ```
 
-
+TODO: naming of files and inconsistency of scripts...
 
 ## E - Intraspecific analyses
 

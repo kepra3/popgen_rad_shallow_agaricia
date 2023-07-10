@@ -11,9 +11,7 @@
 import numpy as np
 import pandas as pd
 
-PATH = '/results'
-
-# TODO: note doing for coordinates with X!
+PATH = '../results'
 
 def import_coords_compile(PATH):
     WP05 = pd.read_csv('{}/rotated_scaled_annotations_X_cur_kal_05m_20200214.csv'.format(PATH))
