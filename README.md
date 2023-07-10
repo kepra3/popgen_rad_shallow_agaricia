@@ -62,7 +62,17 @@ A git hub repository for analysis datasets, scripts and results
 
 ​				|--pcadapt_shallow.R
 
+**Notes**
+
+Steps are all written out instead of all code commands as the commands used are relatviely simple and repetitive.
+
 **Steps**
+
+1. Activate conda environment to access genetics softwares.
+
+   ```bash
+   $ conda activate radkat
+   ```
 
 1. The initial vcf [found on RDM] was filtered for minimum and maximum depth (> 3x mean depth), minimum allele count, maximum missing SNPs.
 
@@ -128,6 +138,10 @@ $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac
 
 ​		|--individuals2keep_lm.txt
 
+**Notes**
+
+The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes the `clone_matches_*` files.
+
 **Steps**
 
 These datasets were not filtered for unlinked and neutral SNPs.
@@ -136,15 +150,10 @@ These datasets were not filtered for unlinked and neutral SNPs.
 2. Run make_clone_groups.py to assess similarity distribution threshold, based upon breaks in distribution and similarity to technical replicates
 3. Retain one individual per clone groups with the highest number of SNPs to create no clones datasets ('nc')
 
-**Notes**
-
-This was run using a conda environment radkat see appendix for details.
-
-The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes the `clone_matches_*` files.
-
 **Code**
 
 ```bash
+$ conda activate radkat
 $ make_clone_groups.py ac_1d_wc_20
 $ make_clone_groups.py hu_1d_wc_20
 $ make_clone_groups.py lm_1d-pure_wc_20
@@ -226,6 +235,14 @@ C-population_structure/
 
 ​			|--Qvalues.R
 
+**Notes**
+
+These analysis datasets do not include clones (removed during B - Clones), have 1 SNP per locus and have outliers removed from pcadapt.
+
+Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using admix_4multiple.sh. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
+
+Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger than the size limit for github).
+
 **Steps**
 
 1. PCA
@@ -236,7 +253,11 @@ C-population_structure/
 
    -run admix_4multiple to create CV error and log-likelihood
 
+   -make plots for CV error, log-likelihood and Qvalue taxa thresholds
+
    -run admix_unlinked to run on analysis dataset (*i.e.*, the sampled dataset used for all other analyses)
+
+   -make admixture plots
 
 3. PCA again
 
@@ -244,24 +265,25 @@ C-population_structure/
 
 4. Combination plots (with NJ-tree)
 
-**Notes**
-
-These analysis datasets do not include clones (removed during B - Clones), have 1 SNP per locus and have outliers removed from pcadapt.
-
-Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using admix_4multiple.sh. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
-
-Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger than the size limit for github).
-
 **Code**
 
 ```bash
-## Run PCA and make plots
+$ conda activate radkat
+```
+
+### PCA
+
+```bash
 $ Rscript basic_pca.R ac_1div_nc_20 4 depth
 $ Rscript basic_pca.R hu_1div_nc_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc-wnr_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc_20 2 depth
 $ Rscript basic_pca.R all-aga_1div_nc-wnr_20 6 species
-## Run Admixture and make plots
+```
+
+### Admixture
+
+```bash
 $ ./admix_unlinked.sh ac 1div nc 10 20
 $ Rscript admix_plots2.R ac 1div nc 20 4 no
 $ ./admix_unlinked.sh hu 1div nc 10 20
@@ -285,8 +307,12 @@ $ Rscript Qvalues.R all-aga_2bi_1div_nc-wnr_20 3
 $ Rscript Qvalues.R ac_2bi_1div_nc_20 2
 $ Rscript Qvalues.R hu_2bi_1div_nc_20 3
 $ Rscript Qvalues.R lm_2bi_1div_nc_20 2
-## Combination plot
+```
 
+### Combination plots
+
+```bash
+$
 ```
 
 
@@ -307,10 +333,26 @@ $ Rscript Qvalues.R lm_2bi_1div_nc_20 2
 
 
 
-**Steps**
+**Notes:**
+
+
+
+**Steps:**
 
 1. Colonies were annotated on point clouds using CloudCompare as three points, one centroid and two on the longest edge of colony.
-2. Two transformations were performed on coordinates.
+2. Two transformations were performed on coordinates for each analysis:
+
+   i) For Redundancy analyses, points were annotated to align with 'real world up', thus the z-axis reflected
+
+
+
+
+
+Code
+
+```bash
+$ conda activate open3d
+```
 
 
 
@@ -330,13 +372,22 @@ $ Rscript Qvalues.R lm_2bi_1div_nc_20 2
 
 ​		|--
 
-**Steps**
+Notes:
+
+
+
+**Steps:**
 
 1. Remove mislabels
 2. Run redundacy analysis
-3. Make separate taxa files for Fstatistics and Kinship
+3. Run isolation-by-distance analysis
+4. Make separate taxa files for Fstatistics and Kinship
 
+**Code:**
 
+```bash
+$ conda activate radkat
+```
 
 ### Redundancy analysis
 
@@ -384,7 +435,7 @@ $ ./colony2s.out IFN:aa1_1div_nc_50_0.1.dat
 # all other taxa run the same except AA2 where datafile was split per location for computation time speed up.
 ```
 
-###F-statistics
+### F-statistics
 
 ```bash
 $ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
