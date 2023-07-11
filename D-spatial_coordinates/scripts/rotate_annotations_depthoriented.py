@@ -95,10 +95,8 @@ def rotate_matrix(pcd, up_vector):
     return R
 
 
-def main(ply_filename, annotations_filename, subsets_filename, path):
+def main(annotations_filename, subsets_filename, short_name, path):
     """ Rotating annotations """
-    short_name = "_".join(ply_filename.split('_')[0:4])
-
     print('Read viscore metadata file ...')
     viscore_md = Viscore_metadata(subsets_filename, short_name)
     print('Read assignment file ...')
@@ -126,18 +124,16 @@ if __name__ == '__main__':
     # Arguments
     parser = argparse.ArgumentParser(prog="Rotate annotations X")
     parser.add_argument('ply_filename', help='Filename of PLY file')
-    parser.add_argument('annotations_filename', help='Filename of annotations file')
-    parser.add_argument('subsets_filename', help='Filename of Viscore metadata, subsets.json')
+    parser.add_argument('annotations_filename', help='Filename of TXT file')
     args = parser.parse_args()
 
-    ply_filename = args.ply_filename
-    annotations_filename = args.annotations_filename
-    subsets_filename = args.subsets_filename
+    ply_filename = args.ply_filename + ".ply"
+    annotations_filename = args.annotations_filename + ".txt"
+    short_name = "_".join(ply_filename.split('_')[0:4])
+    subsets_filename = short_name + "_subsets.json"
     path = "../data"
 
     # e.g.,
-    # args.ply_filename = "cur_kal_20m_20200214_decvis_02.ply"
-    # args.annotations_filename = "cur_kal_20m_20200214_decvis_02.txt"
-    # args.subsets_filename = "cur_kal_20m_20200214_subsets.json"
+    # args.ply_filename = "cur_kal_20m_20200214_decvis_02"
 
-    main(ply_filename, annotations_filename, subsets_filename, path)
+    main(annotations_filename, subsets_filename, short_name, path)

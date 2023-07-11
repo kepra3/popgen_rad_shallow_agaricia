@@ -72,11 +72,8 @@ def main():
     all_annotations = pd.concat([parallel_plus90_df, parallel_minus90_df])
     all_annotations.columns = ['x', 'y', 'z', 'p']
     del all_annotations['p']
-    print("Exporting coords to 3 - Spatial")
-    all_annotations.to_csv('/Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/'
-                           'gen_project/3 - Spatial/all_annotations_X_DEPTH_parallel.txt')
-    print("Exporting coords to coralscape/results")
-    all_annotations.to_csv('{}/all_annotations_X_DEPTH_parallel.txt'.format(PATH))
+    print("Exporting coords to results")
+    all_annotations.to_csv('{}/all_annotations_X_DEPTH_parallel_copy.txt'.format(PATH))
 
 
 main()
