@@ -351,11 +351,22 @@ Code
 ```bash
 $ conda activate open3d
 # For redundancy analysis
-$ rotate_annotations_depthoriented.py cur_kal_20m_20200214_decvis_02.ply cur_kal_20m_20200214_decvis_02.txt cur_kal_20m_20200214_subsets.json
-$ rotate_parallel_depthoriented.py # TODO: fix script
+# in data directory
+$ cd data
+$ json_file=(`ls *.json | tr '\n' ' '`)
+$ text_file=(`ls *.txt | tr '\n' ' '`)
+# in script directory
+$ cd ../scripts
+$ for ((i=0;i<${#json_file[@]};i++)); 
+do python rotate_annotations_depthoriented.py ${json_file[$i]} ${text_file[$i]};
+done
+$ rotate_parallel_depthoriented.py
 # For isolation-by-distance
-$ rotate_annotations_2D.py cur_kal_20m_20200214_decvis_02.ply cur_kal_20m_20200214_decvis_02.txt
-$ rotate_parallel_2D.py
+$ for ((i=0;i<${#json_file[@]};i++)); 
+do python rotate_annotations_2D.py ${json_file[$i]} ${text_file[$i]};
+done
+$ python rotate_annotations_2D.py cur_sna_20m_20200303_subsets.json cur_sna_20m_20200303_decvis_02.txt
+$ python rotate_parallel_2D.py
 ```
 
 TODO: naming of files and inconsistency of scripts...

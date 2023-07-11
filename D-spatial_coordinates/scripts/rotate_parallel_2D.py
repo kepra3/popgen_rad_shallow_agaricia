@@ -11,20 +11,21 @@
 import numpy as np
 import pandas as pd
 
-PATH = '/Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/Photogrammetry/CloudCompare/'
+PATH = '../results'
+
 
 def import_coords_compile(PATH):
-    WP05 = pd.read_csv('{}WP05/scaled_HORIZ_annotations_X_cur_kal_05m_20200214.csv'.format(PATH))
-    WP10 = pd.read_csv('{}WP10/scaled_HORIZ_annotations_X_cur_kal_10m_20200214.csv'.format(PATH))
-    WP20 = pd.read_csv('{}WP20/scaled_HORIZ_annotations_X_cur_kal_20m_20200214.csv'.format(PATH))
-    CA05 = pd.read_csv('{}CA05/scaled_HORIZ_annotations_X_cur_cas_05m_20201212.csv'.format(PATH))
-    CA10 = pd.read_csv('{}CA10/scaled_HORIZ_annotations_X_cur_cas_10m_20201212.csv'.format(PATH))
-    CA20 = pd.read_csv('{}CA20/scaled_HORIZ_annotations_X_cur_cas_20m_20201212.csv'.format(PATH))
-    SB05 = pd.read_csv('{}SB05/scaled_HORIZ_annotations_X_cur_sna_05m_20200303.csv'.format(PATH))
-    SB10 = pd.read_csv('{}SB10/scaled_HORIZ_annotations_X_cur_sna_10m_20200303.csv'.format(PATH))
-    SB20 = pd.read_csv('{}SB20/scaled_HORIZ_annotations_X_cur_sna_20m_20200303.csv'.format(PATH))
-    SQ12 = pd.read_csv('{}SQ10/scaled_HORIZ_annotations_X_cur_seb_10m_20201210.csv'.format(PATH))
-    SQ20 = pd.read_csv('{}SQ20/scaled_HORIZ_annotations_X_cur_seb_20m_20201210.csv'.format(PATH))
+    WP05 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_kal_05m_20200214.csv'.format(PATH))
+    WP10 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_kal_10m_20200214.csv'.format(PATH))
+    WP20 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_kal_20m_20200214.csv'.format(PATH))
+    CA05 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_cas_05m_20201212.csv'.format(PATH))
+    CA10 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_cas_10m_20201212.csv'.format(PATH))
+    CA20 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_cas_20m_20201212.csv'.format(PATH))
+    SB05 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_sna_05m_20200303.csv'.format(PATH))
+    SB10 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_sna_10m_20200303.csv'.format(PATH))
+    SB20 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_sna_20m_20200303.csv'.format(PATH))
+    SQ12 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_seb_10m_20201210.csv'.format(PATH))
+    SQ20 = pd.read_csv('{}/scaled_HORIZ_annotations_X_cur_seb_20m_20201210.csv'.format(PATH))
 
     all_plus90 = pd.concat([SB20, SQ20])
     all_minus90 = pd.concat([WP05, WP10, WP20, CA05, CA10, CA20, SB05, SB10, SQ12])
@@ -64,7 +65,7 @@ def rotate(coords, rotation):
 
 
 def main():
-    print('Import and complie coords')
+    print('Import and compile coords')
     all_plus90_dict, plus90_ranges, all_minus90_dict, minus90_ranges = import_coords_compile(PATH)
 
     parallel_plus90 = rotate(all_plus90_dict, "plus90")
@@ -77,9 +78,8 @@ def main():
     all_annotations.columns = ['x', 'y', 'z', 'range']
     ranges = pd.concat([plus90_ranges, minus90_ranges])
     all_annotations['range'] = ranges.values
-    all_annotations.to_csv('/Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/'
-                           'gen_project/3 - Spatial/all_annotations_X_HORIZ_parallel.txt')
-    print("Exporting coords to 3 - Spatial")
+    print("Exporting coords to results")
+    all_annotations.to_csv('{}/all_annotations_X_HORIZ_parallel.txt'.format(PATH))
 
 
 main()

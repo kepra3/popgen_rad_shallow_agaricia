@@ -72,10 +72,9 @@ def get_ranges(annotations_path, annotations, scale):
     return ranges
 
 
-def main(ply_filename, annotations_filename, PATH):
+def main(subsets_filename, annotations_filename, PATH):
     """ Orienting substrate parallel to surface and scale xyz """
-    short_name = "_".join(ply_filename.split('_')[0:4])
-    subsets_filename = "_".join([short_name, 'subsets.json'])
+    short_name = "_".join(subsets_filename.split('_')[0:4])
     print('Read viscore metadata file ...')
     if short_name == "cur_cas_10m_20201212":
         scale = 0.10383552972538619
@@ -167,15 +166,15 @@ def main(ply_filename, annotations_filename, PATH):
 if __name__ == '__main__':
     # Arguments
     parser = argparse.ArgumentParser(prog="Colony clean and measure")
-    parser.add_argument('ply_filename', help='Filename of PLY file')
+    parser.add_argument('subsets_filename', help='Filename of JSON file')
     parser.add_argument('annotations_filename', help='Filename of annotations file')
     args = parser.parse_args()
 
-    ply_filename = args.ply_filename
+    subsets_filename = args.subsets_filename
     annotations_filename = args.annotations_filename
 
     # GLOBAL VARIABLES
     IGNORE_ANNOTATIONS = ['left', 'right']
     PATH = "../data"
 
-    main(ply_filename, annotations_filename, PATH)
+    main(subsets_filename, annotations_filename, PATH)

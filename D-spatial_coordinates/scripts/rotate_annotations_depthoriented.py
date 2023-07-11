@@ -16,13 +16,14 @@ import json
 import pandas as pd
 
 IGNORE_ANNOTATIONS = ['left', 'right']
+PATH = "../data"
 
 
 class Viscore_metadata(object):
     """ Defining viscore metadata as a class object"""
 
     def __init__(self, subsets_filename, short_name):
-        subsets = json.load(open('{}/{}'.format(path, subsets_filename)))
+        subsets = json.load(open('{}/{}'.format(PATH, subsets_filename)))
         # Determine json key of primary model
         if '{0}/{0}'.format(short_name) in subsets['d']:
             subsets_ortho = subsets['d']['{0}/{0}'.format(short_name)]['c']['ortho']
@@ -95,12 +96,12 @@ def rotate_matrix(pcd, up_vector):
     return R
 
 
-def main(annotations_filename, subsets_filename, short_name, path):
+def main(annotations_filename, subsets_filename, short_name):
     """ Rotating annotations """
     print('Read viscore metadata file ...')
     viscore_md = Viscore_metadata(subsets_filename, short_name)
     print('Read assignment file ...')
-    annotations = get_annotations('{}/{}'.format(path, annotations_filename))
+    annotations = get_annotations('{}/{}'.format(PATH, annotations_filename))
     print('Create rotation matrix ...')
     up_vector = viscore_md.dd[0:3]
     # Make up a point cloud in order to access pcd rotation formulae
@@ -123,17 +124,12 @@ def main(annotations_filename, subsets_filename, short_name, path):
 if __name__ == '__main__':
     # Arguments
     parser = argparse.ArgumentParser(prog="Rotate annotations X")
-    parser.add_argument('ply_filename', help='Filename of PLY file')
+    parser.add_argument('subsets_filename', help='Filename of JSON file')
     parser.add_argument('annotations_filename', help='Filename of TXT file')
     args = parser.parse_args()
 
-    ply_filename = args.ply_filename + ".ply"
-    annotations_filename = args.annotations_filename + ".txt"
-    short_name = "_".join(ply_filename.split('_')[0:4])
-    subsets_filename = short_name + "_subsets.json"
-    path = "../data"
+    subsets_filename = args.subsets_filename
+    annotations_filename = args.annotations_filename
+    short_name = "_".join(subsets_filename.split('_')[0:4])
 
-    # e.g.,
-    # args.ply_filename = "cur_kal_20m_20200214_decvis_02"
-
-    main(annotations_filename, subsets_filename, short_name, path)
+    main(annotations_filename, subsets_filename, short_name)
