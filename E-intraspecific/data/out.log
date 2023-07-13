@@ -1,0 +1,19 @@
+
+VCFtools - 0.1.16
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--vcf lm_1div_nc_20.vcf
+	--keep al2.names.txt
+	--maf 1e-09
+	--max-alleles 2
+	--min-alleles 2
+	--max-missing 0.8
+	--recode
+	--stdout
+
+Keeping individuals in 'keep' list
+After filtering, kept 62 out of 92 Individuals
+Outputting VCF file...
+After filtering, kept 734 out of a possible 945 Sites
+Run Time = 0.00 seconds

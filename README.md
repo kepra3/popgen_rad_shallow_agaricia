@@ -6,12 +6,13 @@ TODO:
 - [x] Admixture
   - [x] log/CV error
 - [ ] Combination
-- [ ] Spatial coords
-- [ ] FST
-- [ ] RDA
+- [x] Spatial coords
+- [x] FST
+- [x] RDA
 - [ ] IBD
 - [ ] Kinship
-- [ ] Clone distances - where to put?
+- [ ] Clone distances
+- [ ] Change names of all files
 - [ ] Add all software versions and requirements
 
 ## raw files
@@ -245,11 +246,13 @@ Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger t
 
 **Steps**
 
-1. PCA
+1. Separate and filter species specific datasets
+
+2. PCA
 
    -run using unlinked and neutral data and with depth category for individual species and species category for all-aga dataset.
 
-2. Admixture
+3. Admixture
 
    -run admix_4multiple to create CV error and log-likelihood
 
@@ -259,16 +262,17 @@ Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger t
 
    -make admixture plots
 
-3. PCA again
+4. PCA again
 
    -run with admixture setting to see concordance and create input files for combination plots
 
-4. Combination plots (with NJ-tree)
+5. Combination plots (with NJ-tree)
 
 **Code**
 
 ```bash
 $ conda activate radkat
+# TODO: show filtered final results files
 ```
 
 ### PCA
@@ -346,7 +350,7 @@ $
 
    ii) For isolation-by-distance, points annotated were rotated to onto the 2D XY-plane, thus any deviation in depth along the slope was reduced to 0. Then plots were oriented accordint to geographical arrangements.
 
-Code
+**Code:**
 
 ```bash
 $ conda activate open3d
@@ -367,6 +371,8 @@ do python rotate_annotations_2D.py ${json_file[$i]} ${text_file[$i]};
 done
 $ python rotate_annotations_2D.py cur_sna_20m_20200303_subsets.json cur_sna_20m_20200303_decvis_02.txt
 $ python rotate_parallel_2D.py
+$ Rscript set_distances.R all_annotations_X_HORIZ_parallel
+$ Rscript set_distancces.R all_annotations_X_DEPTH_parallel
 ```
 
 TODO: naming of files and inconsistency of scripts...
@@ -393,22 +399,83 @@ Notes:
 
 **Steps:**
 
-1. Remove mislabels
-2. Run redundacy analysis
-3. Run isolation-by-distance analysis
-4. Make separate taxa files for Fstatistics and Kinship
+1. Remove mislabels and outgroups
+2. Make separate taxa files for Fstatistics and Kinship
+3. Run redundacy analysis
+4. Run isolation-by-distance analysis
+5. F-statistics
+6. Kinship
 
 **Code:**
 
 ```bash
 $ conda activate radkat
+# Remove mislabels with vcftools, adding a MAF filter as previously variant sites can become nonvariable after removing individuals.
+$ vcftools --vcf ac_1div_nc_20.vcf --remove ac_mislabels.txt --min-alleles 2 --max-alleles 2 --maf 0.000000001 --recode --stdout > ac_3b_nc_20.vcf
+#After filtering, kept 327 out of 335 Individuals
+#After filtering, kept 1604 out of a possible 1606 Sites
+$ vcftools --vcf hu_1div_nc_20.vcf --remove hu_mislabels.txt --min-alleles 2 --max-alleles 2 --maf 0.000000001 --recode --stdout > hu_3b_nc_20.vcf
+#AAfter filtering, kept 120 out of 121 Individuals
+#After filtering, kept 1280 out of a possible 1282 Sites
+# For lamarcki need to also remove nextrad samples that were used for cryptic lineage assignment from Prata et al., (2022)
+$ vcftools --vcf ../data/lm_1div_nc-wnr_20.vcf --remove lm_mislabels.txt --min-alleles 2 --max-alleles 2 --recode --stdout > lm_3b_nc_20_x.vcf
+#After filtering, kept 85 out of 98 Individuals
+#Outputting VCF file...
+#After filtering, kept 940 out of a possible 940 Sites
+#Run Time = 0.00 seconds
+$ vcftools --vcf lm_3b_nc_20_x.vcf --remove ../data/nextrad_lm-gr.txt --maf 0.000000001 --min-alleles 2 --max-alleles 2 --recode --stdout > lm_3b_nc_20.vcf
+#After filtering, kept 79 out of 85 Individuals
+#Outputting VCF file...
+#After filtering, kept 929 out of a possible 940 Sites
+#Run Time = 0.00 seconds
+$ rm lm_3b_nc_20_x.vcf
+```
+
+**Making separate vcf files for each taxon, for Kinship and Fstatistics**
+
+```bash
+# All individuals for f-statistics
+# A. agaricites
+$ vcftools --vcf ac_1div_nc_20.vcf --keep aa1.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > aa1_1div_nc_20.vcf
+#After filtering, kept 35 out of 335 Individuals
+#After filtering, kept 465 out of a possible 1606 Sites
+$ vcftools --vcf ac_1div_nc_20.vcf --keep aa2.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > aa2_1div_nc_20.vcf
+#After filtering, kept 300 out of 335 Individuals
+#After filtering, kept 1461 out of a possible 1606 Sites
+
+# A. humilis
+$ vcftools --vcf hu_1div_nc_20.vcf --keep ah1.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > ah1_1div_nc_20.vcf
+#After filtering, kept 61 out of 121 Individuals
+#After filtering, kept 803 out of a possible 1282 Sites
+
+$ vcftools --vcf hu_1div_nc_20.vcf --keep ah2.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > ah2_1div_nc_20.vcf
+#After filtering, kept 29 out of 121 Individuals
+#After filtering, kept 565 out of a possible 1282 Sites
+
+$ vcftools --vcf hu_1div_nc_20.vcf --keep ah3.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > ah3_1div_nc_20.vcf
+#After filtering, kept 15 out of 121 Individuals
+#After filtering, kept 580 out of a possible 1282 Sites
+
+# A. lamarcki
+$ vcftools --vcf lm_1div_nc_20.vcf --keep al1.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > al1_1div_nc_20.vcf
+#After filtering, kept 28 out of 92 Individuals
+#After filtering, kept 544 out of a possible 945 Sites
+
+$ vcftools --vcf lm_1div_nc_20.vcf --keep al2.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > al2_1div_nc_20.vcf
+#After filtering, kept 62 out of 92 Individuals
+#After filtering, kept 734 out of a possible 945 Sites
+
+# Spatial individuals for kinship # TODO: finish separating files
+$ vcftools --vcf ac_3b_nc_20.vcf --keep AA1_names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.5 --maf 0.000000001 --stdout --recode > aa1_3b_nc_50.vcf
+#After filtering, kept 30 out of 327 Individuals
+#After filtering, kept 482 out of a possible 1604 Sites
 ```
 
 ### Redundancy analysis
 
 ```bash
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
-do Rscript rda_geo_vs_depth.R $taxa;
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
+do Rscript rda.R $taxa;
 done
 ```
 
@@ -421,7 +488,7 @@ do Rscript genepop.R $taxa all all; # TODO: need to alter vcf names within scrip
 done
 # Running genepop across all locations, for within 'locations', e.g., all depths at one spatial location 
 $ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
-do Rscript genepop.R ac_3b_nc_20 $taxa all within;
+do Rscript genepop.R $taxa all within;
 done
 # Summarise results
 $ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
@@ -437,6 +504,14 @@ done
 Rscript ibd_plots_new.R  AA1 all within
 ```
 
+### F-statistics
+
+```bash
+$ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
+do Rscript popgen_stats-taxa.R $taxa 20;
+done
+```
+
 ### Kinship
 
 ```bash
@@ -450,13 +525,13 @@ $ ./colony2s.out IFN:aa1_1div_nc_50_0.1.dat
 # all other taxa run the same except AA2 where datafile was split per location for computation time speed up.
 ```
 
-### F-statistics
+### Clone distances
 
-```bash
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
-do Rscript popgen_stats-taxa.R $taxa;
-done
 ```
+
+```
+
+
 
 ## Appendix
 
