@@ -1,0 +1,15 @@
+Genepop
+GenepopInputFile=../data/AA1_all.genepop_copy.txt
+MenuOptions=6:5
+EstimationPloidy=Diploid
+IsolationStatistic=a
+Geometry=2D
+CIcoverage=0.95
+testPoint=0
+MinimalDistance=0.001
+MaximalDistance=100
+MantelPermutations=1000
+MantelRankTest=FALSE
+MantelSeed=67144630
+Mode=Batch
+

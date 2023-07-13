@@ -9,7 +9,7 @@ taxa=$1 # "AA2"
 cat=$2 # "all"
 scale=$3 # "within"
 
-results_file="../results/${taxa}/${taxa}_${cat}.${scale}.results"
+results_file="../results/ibd/${taxa}/${taxa}_${cat}.${scale}.results_copy"
 
 touch "${results_file}_short.txt"
 

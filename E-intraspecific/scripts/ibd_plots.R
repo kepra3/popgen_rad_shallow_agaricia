@@ -1,4 +1,3 @@
-
 # Required packages
 library(ggplot2)
 library(spaa)
@@ -8,17 +7,14 @@ args = commandArgs(TRUE)
 #taxa = args[1] #"AA2"
 #category = args[2] #"WP05"
 #scale = args[3] # "within"
-#option = args[4] # "no"
-taxa = "AH3"
+taxa = "AA1"
 category = "all"
-scale = "all"
-option = "no"
+scale = "within"
 
 # Import data ==================================================
-setwd("~/Dropbox/agaricia_project_2019/shalo_ag/gen_project/3 - Spatial/3b - Within & between plots/spatial-agaricia/")
-a <- read.delim(paste0("results/", taxa, "/", taxa, "_", category, ".a.txt"), header = FALSE)
-lndist <- read.delim(paste0("results/", taxa, "/", taxa, "_", category, ".lndist.txt"), header = FALSE)
-results <- read.csv(paste0("results/", taxa, "/",taxa, "_", category, ".", scale, ".results_short.txt"))
+a <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", category, ".a.txt"), header = FALSE)
+lndist <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", category, ".lndist.txt"), header = FALSE)
+results <- read.csv(paste0("../results/ibd/", taxa, "/",taxa, "_", category, ".", scale, ".results_short.txt"))
 if (taxa == "AA1" | taxa == "AA2") {
   vcf = "ac_3b_nc_20"
 } else if (taxa == "AL1" | taxa == "AL2") {
@@ -26,7 +22,7 @@ if (taxa == "AA1" | taxa == "AA2") {
 } else if (taxa == "AH1" | taxa == "AH2" | taxa == "AH3") {
   vcf = "hu_3b_nc_20"
 }
-taxa.depth.pop <- read.csv(paste0("data/",vcf, "_", taxa, "_", category, "_.csv"), stringsAsFactors = TRUE)
+taxa.depth.pop <- read.csv(paste0("../data/",vcf, "_", taxa, "_", category, "_.csv"), stringsAsFactors = TRUE)
 table(taxa.depth.pop$Site)
 
 results.round <- results
@@ -34,12 +30,9 @@ for (i in 1:7) {
   results.round[,i] <- round(results[,i], 3)
 }
 
-
-
 row1 <- rep(NA, nrow(a))
 a <- rbind(row1, a)
 lndist <- rbind(row1, lndist)
-
 
 b = results$slope
 b.low = results$s.lowCI
@@ -49,8 +42,6 @@ confidence_interval_lower <- c(results$i.lowCI, b.low)
 confidence_interval_upper <- c(results$i.highCI, b.high)
 pvalue = results$p.slope
 sign = "="
-
-
 
 # Re-organise data ==================================================
 x <- lndist[lower.tri(lndist)]
@@ -84,6 +75,7 @@ confidence_interval_upper <- as.data.frame(cbind(confidence_interval_upper[1], c
 y_lower <- dat$distance * confidence_interval_lower$V2 + confidence_interval_lower$V1
 y_mean <- dat$distance * regression$V2 + regression$V1
 y_upper <- dat$distance * confidence_interval_upper$V2 + confidence_interval_upper$V1
+
 # Make plots  ========================
 slope <- round(regression[2], 3)
 res <- data.frame(cond1 = "regression",
@@ -110,7 +102,7 @@ p <- ggplot(dat, aes(distance, a)) +
         axis.text = element_text(size = 8)) 
 p
 
-ggsave(paste0("plots/results_11-05-23/", taxa, "_", category, "_", scale, "_genvdist_new.pdf"), height = 4, width = 4, units = "cm", dpi = 400)
+ggsave(paste0("../results/ibd/plots/", taxa, "_", category, "_", scale, "_genvdist_copy.pdf"), height = 4, width = 4, units = "cm", dpi = 400)
 
 
 # Dispersal kernal ==================================================
@@ -195,11 +187,11 @@ if (pvalue <= 0.06) {
                                 axis.title = element_text(size = 8),
                                 axis.text = element_text(size = 6)) 
   kernelplot
-  ggsave(paste0("plots/results_11-05-23/dispersal_kernel_", taxa, "_", category, "_", scale, ".pdf"), units = "cm", height = 4, width = 4, dpi = 400)
+  ggsave(paste0("../results/ibd/plots/dispersal_kernel_", taxa, "_", category, "_", scale, ".pdf"), units = "cm", height = 4, width = 4, dpi = 400)
   
   dispersal_data <- cbind(taxa, Neighbourhood, Neighbourhood.low, Neighbourhood.high,
                           D, sigma2, sigma)
-  write.csv(dispersal_data, paste0("plots/results_11-05-23/", taxa, "_", category, "_", scale, "_dispersal_results.csv"), quote = FALSE,
+  write.csv(dispersal_data, paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results_copy.csv"), quote = FALSE,
             row.names = FALSE)
 }
 
