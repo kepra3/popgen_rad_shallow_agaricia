@@ -15,6 +15,8 @@ TODO:
 - [ ] Change names of all files
 - [ ] Add all software versions and requirements
 
+TODO: make sure .gitattributes file is workind thus the linguist settings
+
 ## raw files
 
 Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository (hyperlink)
