@@ -6,5 +6,5 @@ C-popualtion_structure/data/** linguist-vendored
 C-population_structure/results/** linguist-vendored
 D-spatial_coordinates/data/** linguist-vendored
 D-spatial_coordinates/results/** linguist-vendored
-E-interspecific/data/** linguist-vendored
-E-interspecific/results/** linguist-vendored
+E-intraspecific/data/** linguist-vendored
+E-intraspecific/results/** linguist-vendored
