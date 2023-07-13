@@ -1,0 +1,10 @@
+# Apply override to all files in the directory
+A-filtered_vcf/** linguist-vendored
+B-clones/data/** linguist-vendored
+B-clones/results/** linguist-vendored
+C-popualtion_structure/data/** linguist-vendored
+C-population_structure/results/** linguist-vendored
+D-spatial_coordinates/data/** linguist-vendored
+D-spatial_coordinates/results/** linguist-vendored
+E-interspecific/data/** linguist-vendored
+E-interspecific/results/** linguist-vendored

@@ -7,7 +7,7 @@ TODO:
   - [x] log/CV error
 - [ ] Combination
 - [x] Spatial coords
-- [x] FST
+- [x] Fstat
 - [x] RDA
 - [ ] IBD
 - [ ] Kinship
