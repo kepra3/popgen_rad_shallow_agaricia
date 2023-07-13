@@ -100,7 +100,7 @@ make_clone_freq_distribution <- function(freq_table, clusters) {
     geom_bar(position = "stack", stat = "identity") + theme_classic() + scale_fill_manual(values = site_colours) +
     xlab("Number of colonies in a group") +
     ylab("Frequency of groups")
-  ggsave(paste0("3a - Clone distances/", clusters,"_freqclonegroups.pdf"), height = 10, width = 7, units = "cm")
+  ggsave(paste0("../results/clone_dist/", clusters,"_freqclonegroups.pdf"), height = 10, width = 7, units = "cm")
 }
 list_df <- function(metadata, cluster) {
   clust.metadata <- metadata[metadata$Clusters == cluster,]
@@ -141,14 +141,13 @@ match_clones <- function(plot, clonegroups) {
 }
 
 # Import  ####
-setwd("~/Dropbox/agaricia_project_2019/shalo_ag/gen_project/3 - Spatial/")
-metadata <- read.csv('all_annotations_X_HORIZ_parallel_XYZadjusted.txt')
-ac.mlgs <- read.csv("../2 - Population Structure/2c - NJ tree/ac_1d_wc_20_colours.txt", header = FALSE)
-hu.mlgs <- read.csv("../2 - Population Structure/2c - NJ tree/hu_1d_wc_20_colours.txt", header = FALSE)
-lm.mlgs <- read.csv("../2 - Population Structure/2c - NJ tree/lm_1d_wc_20_colours.txt", header = FALSE)
-ac.clonegroups <- read.csv("../Pyscripts/results/clones/clone_groups_ac.csv")
-hu.clonegroups <- read.csv("../Pyscripts/results/clones/clone_groups_hu.csv")
-lm.clonegroups <- read.csv("../Pyscripts/results/clones/clone_groups_lm.csv")
+metadata <- read.csv('../data/all_annotations_X_DEPTH_parallel_XYZ_adjusted.txt')
+ac.mlgs <- read.csv("../data/ac_1d_wc_20_colours.txt", header = FALSE)
+hu.mlgs <- read.csv("../data/hu_1d_wc_20_colours.txt", header = FALSE)
+lm.mlgs <- read.csv("../data/lm_1d_wc_20_colours.txt", header = FALSE)
+ac.clonegroups <- read.csv("../data/clone_groups_ac.csv")
+hu.clonegroups <- read.csv("../data/clone_groups_hu.csv")
+lm.clonegroups <- read.csv("../data/clone_groups_lm.csv")
 pop.wc.ac <- read.csv("../data/ac_1d_wc_20_4.csv")
 pop.wc.hu <- read.csv("../data/hu_1d_wc_20_4.csv")
 pop.wc.lm <- read.csv("../data/lm_1d_wc_20_2.csv")
@@ -228,7 +227,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AA1"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AA1"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AA1"]))
 aa1.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AA1"])) -1) / (46 - 1)
-print(aa1.R)
+print(paste0("Clonal richness for AA1 is ", aa1.R))
 #[1] 0.7333333
 
 # AA2
@@ -236,7 +235,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AA2"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AA2"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AA2"]))
 aa2.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AA2"])) -1) / (462 - 1)
-print(aa2.R)
+print(paste0("Clonal richness for AA2 is ", aa2.R))
 #[1] 0.6464208
 
 # AH1
@@ -244,7 +243,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AH1"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AH1"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AH1"]))
 ah1.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AH1"])) -1) / (88 - 1)
-print(ah1.R)
+print(paste0("Clonal richness for AH1 is ", ah1.R))
 #[1] 0.816092
 
 # AH2
@@ -252,7 +251,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AH2"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AH2"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AH2"]))
 ah2.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AH2"])) -1) / (31 - 1)
-print(ah2.R)
+print(paste0("Clonal richness for AH2 is ", ah2.R))
 #[1] 0.9333333
 
 # AH3
@@ -260,7 +259,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AH3"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AH3"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AH3"]))
 ah3.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AH3"])) -1) / (22 - 1)
-print(ah3.R)
+print(paste0("Clonal richness for AH3 is ", ah3.R))
 #[1] 0.9047619
 
 # AL1
@@ -268,7 +267,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AL1"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AL1"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AL1"]))
 al1.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AL1"])) -1) / (34 - 1)
-print(al1.R)
+print(paste0("Clonal richness for AL1 is ", al1.R))
 #[1] 0.9090909
 
 # AL2
@@ -276,7 +275,7 @@ length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AL2"]))
 table(all.clonegroups$Groups[all.clonegroups$Clusters == "AL2"])
 table(table(all.clonegroups$Groups[all.clonegroups$Clusters == "AL2"]))
 al2.R <- (length(unique(all.clonegroups$Groups[all.clonegroups$Clusters == "AL2"])) -1) / (69 - 1)
-print(al2.R)
+print(paste0("Clonal richness for AL2 is ", al2.R))
 #[1] 0.8970588
 
 # Clone distrib plot ####
@@ -298,7 +297,7 @@ all.clonegroups$Site <- factor(all.clonegroups$Site, levels = c("WP05", "WP10", 
 ggplot(all.clonegroups, aes(x = Freq, fill = Site)) +
   geom_bar(stat = "count") + theme_classic() + scale_fill_manual(values = site_colours) +
   facet_wrap(~Clusters)
-ggsave(paste0("3a - Clone distances/all_clonegroups.pdf"))
+ggsave(paste0("../results/clone_dist/all_clonegroups.pdf"))
 
 
 freq_table <- make_clone_freq_table(all.clonegroups)
@@ -317,27 +316,17 @@ ggplot(freq_table_noAA2, aes(x = Group, y = Freq_group, fill = Site)) +
   geom_bar(position = "stack", stat = "identity") + theme_classic() + scale_fill_manual(values = site_colours) +
   xlab("Number of colonies in a group") +
   ylab("Frequency of groups") + facet_wrap(~Taxa)
-ggsave(paste0("3a - Clone distances/_freqclonegroups_noAA2.pdf"), height = 10, width = 10, units = "cm")
+ggsave(paste0("../results/clone_dist/_freqclonegroups_noAA2.pdf"), height = 10, width = 10, units = "cm")
 
 # Within singles ####
-
 freq_table2 <- freq_table[freq_table$Group != "1",]
-
-ggplot(freq_table2, aes(x = Group, y = Freq_group, fill = Site)) +
-  geom_bar(position = "stack", stat = "identity") + theme_classic() + scale_fill_manual(values = site_colours[2:11]) +
-  xlab("Number of colonies in a group") +
-  ylab("Frequency of groups") + facet_wrap(~Taxa)
-ggsave(paste0("3a - Clone distances/freqclonegroups.pdf"), height = 10, width = 10, units = "cm")
-
-
-#make_clone_freq_distribution(freq_table2, "AA2")
 
 ggplot(freq_table2[freq_table2$Taxa == "AA2",], aes(x = Group, y = Freq_group, fill = Site)) +
   geom_bar(position = "stack", stat = "identity") + theme_classic() + scale_fill_manual(values = site_colours[c(2,3,5,6,8:11)]) +
   facet_wrap(~Taxa) +
   theme(legend.position = "none",
         axis.title = element_blank())
-ggsave(paste0("3a - Clone distances/freqclonegroups_AA2.pdf"), height = 10, width = 3, units = "cm")
+ggsave(paste0("../results/clone_dist/freqclonegroups_AA2.pdf"), height = 10, width = 3, units = "cm")
 
 freq_table2_noAA2 <- freq_table2[freq_table2$Taxa != "AA2",]
 
@@ -349,8 +338,7 @@ ggplot(freq_table2_noAA2, aes(x = Group, y = Freq_group, fill = Site)) +
   geom_bar(position = "stack", stat = "identity") + theme_classic() + scale_fill_manual(values = site_colours[2:11]) +
   xlab("Number of colonies in a group") +
   ylab("Frequency of groups") + facet_wrap(~Taxa)
-ggsave(paste0("3a - Clone distances/_freqclonegroups_noAA2.pdf"), height = 10, width = 10, units = "cm")
-
+ggsave(paste0("../results/clone_dist/freqclonegroups_noAA2.pdf"), height = 10, width = 10, units = "cm")
 
 # Organising spatial metadata ####
 metadata <- metadata %>% separate(Individual, into=c("Sample", "Species", "Site")) %>% 
@@ -367,15 +355,12 @@ all.clonegroups$clones[all.clonegroups$Freq == "1"] = "non-clone"
 all.clonegroups$clones <- droplevels(all.clonegroups$clones)
 metadata$clone_group <- all.clonegroups$clones[match(metadata$Individual, all.clonegroups$Sample)]
 # remove instances no genotypes colonies
-metadata <- na.omit(metadata) # 627
-
+metadata <- na.omit(metadata) # 636
 metadata$Clusters <- all.clonegroups$Clusters[match(metadata$Individual, all.clonegroups$Sample)]
 
-
 # Writing metadata ####
-write.table(metadata, file = "all-aga_spatgeo.txt", quote = FALSE, row.names = FALSE)
-write.table(all.clonegroups, file = "all-aga_clones.txt", quote = FALSE, row.names = FALSE)
-
+write.table(metadata, file = "../results/clone_dist/all-aga_spatgeo.txt", quote = FALSE, row.names = FALSE)
+write.table(all.clonegroups, file = "../results/clone_dist/all-aga_clones.txt", quote = FALSE, row.names = FALSE)
 
 # Euclidean spatial distances between clones ####
 # aa1
@@ -383,29 +368,27 @@ list_aa1 <- list_df(metadata, "AA1")
 ggplot(list_aa1, aes(x = group_pair, y = value, color = group_stat)) + geom_jitter() + theme_classic() + coord_flip()
 list.small <- list_aa1[list_aa1$col_group == list_aa1$row_group & list_aa1$group_pair != "non-clone-non-clone", ]
 ggplot(list.small, aes(x = group_pair, y = value, fill = group_pair)) + geom_jitter(size = 2, shape = 21) + theme_classic() + coord_flip()
-ggsave("AA1_clone_geo_dist.pdf")
+ggsave("../results/clone_dist/AA1_clone_geo_dist.pdf")
 
 ggplot(list.small, aes(value)) + 
   geom_histogram(breaks = seq(0, 0.6, 0.1), fill = colours[1], colour = "black") +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy") +
   xlim(c(0,3)) +
   scale_y_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, 2))
-ggsave("3a - Clone distances/AA1_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
-
+ggsave("../results/clone_dist/AA1_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
 
 # list small aa2
 list_aa2 <- list_df(metadata, "AA2")
 list.small <- list_aa2[list_aa2$col_group == list_aa2$row_group & list_aa2$group_pair != "non-clone-non-clone", ]
 list.small <- list.small[list.small$value < 100,]
 ggplot(list.small, aes(x = group_pair, y = value, fill = group_pair)) + geom_jitter(size = 2, shape = 21) + theme_classic() + coord_flip()
-ggsave("AA2_clone_geo_dist.pdf", height = 30, width = 50, units = "cm")
+ggsave("../results/clone_dist/AA2_clone_geo_dist.pdf", height = 30, width = 50, units = "cm")
 
 ggplot(list.small, aes(value)) + 
   geom_histogram(breaks = seq(0, 3, 0.1), fill = colours[2], colour = "black") +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy") +
   scale_y_continuous(limits = c(0, 80), expand = c(0, 0), breaks = seq(0, 70, 10))
-ggsave("3a - Clone distances/AA2_clone_geo_distancedistrib.pdf", height = 10, width = 5, units = "cm")
-
+ggsave("../results/clone_dist/AA2_clone_geo_distancedistrib.pdf", height = 10, width = 5, units = "cm")
 
 # al1
 list_al1 <- list_df(metadata, "AL1")
@@ -417,9 +400,7 @@ ggplot(list.small, aes(value)) +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy") +
   xlim(c(0,3)) +
   scale_y_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, 2))
-ggsave("3a - Clone distances/AL1_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
-
-
+ggsave("../results/clone_dist/AL1_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
 
 # al2
 list_al2 <- list_df(metadata, "AL2")
@@ -430,22 +411,20 @@ list.small <- list.small[list.small$value < 100, ]
 
 ggplot(list.small, aes(x = group_pair, y = value, fill = group_pair)) + geom_jitter(size = 2, shape = 21) +
   theme_classic() + coord_flip()
-ggsave("AL2_clone_geo_dist.pdf")
+ggsave("../results/clone_dist/AL2_clone_geo_dist.pdf")
 
 ggplot(list.small, aes(value)) + 
   geom_histogram(breaks = seq(0, 1, 0.1), fill = colours[7], colour = "black") +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy")  +
   xlim(c(0,3)) +
   scale_y_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, 2))
-ggsave("3a - Clone distances/AL2_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
-
-
+ggsave("../results/clone_dist/AL2_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
 
 # ah1
 list_ah1 <- list_df(metadata, "AH1")
 list.small <- list_ah1[list_ah1$col_group == list_ah1$row_group & list_ah1$group_pair != "non-clone-non-clone", ]
 ggplot(list.small, aes(x = group_pair, y = value, fill = group_pair)) + geom_jitter(size = 2, shape = 21) + theme_classic() + coord_flip()
-ggsave("AH1_clone_geo_dist.pdf")
+ggsave("../results/clone_dist/AH1_clone_geo_dist.pdf")
 
 # there are clones between WP 10 - 20m
 ggplot(list.small, aes(value)) + 
@@ -453,27 +432,26 @@ ggplot(list.small, aes(value)) +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy") +
   xlim(c(0,30)) +
   scale_y_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, 2))
-ggsave("3a - Clone distances/AH1_clone_geo_distancedistrib.pdf", height = 5, width = 10, units = "cm")
+ggsave("../results/clone_dist/AH1_clone_geo_distancedistrib.pdf", height = 5, width = 10, units = "cm")
 
 # ah2
 list_ah2 <- list_df(metadata, "AH2")
 list.small <- list_ah2[list_ah2$col_group == list_ah2$row_group & list_ah2$group_pair != "non-clone-non-clone", ]
 ggplot(list.small, aes(x = group_pair, y = value, fill = group_pair)) + geom_jitter(size = 2, shape = 21) + theme_classic() + coord_flip()
-ggsave("AH2_clone_geo_dist.pdf")
+ggsave("../results/clone_dist/AH2_clone_geo_dist.pdf")
 
 ggplot(list.small, aes(value)) + 
   geom_histogram(breaks = seq(0, 1, 0.1), fill = colours[4], colour = "black") +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy") +
   xlim(c(0,3)) +
   scale_y_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, 2))
-ggsave("3a - Clone distances/AH2_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
-
+ggsave("../results/clone_dist/AH2_clone_geo_distancedistrib.pdf", height = 5, width = 5, units = "cm")
 
 # ah3
 list_ah3 <- list_df(metadata, "AH3")
 list.small <- list_ah3[list_ah3$col_group == list_ah3$row_group & list_ah3$group_pair != "non-clone-non-clone", ]
 ggplot(list.small, aes(x = group_pair, y = value, fill = group_pair)) + geom_jitter(size = 2, shape = 21) + theme_classic() + coord_flip()
-ggsave("AH3_clone_geo_dist.pdf")
+ggsave("../results/clone_dist/AH3_clone_geo_dist.pdf")
 
 # there are clones between WP05 - WP10
 ggplot(list.small, aes(value)) + 
@@ -481,5 +459,4 @@ ggplot(list.small, aes(value)) +
   theme_classic() + xlab("distance between clones (m)") + ylab("Frequnecy")  +
   xlim(c(0,30)) +
   scale_y_continuous(limits = c(0, 10), expand = c(0, 0), breaks = seq(0, 10, 2))
-ggsave("3a - Clone distances/AH3_clone_geo_distancedistrib.pdf", height = 5, width = 10, units = "cm")
-
+ggsave("../results/clone_dist/AH3_clone_geo_distancedistrib.pdf", height = 5, width = 10, units = "cm")

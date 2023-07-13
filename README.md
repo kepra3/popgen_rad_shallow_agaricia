@@ -9,9 +9,9 @@ TODO:
 - [x] Spatial coords
 - [x] Fstat
 - [x] RDA
-- [ ] IBD
+- [x] IBD
 - [ ] Kinship
-- [ ] Clone distances
+- [x] Clone distances
 - [ ] Change names of all files
 - [ ] Add all software versions and requirements
 
@@ -37,34 +37,6 @@ A git hub repository for analysis datasets, scripts and results
 
 ## A - Filtered vcf file
 
-**Files structure:**
-
-|--blast_files/
-
-​			|--sym_loci_to_remove_all-aga_nogaps_min4_n.txt [match e from Cladocopium genome]
-
-​			|--sym_loci_to_remove_all-aga_SymRAD16_n.txt [match e from RAD symbiont extracts todo: hyperlink to pim github]
-
-​			|--RAD_other_loci_to_remove.txt [match e from NCBI nucleotide database]
-
-|--high-miss-indiv_all-aga_1ci.txt [removed individuals with high missing data]
-
-|--pcadapt_outliers/
-
-​		|--data/
-
-​		|--results/
-
-​				|--ac_pcadapt_outliers.txt
-
-​				|--hu_pcadapt_outliers.txt
-
-​				|--lm_pcadapt_outliers.txt
-
-​		|--scripts/
-
-​				|--pcadapt_shallow.R
-
 **Notes**
 
 Steps are all written out instead of all code commands as the commands used are relatviely simple and repetitive.
@@ -89,58 +61,6 @@ $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac
 
 ## B - Clones
 
-**File structure**
-
-|--data/
-
-​		|--ac_1d_wc_20_gdmatrix.tsv
-
-​		|--clone_matches_ac_1d_wc_20.csv
-
-​		|--clone_matches_hu_1d_wc_20.csv
-
-​		|--clone_matches_lm_1d_wc_20.csv
-
-​		|--hu_1d_wc_20_gdmatrix.tsv
-
-​		|--lm_1d-pure_wc_20_gdmatrix.tsv
-
-​		|--pop_ac_1d_wc_20.txt
-
-​		|--pop_hu_1d_wc_20.txt
-
-​		|--pop_lm_1d-pure_wc_20.txt
-
-|--scripts
-
-​		|--make_clone_groups.py
-
-|--results/
-
-​		|--chosen_individuals_ac.csv
-
-​		|--chosen_individuals_hu.csv
-
-​		|--chosen_individuals_lm.csv
-
-​		|--clone_groups_ac.csv
-
-​		|--clone_groups_hu.csv
-
-​		|--clone_groups_lm.csv
-
-​		|--distribution_pairwise_sum_ac_1d_wc.pdf
-
-​		|--distribution_pairwise_sum_hu_1d_wc.pdf
-
-​		|--distribution_pairwise_sum_lm_1d-pure_wc.pdf
-
-​		|--individuals2keep_ac.txt
-
-​		|--individuals2keep_hu.txt
-
-​		|--individuals2keep_lm.txt
-
 **Notes**
 
 The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes the `clone_matches_*` files.
@@ -163,80 +83,6 @@ $ make_clone_groups.py lm_1d-pure_wc_20
 ```
 
 ## C - Population structure
-
-**File structure**
-
-C-population_structure/
-
-​	|--data/
-
-​			|--ac_1div_nc_20_4.csv
-
-​			|--all-aga_1div_nc-wnr_20_4.csv
-
-​			|--hu_1div_nc_20_4.csv
-
-​			|--lm_1div_nc_20_2.csv
-
-​			|--lm_1div_nc-wnr_20_2.csv
-
-​			|--pop_lm_1div_nc-wnr.txt
-
-​			|--pop_lm_1div_nc.txt
-
-​			|--ac_1div_nc_20.vcf
-
-​			|--all-aga_1div_nc_wnr.vcf 
-
-​			|--hu_1div_nc_20.vcf
-
-​			|--lm_1div_nc_20.vcf
-
-​			|--lm_1div_nc-wnr_20.vcf
-
-​	|--results/
-
-​			|--admix_plots/
-
-
-
-​			|--admix_runs/
-
-​			|--pca/
-
-​					|--ac_stats/
-
-​							|--ac_1div_nc_20_depth_facet_pca-x12.pdf
-
-​							|--ac_2div_nc_20_depth_facet_pca-x34.pdf
-
-​							|--ac_1div_nc_20_eig_plot.pdf
-
-​							|--ac_1div_nc_20_eig.csv
-
-​							|--ac_1div_nc_20_pcscores4.csv
-
-​					|--all-aga_stats/
-
-​					|--hu_stats/
-
-​					|--lm_stats/
-
-​	|--scripts/
-
-​			|--admix_4multiple.sh
-
-​			|--admix_plots2.R
-
-​			|--admix_unlinked.sh
-
-​			|--basic_pca.R
-
-​			|--compile_logs.R
-
-​			|--func-k.R
-
-​			|--Qvalues.R
 
 **Notes**
 
@@ -325,20 +171,6 @@ $
 
 ## D - Spatial coordinates 
 
-**File structure:**
-
-|--data/
-
-​		|--
-
-|--scripts/
-
-​		|--
-
-|--results/
-
-
-
 **Notes:**
 
 
@@ -381,21 +213,7 @@ TODO: naming of files and inconsistency of scripts...
 
 ## E - Intraspecific analyses
 
-**File structure:**
-
-|--data/
-
-​		|--
-
-|--scripts/
-
-​		|--
-
-|--results/
-
-​		|--
-
-Notes:
+**Notes:**
 
 
 
@@ -485,25 +303,28 @@ done
 
 ```bash
 # Running genepop across all locations
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
-do Rscript genepop.R $taxa all all; # TODO: need to alter vcf names within script, ac_3b_nc_20
+$ for taxa in AA1 AA2	AH1 AH2 AH3 AL1 AL2;
+do Rscript genepop.R $taxa all all;
 done
 # Running genepop across all locations, for within 'locations', e.g., all depths at one spatial location 
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 do Rscript genepop.R $taxa all within;
 done
+# create distance matrices for â and ln(geodist)
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
+do ./get_dist_matrix.sh $taxa all
 # Summarise results
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
-do ./get_genepop_results.sh $taxa all within;
-done
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 do ./get_genepop_results.sh $taxa all all;
 done
-# Make plots
-$ for taxa in AA1 AH1 AH2 AH3 AL1 AL2;
-do Rscript ibd_plots_new.R $taxa all all;
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
+do ./get_genepop_results.sh $taxa all within;
 done
-Rscript ibd_plots_new.R  AA1 all within
+# Make plots
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
+do Rscript ibd_plots.R $taxa all all;
+done
+$ Rscript ibd_plots.R AA1 all within
 ```
 
 ### F-statistics
@@ -515,6 +336,28 @@ done
 ```
 
 ### Kinship
+
+Settings:
+
+```
+! 0 - not updating allele frequency
+! 1 - Monoecious species
+! 1 - Inbreeding
+! 0 - Diploid species
+! 0 / 0 - Polygamy for both MF
+! 0 - No clone inference
+! 0 1.0 1.0 - No sibship prior; mean parternal maternal size - not necessary if sibship prior is 0
+! 0 - Unknown pop freq
+! 10 - Number of runs
+! 4 - Length of run
+! 0 - Monitor method always choose 0 when not using windows GUI
+! 10000 - Monitor interval (ignore)
+! 0 - non-windows version
+! 1 - Full likelihood
+! 3 - High precision
+```
+
+Running code:
 
 ```bash
 $ Rscript colony_files.R aa1_1div_nc_50
@@ -529,11 +372,12 @@ $ ./colony2s.out IFN:aa1_1div_nc_50_0.1.dat
 
 ### Clone distances
 
+```bash
+# clones
+$ Rscript clone_spatial_plots.R
+# all genotypes
+$ Rscript 
 ```
-
-```
-
-
 
 ## Appendix
 
@@ -543,7 +387,8 @@ Details for different conda environments
 
 ### Script descriptions
 
-
+TODO:
 
 ### Filename descriptions
 
+TODO:
