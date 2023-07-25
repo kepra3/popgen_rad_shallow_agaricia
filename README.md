@@ -2,20 +2,11 @@
 
 TODO:
 
-- [x] PCA
-- [x] Admixture
-  - [x] log/CV error
 - [ ] Combination
-- [x] Spatial coords
-- [x] Fstat
-- [x] RDA
-- [x] IBD
 - [ ] Kinship
-- [x] Clone distances
+- [ ] Copy ipyrad settings
 - [ ] Change names of all files
 - [ ] Add all software versions and requirements
-
-TODO: make sure .gitattributes file is workind thus the linguist settings
 
 ## raw files
 
@@ -33,7 +24,7 @@ Ipyrad settings:
 
 # popgen_rad_shallow_agaricia
 
-A git hub repository for analysis datasets, scripts and results
+A repository for analysis datasets, scripts and results for Prata et al., (2023) Metre-scale generational dispersal in dominant Caribbean corals.
 
 ## A - Filtered vcf file
 
@@ -153,7 +144,7 @@ $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc 10 20 $run;
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc-wnr 10 20 $run; done
 # $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh all-aga 1diii nc-wnr 10 20 $run; done
 ### CV error and log-likelihood plots
-$ Rscript complie_logs.R
+$ Rscript compile_logs.R
 ### Q plots
 $ Rscript Qvalues.R all-aga_2bi_1div_nc-wnr_20 3
 $ Rscript Qvalues.R ac_2bi_1div_nc_20 2
@@ -337,7 +328,7 @@ done
 
 ### Kinship
 
-Settings:
+Kinship general settings file:
 
 ```
 ! 0 - not updating allele frequency
@@ -363,11 +354,9 @@ Running code:
 $ Rscript colony_files.R aa1_1div_nc_50
 $ for param in 0.5 0.2 0.1 0.05;
 do ./edit_dat_file.sh aa1_1div_nc_50 35 487 $param
-$ ./colony2s.out IFN:aa1_1div_nc_50_0.2.dat
-$ ./colony2s.out IFN:aa1_1div_nc_50_0.5.dat
-$ ./colony2s.out IFN:aa1_1div_nc_50_0.05.dat
-$ ./colony2s.out IFN:aa1_1div_nc_50_0.1.dat
-# all other taxa run the same except AA2 where datafile was split per location for computation time speed up.
+$ for param in 0.5 0.1 0.05;
+do ./colony2s.out IFN:aa1_1div_nc_50_${param}.dat
+# all other taxa analyses were run the same except AA2 where datafile was split per location for computation time speed up.
 ```
 
 ### Clone distances
@@ -383,12 +372,46 @@ $ Rscript
 
 ### Conda environments
 
-Details for different conda environments
+Details for different conda environments.
+
+Two conda environments were used for all analyses, `radkat` and `open3d`
+
+```bash
+# radkat conda environment
+```
+
+
 
 ### Script descriptions
 
 TODO:
 
-### Filename descriptions
+### Filename glossary
 
 TODO:
+
+'all-aga' - all *Agaricia* spp. samples
+
+'ac' - *A. agaricites*
+
+'lm' - A. lamarcki
+
+'hu' - A. humilis
+
+'nc' - no clones
+
+'wc' - with clones
+
+'aa1' - A. agaricites taxon 1
+
+'aa2' -
+
+'ah1' -
+
+'ah2' -
+
+'ah3' -
+
+'al1' -
+
+'al2' -

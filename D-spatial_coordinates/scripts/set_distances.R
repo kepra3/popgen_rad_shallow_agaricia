@@ -70,4 +70,4 @@ metadata$y[metadata$Site == "SB20"] = metadata$y[metadata$Site == "SB20"] - dist
 metadata$y[metadata$Site == "CA20"] = metadata$y[metadata$Site == "CA20"] - dist_5_10 - dist_10_20
 metadata$y[metadata$Site == "SQ20"] = metadata$y[metadata$Site == "SQ20"] - dist_5_10 - dist_10_20
 
-write.csv(metadata, file = paste0("../results/", annotation_file, "_XYZ_adjusted.txt"), row.names = FALSE, quote = FALSE)
+write.csv(metadata, file = paste0("../results/", annotation_file, "_XYZ_adjusted_copy.txt"), row.names = FALSE, quote = FALSE)

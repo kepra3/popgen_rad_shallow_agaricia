@@ -1,0 +1,272 @@
+# Title: Sorting metadata for GEOME
+# Author: Katharine Prata
+# Date created: 18/07/23
+
+# Packages
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(readxl)
+library(ggplot2)
+
+# Functions
+add_plate_wells <- function(dataset, dataset_reads) {
+  dataset$plate <- deparse(substitute(dataset))
+  dataset$well <- NA
+  wells <- NA
+  for (i in 1:12) {
+    for (j in 1:8){
+      wells[length(wells) + 1] <- paste0(LETTERS[j], i)
+    }}
+  dataset$well <- wells[-1]
+  dataset <- cbind(dataset, dataset_reads[,3:6])
+  return(dataset)
+}
+
+
+setwd("~/Dropbox/agaricia_project_2019/shalo_ag/gen_project/popgen_rad_shallow_agaricia/F-final_metadata/scripts")
+
+# files
+for (i in 1:9) {
+  assign(paste0("KP0", i, "_reads"), read.csv(paste0("../data/KP0", i, "_reads.txt"), sep = "\t", header = TRUE))
+}
+for (i in 10:14) {
+  assign(paste0("KP", i, "_reads"), read.csv(paste0("../data/KP", i, "_reads.txt"), sep = "\t", header = TRUE))
+}
+for (i in 1:9) {
+  assign(paste0("KP0", i), read.csv(paste0("../data/KP0", i, "_barcode_names.txt"), sep = " ", header = FALSE))
+}
+for (i in 10:14) {
+  assign(paste0("KP", i), read.csv(paste0("../data/KP", i, "_barcode_names.txt"), sep = " ", header = FALSE))
+}
+fastq_samples <- read.csv("../data/fastq_samples.txt", header = FALSE)
+genetic_samples <- read.csv("../data/all-aga_clones.txt", sep = " ")
+spatial_samples <- read.csv("../data/all-aga_spatgeo.txt", sep = " ")
+geome_samples <- read_excel("../data/CoralScape_popgen_shallow-agaricia.xlsx", sheet = "Samples")
+annotation_samples <- read.csv("../data/Annotations_AgariciaCuracao2019_all - all_annotations.csv")
+
+# sort barcode and read files ####
+KP01 <- add_plate_wells(KP01, KP01_reads)
+KP02 <- add_plate_wells(KP02, KP02_reads)
+KP03 <- add_plate_wells(KP03, KP03_reads)
+KP04 <- add_plate_wells(KP04, KP03_reads)
+KP05 <- add_plate_wells(KP05, KP03_reads)
+KP06 <- add_plate_wells(KP06, KP03_reads)
+KP07 <- add_plate_wells(KP07, KP03_reads)
+KP08 <- add_plate_wells(KP08, KP03_reads)
+KP09 <- add_plate_wells(KP09, KP03_reads)
+KP10 <- add_plate_wells(KP10, KP03_reads)
+KP11 <- add_plate_wells(KP11, KP03_reads)
+KP12 <- add_plate_wells(KP12, KP03_reads)
+KP13 <- add_plate_wells(KP13, KP03_reads)
+KP14 <- add_plate_wells(KP14, KP03_reads)
+
+later_samples <- rbind(KP09, KP10, KP11, KP12, KP13, KP14)
+later_samples <- later_samples %>% 
+  separate(V3, into = c("Number", "Species", "Location", "Site"), sep = "_")
+later_samples$Site[later_samples$Site == "WP5"] <- "WP05"
+later_samples$Site[later_samples$Site == "CA5"] <- "CA05"
+later_samples$Site[later_samples$Site == "SB5"] <- "SB05"
+later_samples <- later_samples %>% 
+  unite(Individual, Number, Species, Site, sep = "_") %>% 
+  select(V1, V2, Individual, plate, well, Total, NoRadTag, LowQuality, Retained)
+
+earlier_samples <- rbind(KP01, KP02, KP03, KP04, KP05, KP06, KP07, KP08)
+earlier_samples <- earlier_samples %>% 
+  separate(V3, into = c("Number", "Species", "Site"), sep = "_")
+earlier_samples$Site[earlier_samples$Site == "WP5"] <- "WP05"
+earlier_samples$Site[earlier_samples$Site == "CA5"] <- "CA05"
+earlier_samples$Site[earlier_samples$Site == "SB5"] <- "SB05"
+earlier_samples <- earlier_samples %>% 
+  unite(Individual, Number, Species, Site, sep = "_")
+
+all_samples <- rbind(earlier_samples, later_samples)
+all_samples$Individual[all_samples$Individual == "NR5242_AL1_CK50"] <- "NR5242_L1_CK50"
+all_samples$Individual[all_samples$Individual == "NR5053_AL2_CS15"] <- "NR5053_L2_CS15"
+
+# sort duplicates and rename mislabels ####
+# Information given from !README, from notebook and calc_reseq.R
+# Issue with accidentally writing wrong number when copying from lab notebook
+all_samples$Individual[all_samples$Individual == "KP0334_AC_WP20" & all_samples$plate == "KP01"] <- "KP0344_LM_WP20"
+all_samples$Individual[all_samples$Individual == "KP0792_AC_WP10" & all_samples$plate == "KP07"] <- "KP0702_AC_SB20"
+all_samples$Individual[all_samples$Individual == "KP0648_AC_SB20" & all_samples$plate == "KP07"] <- "KP0678_AC_SB20"
+all_samples$Individual[all_samples$Individual == "KP0998_AC_CA10" & all_samples$plate == "KP06"] <- "KP0990_AC_CA10"
+all_samples$Individual[all_samples$Individual == "KP1067_AC_CA20" & all_samples$plate == "KP07"] <- "KP1069_AC_CA20"
+all_samples$Individual[all_samples$Individual == "KP0685_AC_SB20" & all_samples$plate == "KP06"] <- "KP0686_AC_SB20"
+all_samples$Individual[all_samples$Individual == "KP1059_LM_CA20" & all_samples$plate == "KP03"] <- "KP1159_UN_CA20"
+all_samples$Individual[all_samples$Individual == "KP0981_AC_WP05" & all_samples$plate == "KP07"] <- "KP0984_HU_WP05"
+all_samples$Individual[all_samples$Individual == "KP0756_AC_WP10" & all_samples$plate == "KP09"] <- "KP0746_AC_WP10"
+all_samples$Individual[all_samples$Individual == "KP0750_AC_WP10" & all_samples$plate == "KP10"] <- "KP0740_HU_WP10"
+all_samples$Individual[all_samples$Individual == "KP1054_AC_CA10" & all_samples$plate == "KP10"] <- "KP1052_AC_CA10"
+all_samples$Individual[all_samples$Individual == "KP0423_HU_CA05" & all_samples$plate == "KP10"] <- "KP0458_LM_WP20"
+all_samples$Individual[all_samples$Individual == "KP0144_LM_SB05" & all_samples$plate == "KP11"] <- "KP1144_LM_CA20"
+all_samples$Individual[all_samples$Individual == "KP0139_HU_SB05" & all_samples$plate == "KP11"] <- "KP1039_AC_CA10"
+all_samples$Individual[all_samples$Individual == "KP1049_HU_CA10" & all_samples$plate == "KP01"] <- "KP1149_AC_CA20"
+
+duplicates <- all_samples[duplicated(all_samples$Individual) | duplicated(all_samples$Individual, fromLast = TRUE),]
+
+duplicates <- duplicates[,(c(3, 4, 5, 9))] %>% 
+  group_by(Individual) %>% 
+  mutate(col_number = row_number()) %>% 
+  pivot_wider(names_from = col_number,
+              values_from = c(plate, well, Retained),
+              names_glue = "{.value}{col_number}") %>% 
+  ungroup()
+
+rm(KP01, KP01_reads, KP02, KP02_reads, KP03, KP03_reads, KP04, KP04_reads, KP05, KP05_reads, KP06, KP06_reads, KP07, KP07_reads,
+   KP08, KP08_reads, KP09, KP09_reads, KP10, KP10_reads, KP11, KP11_reads, KP12, KP12_reads, KP13, KP13_reads, KP14, KP14_reads,
+   earlier_samples, later_samples)
+
+duplicates$plate <- paste(duplicates$plate1, duplicates$plate2, duplicates$plate3, sep = " | ")
+duplicates$well <- paste(duplicates$well1, duplicates$well2, duplicates$plate3, sep = " | ")
+duplicates$reads <- paste(duplicates$Retained1, duplicates$Retained2, duplicates$Retained3, sep = " | ")
+
+# sort fastq samples ####
+fastq_samples <- fastq_samples %>% separate(V1, into = c("sample", "R", "fq", "gz"), sep = "\\.") %>% 
+  select(sample)
+fastq_samples <- as.data.frame(fastq_samples[!duplicated(fastq_samples),])
+
+# sort denovo samples ####
+denovo_samples <- read_excel("../data/README_renamed-samples_05-06-23.xlsx", sheet = "sample_fates")
+denovo_samples <- denovo_samples %>% separate(sample, into = c("number", "species1", "extra", "site"))
+denovo_samples$site[is.na(denovo_samples$site)] <- denovo_samples$extra[is.na(denovo_samples$site)]
+denovo_samples$site[denovo_samples$site == "SB5"] <- "SB05"
+denovo_samples$site[denovo_samples$site == "CA5"] <- "CA05"
+denovo_samples$site[denovo_samples$site == "WP5"] <- "WP05"
+denovo_samples$species1[denovo_samples$species1 == "AL1"] <- "L1"
+denovo_samples$species1[denovo_samples$species1 == "AL2"] <- "L2"
+denovo_samples <- denovo_samples %>% unite(sample, number, species1, site, remove = FALSE) %>% 
+  select(sample, number, species1, site, reads_raw, reads_passed_filter, retained_denovo, retained_highmiss) %>% 
+  separate(site, into = c("location1", "depth1"), sep = 2, remove = FALSE) %>% 
+  separate(number, into = c("KP", "ind"), sep = 2)
+denovo_samples$tissueID <- paste0("KP", denovo_samples$ind, "_", denovo_samples$species1, "_", denovo_samples$site)
+denovo_samples$tissueID[denovo_samples$KP == "NR"] <- denovo_samples$sample[denovo_samples$KP == "NR"]
+
+# Adding plate and well
+denovo_samples$plate1 <- all_samples$plate[match(denovo_samples$tissueID, all_samples$Individual)]
+denovo_samples$well1 <- all_samples$well[match(denovo_samples$tissueID, all_samples$Individual)]
+denovo_samples$reads1 <- as.character(all_samples$Retained[match(denovo_samples$tissueID, all_samples$Individual)])
+denovo_samples$plateX <- duplicates$plate[match(denovo_samples$tissueID, duplicates$Individual)]
+denovo_samples$wellX <- duplicates$well[match(denovo_samples$tissueID, duplicates$Individual)]
+denovo_samples$readsX <- duplicates$reads[match(denovo_samples$tissueID, duplicates$Individual)]
+
+denovo_samples <- denovo_samples %>% 
+  mutate(plate = coalesce(plateX, plate1)) %>% 
+  mutate(well = coalesce(wellX, well1)) %>% 
+  mutate(reads = coalesce(readsX, reads1))
+
+# Adding species, depth and location info
+denovo_samples$location2 <- genetic_samples$Loc[match(denovo_samples$tissueID, genetic_samples$Sample)]
+genetic_samples$Depth <- as.character(genetic_samples$Depth)
+genetic_samples$Depth[genetic_samples$Depth == "5"] <- "05"
+denovo_samples$depth2 <- genetic_samples$Depth[match(denovo_samples$tissueID, genetic_samples$Sample)]
+genetic_samples$species2 <- genetic_samples$Species
+genetic_samples$species2[genetic_samples$Clusters == "AA1" | genetic_samples$Clusters == "AA2"] <- "AC"
+genetic_samples$species2[genetic_samples$Clusters == "AH1" | genetic_samples$Clusters == "AH2" | 
+                           genetic_samples$Clusters == "AH3"] <- "HU"
+genetic_samples$species2[genetic_samples$Clusters == "AL1" | genetic_samples$Clusters == "AL2"] <- "LM"
+denovo_samples$species2 <- genetic_samples$species2[match(denovo_samples$sample, genetic_samples$Sample)]
+
+denovo_samples <- denovo_samples %>% 
+  mutate(location = coalesce(location2, location1)) %>% 
+  mutate(depth = coalesce(depth2, depth1)) %>% 
+  mutate(species = coalesce(species2, species1))
+
+# adding details to geome metadata ####
+geome_samples[1:972,] <- rep(NA, 32)
+geome_samples$materialSampleID <- denovo_samples$sample
+geome_samples$country <- "Curacao"
+geome_samples$yearCollected <- 2019
+geome_samples$principalInvestigator <- "Pim Bongaerts"
+geome_samples$continentOcean <- "Caribbean"
+geome_samples$locationID <- denovo_samples$location
+geome_samples$depthOfBottomInMeters <- denovo_samples$depth
+geome_samples$eventEnteredBy <- "Katharine E. Prata"
+geome_samples$family <- "Agariciidae"
+geome_samples$genus <- "Agaricia"
+geome_samples$class <- "Hexacorallia"
+geome_samples$order <- "Scleractinia"
+geome_samples$phylum <- "Cnidaria"
+geome_samples$kingdom <- "Animalia"
+geome_samples$identifiedBy <- "Katharine E. Prata"
+geome_samples$scientificName <- denovo_samples$species
+geome_samples$scientificName[geome_samples$scientificName == "AC"] <- "Agaricia agaricites"
+geome_samples$scientificName[geome_samples$scientificName == "HU"] <- "Agaricia humilis"
+geome_samples$scientificName[geome_samples$scientificName == "LM"] <- "Agaricia lamarcki"
+geome_samples$habitat <- "marine coral reef biome"
+geome_samples$collectorList <- c("Katharine E. Prata | Livia Sinigalia")
+geome_samples$island <- "Curacao"
+geome_samples$locality[geome_samples$locationID == "SB"] <- "Snake Bay" 
+geome_samples$locality[geome_samples$locationID == "WP"] <- "Playa Kalki"
+geome_samples$locality[geome_samples$locationID == "CA"] <- "Cas Abao"
+geome_samples$locality[geome_samples$locationID == "SQ"] <- "Seaquarium"
+geome_samples$locality[geome_samples$locationID == "CS"] <- "Seaquarium"
+geome_samples$locality[geome_samples$locationID == "CK"] <- "Playa Kalki"
+geome_samples$locality[geome_samples$locationID == "CR"] <- "CARMABI Buoy 0"
+geome_samples$locality[geome_samples$locationID == "CE"] <- "Eastpoint Piedra Pretu"
+geome_samples$country[geome_samples$locationID == "BR"] <- "Bonaire"
+geome_samples$island[geome_samples$locationID == "BR"] <- "Bonaire"
+geome_samples$locality[geome_samples$locationID == "BR"] <- "Red Slave"
+
+# Lat and Long
+geome_samples$decimalLatitude[geome_samples$locality == "Playa Kalki"] <- 12.375418
+geome_samples$decimalLatitude[geome_samples$locality == "Cas Abao"] <- 12.228482
+geome_samples$decimalLatitude[geome_samples$locality == "Snake Bay"] <- 12.139446
+geome_samples$decimalLatitude[geome_samples$locality == "Seaquarium"] <- 12.085041
+geome_samples$decimalLatitude[geome_samples$locality == "CARMABI Buoy 0"] <- 12.125
+geome_samples$decimalLatitude[geome_samples$locality == "Eastpoint Piedra Pretu"] <- 12.043
+geome_samples$decimalLatitude[geome_samples$locality == "Red Slave"] <- 12.027
+geome_samples$decimalLongitude[geome_samples$locality == "Playa Kalki"] <- -69.157746
+geome_samples$decimalLongitude[geome_samples$locality == "Cas Abao"] <- -69.092073
+geome_samples$decimalLongitude[geome_samples$locality == "Snake Bay"] <- -68.997199
+geome_samples$decimalLongitude[geome_samples$locality == "Seaquarium"] <- -68.898095
+geome_samples$decimalLongitude[geome_samples$locality == "CARMABI Buoy 0"] <- -69.974
+geome_samples$decimalLongitude[geome_samples$locality == "Eastpoint Piedra Pretu"] <- -68.762
+geome_samples$decimalLongitude[geome_samples$locality == "Red Slave"] <- -68.251
+geome_samples$georeferenceProtocol <- "Approximated from Google Maps for Lat and Lon. Relative photogrammetry coordinates for each sample can be found in LocationID"
+# add lat lon of other locations
+
+# adding annotation samples
+geome_samples$dayCollected <- annotation_samples$Date[match(geome_samples$materialSampleID, annotation_samples$SampleName)]
+geome_samples$fieldNotes <- annotation_samples$Comments[match(geome_samples$materialSampleID, annotation_samples$SampleName)]
+
+# adding genetic samples
+geome_samples$identificationRemarks <- paste(genetic_samples$Clusters[match(geome_samples$materialSampleID, genetic_samples$Sample)],
+                                             genetic_samples$clones[match(geome_samples$materialSampleID, genetic_samples$Sample)], sep = " | ")
+
+# adding spatial samples
+geome_samples$locationID <- paste(geome_samples$locationID, spatial_samples$x[match(geome_samples$materialSampleID, spatial_samples$Individual)],
+                                  spatial_samples$y[match(geome_samples$materialSampleID, spatial_samples$Individual)],
+                                  spatial_samples$z[match(geome_samples$materialSampleID, spatial_samples$Individual)], sep = " | ")
+
+# adding plates and wells
+geome_samples$tissueID <- denovo_samples$tissueID[match(geome_samples$materialSampleID, denovo_samples$sample)]
+geome_samples$tissuePlate <- denovo_samples$plate[match(geome_samples$materialSampleID, denovo_samples$sample)]
+geome_samples$tissueWell <- denovo_samples$well[match(geome_samples$materialSampleID, denovo_samples$sample)]
+
+# Fixing odd samples
+geome_samples$scientificName[geome_samples$scientificName == "L1" | geome_samples$scientificName == "L2"] <- "Agaricia lamarcki"
+geome_samples$scientificName[geome_samples$scientificName == "G1" | geome_samples$scientificName == "G2"] <- "Agaricia grahamae"
+
+# Formatting
+geome_samples$fieldNotes <- gsub(",", "-", geome_samples$fieldNotes)
+
+write.csv(geome_samples, "../results/geome_coralscape_shallow_agaricia.csv", quote = FALSE, row.names = FALSE)
+
+# annotation plot ####
+colours <- c("#FBD1D7", "#EC9C9D", "#AA5459",
+             "#E2DCE0", "#C4AABB", "#8C6C82",
+             "#C0DFF5", "#9BB7DB", "#5179A6",
+             "#8BD3D7", "#74A8B6")
+annotation_samples$Annotater <- as.factor(annotation_samples$Annotater)
+annotation_samples$LocDepth <- as.factor(annotation_samples$LocDepth)
+annotation_samples$LocDepth <- factor(annotation_samples$LocDepth, levels = c("WP05", "WP10", "WP20",
+                                "CA05", "CA10", "CA20",
+                                "SB05", "SB10", "SB20",
+                                "SQ12", "SQ20"))
+ggplot(annotation_samples[-538,], aes(Annotater, fill = LocDepth)) + 
+  geom_bar(colour = "black") +
+  ylab("Number of colonies annotated") +
+  scale_fill_manual(name = "Location & Depth", values = colours) +
+  theme_classic()
+ggsave("../results/annotations.pdf", height = 9, width = 15, units = "cm", dpi = 400)
