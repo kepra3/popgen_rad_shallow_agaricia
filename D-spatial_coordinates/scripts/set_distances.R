@@ -1,7 +1,9 @@
-# Set distances #
+# Title: Set distances between plots
+# Created by: Katharine Prata
 
 # Packages
-library(tidyverse)
+# R v4.2.0
+library(tidyverse) # v1.3.1
 
 # Functions
 clean_df <- function(data) {

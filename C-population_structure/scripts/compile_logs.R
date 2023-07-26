@@ -1,4 +1,8 @@
-library(ggplot2)
+# Title: Compiling logs and CV error from Admixture results
+# Created by: Katharine Prata
+
+# R v4.2.0
+library(ggplot2) # v3.4.0
 
 for (vcf_name in c("ac_1diii_nc", "hu_1diii_nc", "lm_1diii_nc-wnr", "all-aga_1diii_nc-wnr")) {
                

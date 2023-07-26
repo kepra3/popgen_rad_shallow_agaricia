@@ -1,11 +1,15 @@
+# Title: F-statistics
+# Author: Katharine Prata
+
 # Packages ####
-library("vcfR")
-library("adegenet")
-library("dplyr")
-library("tidyr")
-library("hierfstat")
-library("sjmisc")
-library("pegas")
+# R v4.2.9
+library("vcfR") # v1.12.0
+library("adegenet") # v2.1.7
+library("dplyr") # v1.0.9
+library("tidyr") # v1.2.0
+library("hierfstat") # v0.5-11
+library("sjmisc") # v2.8.9
+library("pegas") # v1.1
 
 # Arguments
 args <- commandArgs(TRUE)

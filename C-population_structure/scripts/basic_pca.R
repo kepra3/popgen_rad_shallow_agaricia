@@ -4,12 +4,13 @@
 # Last edit: 28/06/23
 
 ## Dependencies ================================================
-library(ggplot2)
-library(adegenet)
-library(dplyr)
-library(tidyr)
-library(stringr)
-library(vcfR)
+# R v4.2.0
+library(ggplot2) # v3.4.0
+library(adegenet) # v2.1.7
+library(dplyr) # v1.0.9
+library(tidyr) # v1.2.0
+library(stringr) # v1.4.0
+library(vcfR) # v1.12.0
 
 ## Functions ===================================================
 sort_pca <- function(pca, pop, nf) {

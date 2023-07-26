@@ -3,11 +3,12 @@
 # Date created: 19/4/22
 
 # Required packages
-library(vcfR)
-library(adegenet)
-library(genepop)
-library(tidyr)
-library(dplyr)
+# R v4.2.0
+library(vcfR) # v1.12.0
+library(adegenet) # v2.1.7
+library(genepop) # v1.1.7
+library(tidyr) # v1.2.0
+library(dplyr) # v1.0.9
 
 # Functions  ==================================================
 genind2genepop <- function(taxa.genind, taxa.pop, category) {

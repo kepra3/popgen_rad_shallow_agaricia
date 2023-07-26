@@ -3,13 +3,14 @@
 # Last edit: 15/4/22
 
 # Packages
-library(tidyverse)
-library(adegenet)
-library(vcfR)
-library(spaa)
-library(vegan)
-library(ape)
-library(reshape2)
+# R v4.2.0
+library(tidyverse) # v1.3.1
+library(adegenet) # v2.1.7
+library(vcfR) # v1.12.0
+library(spaa) # v0.2.2
+library(vegan) # v2.6-2
+library(ape) # v5.6-3
+library(reshape2) # v1.4.4
 
 # Functions
 make_clone_distribution <- function(clonegroups, clusters, site) {

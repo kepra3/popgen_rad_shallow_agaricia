@@ -4,12 +4,13 @@
 # Last edit: 19/4/22
 
 # Packages
-library("pcadapt")
-library("tidyr")
-library("qvalue")
-library("vcfR")
-library("adegenet")
-library("dplyr")
+# R version 4.2.0
+library("pcadapt") # version 4.3.3, https://doi.org/10.1093/molbev/msaa053
+library("tidyr") # version 1.2.0, https://CRAN.R-project.org/package=tidyr
+library("qvalue") # version 2.28.0, http://github.com/jdstorey/qvalue
+library("vcfR") # version 1.12.0, http://dx.doi.org/10.1111/1755-0998.12549 
+library("adegenet") # version 2.1.7, 10.1093/bioinformatics/btn129, 10.1093/bioinformatics/btr521
+library("dplyr") # version 1.0.9, https://CRAN.R-project.org/package=dplyr
 
 # functions ####
 find.snps <- function(loc.names,snp_pc){

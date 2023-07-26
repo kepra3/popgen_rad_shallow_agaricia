@@ -1,15 +1,19 @@
-# Convert 2 COLONY
+# Title: Convert genotypes 2 COLONY format
+# Author: Katharine Prata
+
+# Packages
 # R 4.2.0
 library(vcfR) # vcfR 1.12.0 (http://dx.doi.org/10.1111/1755-0998.12549)
 library(adegenet) # adegenet 2.1.7 (doi: 10.1093/bioinformatics/btr521)
 
+# Arguments
 args = commandArgs(TRUE)
 vcf_name <- args[1]
 
-# Make sure vcf is in the data directory
+# Load vcf
 genind <- vcfR2genind(read.vcfR(paste0("../data/", vcf_name, ".vcf")))
-
 df <- genind2df(genind)
+# Print individual and SNP dimensions
 print(paste(vcf_name, dim(df)))
 
 loci_list <- colnames(df)

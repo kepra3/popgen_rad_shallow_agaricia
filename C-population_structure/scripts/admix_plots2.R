@@ -7,9 +7,9 @@
 # @TODO: Make work with custom colour file!
 
 ## Dependencies ===================================================
-library(ggplot2)
-library(dplyr)
-library(tidyr)
+library(ggplot2) # version 3.4.0
+library(dplyr) # version 1.0.9
+library(tidyr) # version 1.2.0
 
 ## Functions ===================================================
 organise_data <- function(qfile,popfile,clusters){
@@ -81,29 +81,19 @@ admixture_plot_species <- function(plotdata, title) {
 }
 
 ## Arguments ===================================================
-#args = commandArgs(TRUE)
-#VCF_NAME <- as.character(args[1]) 
-#STAGE <- args[2]
-#PARAMS <- args[3]
-#MISS_DAT <- args[4]
-#NUM_K <- as.numeric(args[5])
-#sorted <- args[6]
-
-# set working directory
-setwd('/Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/gen_project/popgen_rad_shallow_agaricia/C-population_structure/')
-
-VCF_NAME = 'lm'
-STAGE = '1div'
-PARAMS = 'nc'
-MISS_DAT = '20'
-NUM_K = 4
-sorted = 'no'
+args = commandArgs(TRUE)
+VCF_NAME <- as.character(args[1]) 
+STAGE <- args[2]
+PARAMS <- args[3]
+MISS_DAT <- args[4]
+NUM_K <- as.numeric(args[5])
+sorted <- args[6]
   
 # Start cluster list
 Clusters <- "Clust1"
 
 # Import data ===================================================
-popfile <- read.table(paste0("metadata/pop_", VCF_NAME, "_", STAGE, "_", PARAMS, ".txt"), header = FALSE, sep = "\t", stringsAsFactors = FALSE)
+popfile <- read.table(paste0("../data/pop_", VCF_NAME, "_", STAGE, "_", PARAMS, ".txt"), header = FALSE, sep = "\t", stringsAsFactors = FALSE)
 colnames(popfile) <- c("Individual", "pop")
 # Note: altered individual species popfiles to be only at sites and changed NAs to appropriate location
 colours <- c(rainbow(NUM_K))
@@ -244,11 +234,11 @@ title <- paste0(MISS_DAT, "% missing data, K = ", i)
 # Plot data ===================================================
 plot <- admixture_plot(data, title)
 ggsave(paste0(VCF_NAME, "_", STAGE, "_", PARAMS, "_", i, "_admixture.pdf"), plot = plot, width = 22, height = 4,
-              units = "cm",path = "results/admix_plots", limitsize = FALSE)
+              units = "cm",path = "../results/admix_plots", limitsize = FALSE)
 if (VCF_NAME == "all-aga") {
   plot2 <- admixture_plot_species(data, title)
   ggsave(paste0(VCF_NAME, "_", STAGE, "_", PARAMS, "_", i, "_admixture_species.pdf"), plot = plot2, width = 22, height = 4,
-       units = "cm", path = "results/admix_plots", limitsize = FALSE)
+       units = "cm", path = "../results/admix_plots", limitsize = FALSE)
 }
 }
 

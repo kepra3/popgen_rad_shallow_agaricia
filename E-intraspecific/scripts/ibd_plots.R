@@ -1,6 +1,10 @@
+# Title: Isolation-by-distance plots
+# Author: Katharine Prata
+
 # Required packages
-library(ggplot2)
-library(spaa)
+# R v4.2.0
+library(ggplot2) # v3.4.0
+library(spaa) # v0.2.2
 
 # Arguments  ==================================================
 args = commandArgs(TRUE)

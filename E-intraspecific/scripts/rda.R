@@ -1,10 +1,14 @@
+# Title: Redundancy analysis
+# Author: Katharine Prata
+
 # Packages
-library(vegan)
-library(tidyverse)
-library(ape)
-library(tidyr)
-library(dplyr)
-library(corrplot)
+# R 4.2.0
+library(vegan) # v2.6-2
+library(tidyverse) # v1.3.1
+library(ape) # v5.602
+library(tidyr) # v1.2.0
+library(dplyr) # v1.0.9
+library(corrplot) # v0.92
 
 
 # Arguments

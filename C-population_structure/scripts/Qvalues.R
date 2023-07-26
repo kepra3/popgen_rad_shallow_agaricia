@@ -1,4 +1,9 @@
-library(stringr)
+# Ancestry proportions plots
+# Created by: Katharine Prata
+
+# Packages
+# R v4.2.0
+library(stringr) # v1.4.0
 
 # Arguments
 args = commandArgs(TRUE)

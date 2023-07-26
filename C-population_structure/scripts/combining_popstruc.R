@@ -5,15 +5,16 @@
 # Description: Combination population structure plots
 
 ## Dependencies  ===================================================
-library(tidyverse)
-library(adegenet)
-library(vcfR)
-library(ggtree)
-library(treeio)
-library(ggstance)
-library(RColorBrewer)
-library(phytools)
-library(ggplotify)
+# R v4.2.0
+library(tidyverse) # v1.3.1
+library(adegenet) # v2.1.7
+library(vcfR) # v1.12.0
+library(ggtree) # v3.4.0
+library(treeio) # v1.20.0
+library(ggstance) # v0.3.5
+library(RColorBrewer) # v1.1-3
+library(phytools) # v1.0-3
+library(ggplotify) # v0.1.0
 
 # Functions ==========================================
 organise_data <- function(qfile, popfile, clusters){

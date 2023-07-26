@@ -3,11 +3,12 @@
 # Date created: 18/07/23
 
 # Packages
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(readxl)
-library(ggplot2)
+# R v4.2.0
+library(tidyr) # v1.2.0
+library(dplyr) # v1.0.9
+library(stringr) # v1.4.0
+library(readxl) # v1.4.0
+library(ggplot2) # v3.4.0
 
 # Functions
 add_plate_wells <- function(dataset, dataset_reads) {

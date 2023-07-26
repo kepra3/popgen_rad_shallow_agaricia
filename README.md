@@ -116,11 +116,11 @@ $ make_clone_groups.py lm_1d-pure_wc_20
 
 These analysis datasets do not include clones (removed during B - Clones), have 1 SNP per locus and have outliers removed from pcadapt.
 
-Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using `admix_4multiple.sh`. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
+Need to use `vcf_single_snp.py` from www.github.com/pimbongaerts/radseq for creating unlinked datasets when using `admix_4multiple.sh`. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
 
 Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger than the size limit for github).
 
-For creating the combination plots (*e.g.*, Admixture and NJ-tree summary plots) need to use `vcf_gdmatrix.py` & `gdmatrix2tree.py` from Pim Bongaerts github.
+For creating the combination plots (*e.g.*, Admixture and NJ-tree summary plots) need to use `vcf_gdmatrix.py` & `gdmatrix2tree.py` from www.github.com/pimbongaerts/radseq.
 
 **Steps**
 
@@ -432,15 +432,17 @@ done
 ### Clone distances
 
 ```bash
-# clones
+# clone distances
 $ Rscript clone_spatial_plots.R
-# all genotypes
-$ Rscript 
+# all genotype distances
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2
+do Rscript genotype_spatial_plots.R $taxa;
+done
 ```
 
 ## Appendix
 
-### Conda environments
+### Python packages
 
 Details for different conda environments.
 
@@ -759,4 +761,36 @@ xz                        5.2.5                haf1e3a3_1    conda-forge
 zlib                      1.2.11            h9173be1_1013    conda-forge
 zstd                      1.5.2                h582d3a0_0    conda-forge
 ```
+
+###  R packages
+
+| Package      | Version | DOI or package link                                          |
+| ------------ | ------- | ------------------------------------------------------------ |
+| adegenet     | 2.1.7   | 10.1093/bioinformatics/btn129,  10.1093/bioinformatics/btr521 |
+| ape          | 5.6-2   | [https://CRAN.R-project.org/package=ape](https://cran.r-project.org/package=ape) |
+| corrplot     | 0.92    | https://github.com/taiyun/corrplot                           |
+| dplyr        | 1.0.9   | [https://CRAN.R-project.org/package=dplyr](https://cran.r-project.org/package=dplyr) |
+| genepop      | 1.1.7   | http://dx.doi.org/10.1111/j.1471-8286.2007.01931.x           |
+| ggplot2      | 3.4.0   | [https://ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/) |
+| ggplotify    | 0.1.0   | [https://CRAN.R-project.org/package=ggplotify](https://cran.r-project.org/package=ggplotify) |
+| ggstance     | 0.3.5   | [https://CRAN.R-project.org/package=ggstance](https://cran.r-project.org/package=ggstance) |
+| ggtree       | 3.4.0   | 10.1111/2041-210X.12628                                      |
+| hierfstat    | 0.5-11  | [https://CRAN.R-project.org/package=hierfstat](https://cran.r-project.org/package=hierfstat) |
+| lattice      | 0.20-45 | [http://lmdvr.r-forge.r-project.org](http://lmdvr.r-forge.r-project.org/) |
+| pcadapt      | 4.3.3   | https://doi.org/10.1093/molbev/msaa053                       |
+| pegas        | 1.1     | [https://CRAN.R-project.org/package=pegas](https://cran.r-project.org/package=pegas) |
+| permute      | 0.9-7   | [https://CRAN.R-project.org/package=permute](https://cran.r-project.org/package=permute) |
+| phytools     | 1.0-3   | 10.1111/j.2041-210X.2011.00169.x                             |
+| qvalue       | 2.28.0  | http://github.com/jdstorey/qvalue                            |
+| RColorBrewer | 1.1-3   | [https://CRAN.R-project.org/package=RColorBrewer](https://cran.r-project.org/package=RColorBrewer) |
+| readxl       | 1.4.0   | [https://CRAN.R-project.org/package=readxl](https://cran.r-project.org/package=readxl) |
+| reshape2     | 1.4.4   | http://www.jstatsoft.org/v21/i12/                            |
+| sjmisc       | 2.8.9   | 10.21105/joss.00754                                          |
+| spaa         | 0.2.2   | [https://CRAN.R-project.org/package=spaa](https://cran.r-project.org/package=spaa) |
+| stringr      | 1.4.0   | [https://CRAN.R-project.org/package=stringr](https://cran.r-project.org/package=stringr) |
+| tidyr        | 1.2.0   | [https://CRAN.R-project.org/package=tidyr](https://cran.r-project.org/package=tidyr) |
+| tidyverse    | 1.3.1   | 10.21105/joss.01686                                          |
+| treeio       | 1.20.0  | 0.1093/molbev/msz240                                         |
+| vcfR         | 1.12.0  | [http://dx.doi.org/10.1111/1755-0998.12549 ](http://dx.doi.org/10.1111/1755-0998.12549) |
+| vegan        | 2.6-2   | [https://CRAN.R-project.org/package=vegan](https://cran.r-project.org/package=vegan) |
 
