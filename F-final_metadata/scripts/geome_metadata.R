@@ -24,9 +24,6 @@ add_plate_wells <- function(dataset, dataset_reads) {
   return(dataset)
 }
 
-
-setwd("~/Dropbox/agaricia_project_2019/shalo_ag/gen_project/popgen_rad_shallow_agaricia/F-final_metadata/scripts")
-
 # files
 for (i in 1:9) {
   assign(paste0("KP0", i, "_reads"), read.csv(paste0("../data/KP0", i, "_reads.txt"), sep = "\t", header = TRUE))
@@ -45,6 +42,9 @@ genetic_samples <- read.csv("../data/all-aga_clones.txt", sep = " ")
 spatial_samples <- read.csv("../data/all-aga_spatgeo.txt", sep = " ")
 geome_samples <- read_excel("../data/CoralScape_popgen_shallow-agaricia.xlsx", sheet = "Samples")
 annotation_samples <- read.csv("../data/Annotations_AgariciaCuracao2019_all - all_annotations.csv")
+mislabels.A <- read.csv("../data/mislabels_AA.csv", row.names = 1)
+mislabels.H <- read.csv("../data/mislabels_AH.csv", row.names = 1)
+mislabels.L <- read.csv("../data/mislabels_AL.csv", row.names = 1)
 
 # sort barcode and read files ####
 KP01 <- add_plate_wells(KP01, KP01_reads)
@@ -173,6 +173,13 @@ denovo_samples <- denovo_samples %>%
   mutate(depth = coalesce(depth2, depth1)) %>% 
   mutate(species = coalesce(species2, species1))
 
+# sort mislabels ####
+mislabels.A$note <- "mislabelled, assigns to A. agaricites"
+mislabels.H$note <- "mislabelled, assigns to A. humilis"
+mislabels.L$note <- "mislabelled, assigns to A. lamarcki"
+mislabels <- rbind(mislabels.A, mislabels.H, mislabels.L)
+rm(mislabels.A, mislabels.H, mislabels.L)
+
 # adding details to geome metadata ####
 geome_samples[1:972,] <- rep(NA, 32)
 geome_samples$materialSampleID <- denovo_samples$sample
@@ -194,6 +201,7 @@ geome_samples$scientificName <- denovo_samples$species
 geome_samples$scientificName[geome_samples$scientificName == "AC"] <- "Agaricia agaricites"
 geome_samples$scientificName[geome_samples$scientificName == "HU"] <- "Agaricia humilis"
 geome_samples$scientificName[geome_samples$scientificName == "LM"] <- "Agaricia lamarcki"
+geome_samples$scientificName[geome_samples$scientificName == "HE"] <- "Helioseris cucullata"
 geome_samples$habitat <- "marine coral reef biome"
 geome_samples$collectorList <- c("Katharine E. Prata | Livia Sinigalia")
 geome_samples$island <- "Curacao"
@@ -227,28 +235,32 @@ geome_samples$decimalLongitude[geome_samples$locality == "Red Slave"] <- -68.251
 geome_samples$georeferenceProtocol <- "Approximated from Google Maps for Lat and Lon. Relative photogrammetry coordinates for each sample can be found in LocationID"
 # add lat lon of other locations
 
-# adding annotation samples
-geome_samples$dayCollected <- annotation_samples$Date[match(geome_samples$materialSampleID, annotation_samples$SampleName)]
-geome_samples$fieldNotes <- annotation_samples$Comments[match(geome_samples$materialSampleID, annotation_samples$SampleName)]
+# adding plates and wells
+geome_samples$tissueID <- denovo_samples$tissueID[match(geome_samples$materialSampleID, denovo_samples$sample)]
+geome_samples$tissuePlate <- denovo_samples$plate[match(geome_samples$materialSampleID, denovo_samples$sample)]
+geome_samples$tissueWell <- denovo_samples$well[match(geome_samples$materialSampleID, denovo_samples$sample)]
+
+# adding annotation samples & mislabels
+geome_samples$dayCollected <- annotation_samples$Date[match(geome_samples$tissueID, annotation_samples$SampleName)]
+geome_samples$fieldNotes <- paste(annotation_samples$Comments[match(geome_samples$materialSampleID, annotation_samples$SampleName)],
+                                  mislabels$note[match(geome_samples$materialSampleID, mislabels$x)], sep = " | ")
+# TODO: overwrite field notes with NA to have just one entry (like plate/well)
+                                   
 
 # adding genetic samples
 geome_samples$identificationRemarks <- paste(genetic_samples$Clusters[match(geome_samples$materialSampleID, genetic_samples$Sample)],
                                              genetic_samples$clones[match(geome_samples$materialSampleID, genetic_samples$Sample)], sep = " | ")
 
 # adding spatial samples
-geome_samples$locationID <- paste(geome_samples$locationID, spatial_samples$x[match(geome_samples$materialSampleID, spatial_samples$Individual)],
-                                  spatial_samples$y[match(geome_samples$materialSampleID, spatial_samples$Individual)],
-                                  spatial_samples$z[match(geome_samples$materialSampleID, spatial_samples$Individual)], sep = " | ")
-
-# adding plates and wells
-geome_samples$tissueID <- denovo_samples$tissueID[match(geome_samples$materialSampleID, denovo_samples$sample)]
-geome_samples$tissuePlate <- denovo_samples$plate[match(geome_samples$materialSampleID, denovo_samples$sample)]
-geome_samples$tissueWell <- denovo_samples$well[match(geome_samples$materialSampleID, denovo_samples$sample)]
+geome_samples$locationID <- paste(geome_samples$locationID, spatial_samples$x[match(geome_samples$tissueID, spatial_samples$Individual)],
+                                  spatial_samples$y[match(geome_samples$tissueID, spatial_samples$Individual)],
+                                  spatial_samples$z[match(geome_samples$tissueID, spatial_samples$Individual)], sep = " | ")
 
 # Fixing odd samples
 geome_samples$scientificName[geome_samples$scientificName == "L1" | geome_samples$scientificName == "L2"] <- "Agaricia lamarcki"
 geome_samples$scientificName[geome_samples$scientificName == "G1" | geome_samples$scientificName == "G2"] <- "Agaricia grahamae"
-
+geome_samples$yearCollected[963:972] <- 2013
+geome_samples$yearCollected[963:972]
 # Formatting
 geome_samples$fieldNotes <- gsub(",", "-", geome_samples$fieldNotes)
 
