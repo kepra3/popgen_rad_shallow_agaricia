@@ -1,26 +1,46 @@
 # Data accessibility for Prata et al (2023)
 
-TODO:
+## raw files and de novo assembly
 
-- [ ] Combination
-- [ ] Kinship
-- [ ] Copy ipyrad settings
-- [ ] Change names of all files
-- [ ] Add all software versions and requirements
+Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and will be uploaded to NCBI SRA database.
 
-## raw files
-
-Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository (hyperlink)
-
-TODO: add ipyrad settings file to RDM & here
+De novo assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPC.
 
 Ipyrad settings:
 
 ```
-
+------- ipyrad params file (v.0.9.67)-------------------------------------------
+all_aga                        ## [0] [assembly_name]: Assembly name. Used to name output directories for assembly steps
+/gpfs1/scratch/30days/uqkprat2/pyrad ## [1] [project_dir]: Project dir (made in curdir if not present)
+                               ## [2] [raw_fastq_path]: Location of raw non-demultiplexed fastq files
+                               ## [3] [barcodes_path]: Location of barcodes file
+/gpfs1/scracth/30days/uqkprat2/stacks/KP01_14_set/*fq.gz                               ## [4] [sorted_fastq_path]: Location of demultiplexed/sorted fastq files
+denovo                         ## [5] [assembly_method]: Assembly method (denovo, reference)
+                               ## [6] [reference_sequence]: Location of reference sequence file
+pairddrad                            ## [7] [datatype]: Datatype (see docs): rad, gbs, ddrad, etc.
+TGCAG,CGG                         ## [8] [restriction_overhang]: Restriction overhang (cut1,) or (cut1, cut2)
+5                              ## [9] [max_low_qual_bases]: Max low quality base calls (Q<20) in a read
+33                             ## [10] [phred_Qscore_offset]: phred Q score offset (33 is default and very standard)
+10                              ## [11] [mindepth_statistical]: Min depth for statistical base calling
+10                              ## [12] [mindepth_majrule]: Min depth for majority-rule base calling
+10000                          ## [13] [maxdepth]: Max cluster depth within samples
+0.85                           ## [14] [clust_threshold]: Clustering threshold for de novo assembly
+0                              ## [15] [max_barcode_mismatch]: Max number of allowable mismatches in barcodes
+2                              ## [16] [filter_adapters]: Filter for adapters/primers (1 or 2=stricter)
+35                             ## [17] [filter_min_trim_len]: Min length of reads after adapter trim
+2                              ## [18] [max_alleles_consens]: Max alleles per site in consensus sequences
+0.05                           ## [19] [max_Ns_consens]: Max N's (uncalled bases) in consensus
+0.05                           ## [20] [max_Hs_consens]: Max Hs (heterozygotes) in consensus
+4                              ## [21] [min_samples_locus]: Min # samples per locus for output
+0.2                            ## [22] [max_SNPs_locus]: Max # SNPs per locus
+8                              ## [23] [max_Indels_locus]: Max # of indels per locus
+0.5                            ## [24] [max_shared_Hs_locus]: Max # heterozygous sites per locus
+0, 0, 0, 0                     ## [25] [trim_reads]: Trim raw read edges (R1>, <R1, R2>, <R2) (see docs)
+0, 0, 0, 0                     ## [26] [trim_loci]: Trim locus edges (see docs) (R1>, <R1, R2>, <R2)
+p, s, v                        ## [27] [output_formats]: Output formats (see docs)
+                               ## [28] [pop_assign_file]: Path to population assignment file
+                               ## [29] [reference_as_filter]: Reads mapped to this reference are removed in step 
 ```
-
-
 
 # popgen_rad_shallow_agaricia
 
@@ -30,7 +50,7 @@ A repository for analysis datasets, scripts and results for Prata et al., (2023)
 
 **Notes**
 
-Steps are all written out instead of all code commands as the commands used are relatviely simple and repetitive.
+Some steps are written out instead of all code commands due to utilising databases and other large files.
 
 **Steps**
 
@@ -46,9 +66,26 @@ Steps are all written out instead of all code commands as the commands used are 
 $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac 3 --max-missing 0.5 --min-alleles 2 --max-alleles 2 --recode --stdout > all-aga_1ci.vcf
 ```
 
-2. Symbiont, other contamination (see `blast_files/`) and high missing data individuals (see `high-miss-indiv_all-aga_1ci.txt`) were removed, then final filters were applied, 5, 10, 20% maximum missing data, & monomorphic SNPs removed.
-3. Initial PCA, NJ-tree and Admixture analyses were conducted in order to separate into species datasets for outlier removal (see *C - Population structure*). VCF files found within *C - Population structure* already have outliers removed, there were no significant differences among the structure results for these datsets. Individuals that assigned to each of the species were subset from the initial vcf and filtering, using the same steps as above, was repeated.
-4. For most analyses outliers were removed and datasets were subset to one SNP per RAD contig. Outlier SNPs were discovered per species dataset using pcadapt (see `pcadapt_outliers/`).
+2. Symbiont and other contamination was found using blastn tool (see `blast_files/`. The loci file from ipyrad output was converted into a fasta file using `pyrad2fasta.py`. For Symbiodiniacae the Cladocopium spp. genome fasta file was downloaded from https://www.ncbi.nlm.nih.gov/assembly/GCA_003297045.1 and a RAD reference from www.github.com/pimbongaerts/bermuda-rad, reads that matched an e-value of 1e-15 were removed. For the other symbionts and contamination, the web-based software, Galaxy was used and the fasta file was matched with the `nt 17-Apr-2014` database using an e-value of 0.001.
+3. High missing data individuals (see `high-miss-indiv_all-aga_1ci.txt`) were removed, then final filters were applied, 5, 10, 20% maximum missing data, & monomorphic SNPs removed.
+4. Initial PCA, NJ-tree and Admixture analyses were conducted in order to separate into species datasets for outlier removal (see *C - Population structure*). VCF files found within *C - Population structure* already have outliers removed, there were no significant differences among the structure results for these datsets. Individuals that assigned to each of the species were subset from the initial vcf and filtering, using the same steps as above, was repeated.
+5. For all analyses (apart from clone analyses) outliers were removed and datasets were subset to one SNP per RAD contig. Outlier SNPs were discovered per species dataset using pcadapt (see `pcadapt_outliers/`).
+
+**Base datasets for analyses**
+
+| Dataset name               | # individuals | # SNPs  | Conditions                                                   | Use                                           | Locations                                                    |
+| -------------------------- | ------------- | ------- | ------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
+| all-aga_1d_wc-wnr_20.vcf   | 767           | 15659   | All *Agaricia* species samples, linked, no outlier removal, with clones and NextRAD samples and 20% max missing data | Clones                                        | -                                                            |
+| all-aga_1div_nc-wnr_20.vcf | 557           | 751     | All *Agaricia* species samples, unlinked, neutral, no clones with NextRAD samples and 20% max missing data | Population structure                          | C - population structure/data, D - intraspeific analyses/data |
+| ac_1d_wc_20.vcf            | 512           | 22274   | *A. agaricites* samples, linked, no outlier removal, with clones and 20% max missing data | Clones                                        | Distance matrix stored in B - Clones/data                    |
+| ac_1div_nc_20.vcf          | 335           | 1606    | *A. agaricites* samples, unlinked, neutral, no clones and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
+| hu_1d_wc_20.vcf            | 142           | 25380   | *A. humilis* samples, linked, no outlier removal, with clones and 20% max missing data | Clones                                        | Distance matrix stored in B - Clones/data                    |
+| hu_1div_nc_20.vcf          | 121           | 1282    | *A. humilis* samples, unlinked, neutral, no clones and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
+| lm_1d-pure_wc_20.vcf       | 105           | *18541* | *A. lamarcki* samples (including *A. lamarcki* NextRAD samples), linked, no outlier removal, with clones and 20% max missing data | Clones                                        | Distance matrix stored in B - Clones/data                    |
+| lm_1div_nc_20.vcf          | 92            | 941     | *A. lamarcki* samples, unlinked, neutral, no clones and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
+| lm_1div_nc-wnr_20.vcf      | 98            | 940     | *A. lamarcki* samples, unlinked, neutral, no clones with NextRAD samples, and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
+
+For intraspecific analyses these were further filtered see **E - Intraspecific analyses** section for more details.
 
 ## B - Clones
 
@@ -79,9 +116,11 @@ $ make_clone_groups.py lm_1d-pure_wc_20
 
 These analysis datasets do not include clones (removed during B - Clones), have 1 SNP per locus and have outliers removed from pcadapt.
 
-Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using admix_4multiple.sh. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
+Need to use `vcf_single_snp.py` from Pim Bongaerts github for creating unlinked datasets when using `admix_4multiple.sh`. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
 
 Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger than the size limit for github).
+
+For creating the combination plots (*e.g.*, Admixture and NJ-tree summary plots) need to use `vcf_gdmatrix.py` & `gdmatrix2tree.py` from Pim Bongaerts github.
 
 **Steps**
 
@@ -111,7 +150,6 @@ Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger t
 
 ```bash
 $ conda activate radkat
-# TODO: show filtered final results files
 ```
 
 ### PCA
@@ -155,18 +193,27 @@ $ Rscript Qvalues.R lm_2bi_1div_nc_20 2
 ### Combination plots
 
 ```bash
-$
+# PCA with Admixture
+$ Rscript basic_pca.R ac_1div_nc_20 4 admixture
+$ Rscript basic_pca.R hu_1div_nc_20 4 admixture
+$ Rscript basic_pca.R lm_1div_nc-wnr_20 4 admixture
+$ Rscript basic_pca.R lm_1div_nc_20 2 admixture
+# Make Neighbour Joining trees
+$ for taxa in ac hu lm;
+do vcf_gdmatrix.py ../data/${taxa}_1div_nc_20.vcf ../data/pop_${taxa}_1div_nc.txt > ../results/${taxa}_1div_nc_20_gdmatrix.tsv; 
+done
+$ for taxa in ac hu lm;
+do gdmatrix2tree.py ../results/${taxa}_1div_nc_20_gdmatrix.tsv ../results/${taxa}_1div_nc_20_tree.nex;
+done
+# Run combination plot script
+$ for taxa in ac hu lm;
+do Rscript combining_popstruc.R ${taxa} 1div nc Taxa no;
+done
 ```
-
-
 
 ## D - Spatial coordinates 
 
-**Notes:**
-
-
-
-**Steps:**
+**Steps**
 
 1. Colonies were annotated on point clouds using CloudCompare as three points, one centroid and two on the longest edge of colony.
 2. Two transformations were performed on coordinates for each analysis:
@@ -175,7 +222,7 @@ $
 
    ii) For isolation-by-distance, points annotated were rotated to onto the 2D XY-plane, thus any deviation in depth along the slope was reduced to 0. Then plots were oriented accordint to geographical arrangements.
 
-**Code:**
+**Code**
 
 ```bash
 $ conda activate open3d
@@ -200,24 +247,18 @@ $ Rscript set_distances.R all_annotations_X_HORIZ_parallel
 $ Rscript set_distancces.R all_annotations_X_DEPTH_parallel
 ```
 
-TODO: naming of files and inconsistency of scripts...
-
 ## E - Intraspecific analyses
 
-**Notes:**
+**Steps**
 
-
-
-**Steps:**
-
-1. Remove mislabels and outgroups
+1. Remove mislabels and outgroups for spatial analyses
 2. Make separate taxa files for Fstatistics and Kinship
 3. Run redundacy analysis
 4. Run isolation-by-distance analysis
 5. F-statistics
 6. Kinship
 
-**Code:**
+**Code**
 
 ```bash
 $ conda activate radkat
@@ -228,7 +269,7 @@ $ vcftools --vcf ac_1div_nc_20.vcf --remove ac_mislabels.txt --min-alleles 2 --m
 $ vcftools --vcf hu_1div_nc_20.vcf --remove hu_mislabels.txt --min-alleles 2 --max-alleles 2 --maf 0.000000001 --recode --stdout > hu_3b_nc_20.vcf
 #AAfter filtering, kept 120 out of 121 Individuals
 #After filtering, kept 1280 out of a possible 1282 Sites
-# For lamarcki need to also remove nextrad samples that were used for cryptic lineage assignment from Prata et al., (2022)
+# For lamarcki need to also remove nextrad samples that were used for cryptic lineage assignment
 $ vcftools --vcf ../data/lm_1div_nc-wnr_20.vcf --remove lm_mislabels.txt --min-alleles 2 --max-alleles 2 --recode --stdout > lm_3b_nc_20_x.vcf
 #After filtering, kept 85 out of 98 Individuals
 #Outputting VCF file...
@@ -245,7 +286,6 @@ $ rm lm_3b_nc_20_x.vcf
 **Making separate vcf files for each taxon, for Kinship and Fstatistics**
 
 ```bash
-# All individuals for f-statistics
 # A. agaricites
 $ vcftools --vcf ac_1div_nc_20.vcf --keep aa1.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > aa1_1div_nc_20.vcf
 #After filtering, kept 35 out of 335 Individuals
@@ -253,6 +293,25 @@ $ vcftools --vcf ac_1div_nc_20.vcf --keep aa1.names.txt --min-alleles 2 --max-al
 $ vcftools --vcf ac_1div_nc_20.vcf --keep aa2.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > aa2_1div_nc_20.vcf
 #After filtering, kept 300 out of 335 Individuals
 #After filtering, kept 1461 out of a possible 1606 Sites
+
+## Subsetting A. agaricities 2 for Kinship
+$ for location in WP CA SB SQ;
+do grep ${location} aa2.names.txt > aa2-${location}.names.txt;
+vcftools --vcf ac_1div_nc_20.vcf --keep aa2-${location}.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.2 --maf 0.000000001 --stdout --recode > aa2-${location}_1div_nc_20.vcf;
+zo;
+done
+### WP
+#After filtering, kept 144 out of 335 Individuals
+#After filtering, kept 945 out of a possible 1606 Sites
+### CA
+#After filtering, kept 53 out of 335 Individuals
+#After filtering, kept 887 out of a possible 1606 Sites
+#### SB
+#After filtering, kept 71 out of 335 Individuals
+#After filtering, kept 1005 out of a possible 1606 Sites
+#### SQ
+#After filtering, kept 30 out of 335 Individuals
+#After filtering, kept 1052 out of a possible 1606 Sites
 
 # A. humilis
 $ vcftools --vcf hu_1div_nc_20.vcf --keep ah1.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > ah1_1div_nc_20.vcf
@@ -275,11 +334,6 @@ $ vcftools --vcf lm_1div_nc_20.vcf --keep al1.names.txt --min-alleles 2 --max-al
 $ vcftools --vcf lm_1div_nc_20.vcf --keep al2.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.8 --maf 0.000000001 --stdout --recode > al2_1div_nc_20.vcf
 #After filtering, kept 62 out of 92 Individuals
 #After filtering, kept 734 out of a possible 945 Sites
-
-# Spatial individuals for kinship # TODO: finish separating files
-$ vcftools --vcf ac_3b_nc_20.vcf --keep AA1_names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.5 --maf 0.000000001 --stdout --recode > aa1_3b_nc_50.vcf
-#After filtering, kept 30 out of 327 Individuals
-#After filtering, kept 482 out of a possible 1604 Sites
 ```
 
 ### Redundancy analysis
@@ -348,15 +402,31 @@ Kinship general settings file:
 ! 3 - High precision
 ```
 
-Running code:
+Code:
 
 ```bash
-$ Rscript colony_files.R aa1_1div_nc_50
+$ for dataset in aa1 ah1 ah2 ah3 al1 al2 aa2-WP aa2-CA aa2-SB aa2-SQ;
+do Rscript colony_files.R ${dataset}_1div_nc_20;
+done
+# Number of individuals and SNPs for each dataset.
+# aa1: 35 465
+# ah1: 61 803
+# ah2: 29 565
+# ah3: 15 580
+# al1: 28 544
+# al2: 62 734
+# aa2-WP: 144 945
+# aa2-CA: 53 887
+# aa2-SB: 71 1005
+# aa2-SQ: 30 1052
 $ for param in 0.5 0.2 0.1 0.05;
-do ./edit_dat_file.sh aa1_1div_nc_50 35 487 $param
+do ./edit_dat_file.sh aa1_1div_nc_20 35 465 $param;
+done
+# Running analyses
 $ for param in 0.5 0.1 0.05;
-do ./colony2s.out IFN:aa1_1div_nc_50_${param}.dat
-# all other taxa analyses were run the same except AA2 where datafile was split per location for computation time speed up.
+do ./colony2s.out IFN:aa1_1div_nc_20_${param}.dat;
+done
+# all other taxa analyses were run the same except AA2 where datafile was split per location for computation time speed up. Analyses were done using parallel processing on HPC, official results for each datasets can be found in results/kinship/
 ```
 
 ### Clone distances
@@ -374,44 +444,319 @@ $ Rscript
 
 Details for different conda environments.
 
-Two conda environments were used for all analyses, `radkat` and `open3d`
+`radkat`
 
 ```bash
-# radkat conda environment
+# packages in environment at /Users/kprata/anaconda3/envs/radkat:
+#
+# Name                    Version                   Build  Channel
+admixture                 1.3.0                         0    bioconda
+appnope                   0.1.0                 py37_1000    conda-forge
+attrs                     19.3.0                     py_0    conda-forge
+backcall                  0.1.0                      py_0    conda-forge
+bcftools                  1.9                  h16e57c4_7    bioconda
+biopython                 1.74             py37h01d97ff_0    conda-forge
+blas                      2.12                   openblas    conda-forge
+blast                     2.12.0               h0370960_3    bioconda
+bleach                    3.1.0                      py_0    conda-forge
+boost                     1.68.0          py37h9888f84_1001    conda-forge
+boost-cpp                 1.68.0            h6f8c590_1000    conda-forge
+bzip2                     1.0.8                h0b31af3_2    conda-forge
+c-ares                    1.18.1               h0d85af4_0    conda-forge
+ca-certificates           2021.10.8            h033912b_0    conda-forge
+certifi                   2021.10.8        py37hf985489_1    conda-forge
+curl                      7.82.0               h9dce1e3_0    conda-forge
+cython                    0.29.14          py37h4a8c4bd_0    conda-forge
+dadi                      2.0.3                    pypi_0    pypi
+dbus                      1.13.6               h2f22bb5_0    conda-forge
+decorator                 4.4.1                      py_0    conda-forge
+defusedxml                0.6.0                      py_0    conda-forge
+entrez-direct             16.2                 h193322a_0    bioconda
+entrypoints               0.3                   py37_1000    conda-forge
+expat                     2.2.9                h4a8c4bd_2    conda-forge
+gettext                   0.19.8.1          hd1a6beb_1008    conda-forge
+glib                      2.70.2               hcf210ce_4    conda-forge
+glib-tools                2.70.2               hcf210ce_4    conda-forge
+gmp                       6.2.0                h4a8c4bd_1    conda-forge
+gnutls                    3.6.5             h53004b3_1002    conda-forge
+gsl                       2.5                  ha2d443c_1    conda-forge
+htslib                    1.9                  h356306b_9    bioconda
+icu                       58.2              h0a44026_1000    conda-forge
+importlib_metadata        1.5.0                    py37_0    conda-forge
+inflect                   4.1.0                    py37_0    conda-forge
+ipykernel                 5.1.4            py37h5ca1d4c_0    conda-forge
+ipython                   7.8.0            py37h5ca1d4c_0    conda-forge
+ipython_genutils          0.2.0                      py_1    conda-forge
+ipywidgets                7.5.1                      py_0    conda-forge
+jaraco.itertools          5.0.0                      py_0    conda-forge
+jedi                      0.16.0                   py37_0    conda-forge
+jinja2                    2.11.1                     py_0    conda-forge
+jpeg                      9c                h1de35cc_1001    conda-forge
+jsonschema                3.2.0                    py37_0    conda-forge
+jupyter                   1.0.0                      py_2    conda-forge
+jupyter_client            5.3.4                    py37_1    conda-forge
+jupyter_console           6.0.0                      py_0    conda-forge
+jupyter_core              4.6.1                    py37_0    conda-forge
+krb5                      1.19.3               hb98e516_0    conda-forge
+libblas                   3.8.0               12_openblas    conda-forge
+libcblas                  3.8.0               12_openblas    conda-forge
+libcurl                   7.82.0               h9dce1e3_0    conda-forge
+libcxx                    13.0.1               hc203e6f_0    conda-forge
+libdeflate                1.3                  h01d97ff_0    conda-forge
+libedit                   3.1.20191231         h0678c8f_2    conda-forge
+libev                     4.33                 haf1e3a3_1    conda-forge
+libffi                    3.4.2                h0d85af4_5    conda-forge
+libgfortran               3.0.1                         0    conda-forge
+libglib                   2.70.2               hf1fb8c0_4    conda-forge
+libiconv                  1.16                 haf1e3a3_0    conda-forge
+liblapack                 3.8.0               12_openblas    conda-forge
+liblapacke                3.8.0               12_openblas    conda-forge
+libnghttp2                1.47.0               hca56917_0    conda-forge
+libopenblas               0.3.7                hd44dcd8_1    conda-forge
+libpng                    1.6.37               h2573ce8_0    conda-forge
+libsodium                 1.0.17               h01d97ff_0    conda-forge
+libssh2                   1.10.0               hd3787cc_2    conda-forge
+libzlib                   1.2.11            h9173be1_1013    conda-forge
+llvm-openmp               13.0.1               hcb1a161_1    conda-forge
+markupsafe                1.1.1            py37h0b31af3_0    conda-forge
+mistune                   0.8.4           py37h0b31af3_1000    conda-forge
+more-itertools            8.2.0                      py_0    conda-forge
+mpi                       1.0                     openmpi    conda-forge
+nbconvert                 5.6.1                    py37_0    conda-forge
+nbformat                  5.0.4                      py_0    conda-forge
+ncurses                   6.3                  he49afe7_0    conda-forge
+nettle                    3.4.1             h3efe00b_1002    conda-forge
+notebook                  6.0.1                    py37_0    conda-forge
+numpy                     1.18.0.dev0+463acda          pypi_0    pypi
+openblas                  0.3.7                hd44dcd8_1    conda-forge
+openjdk                   11.0.1            hbbe82c9_1018    conda-forge
+openmpi                   3.1.4                ha90c164_0    conda-forge
+openssl                   3.0.0                h0d85af4_2    conda-forge
+pandoc                    2.9.1.1                       0    conda-forge
+pandocfilters             1.4.2                      py_1    conda-forge
+parso                     0.6.1                      py_0    conda-forge
+pcre                      8.45                 he49afe7_0    conda-forge
+perl                      5.32.1          2_h0d85af4_perl5    conda-forge
+perl-archive-tar          2.40            pl5321hdfd78af_0    bioconda
+perl-carp                 1.50            pl5321hd8ed1ab_0    conda-forge
+perl-common-sense         3.75            pl5321hdfd78af_0    bioconda
+perl-compress-raw-bzip2   2.101           pl5321h9722bc1_1    bioconda
+perl-compress-raw-zlib    2.101           pl5321h9722bc1_2    bioconda
+perl-encode               3.16            pl5321ha5712d3_1    bioconda
+perl-exporter             5.74            pl5321hd8ed1ab_0    conda-forge
+perl-exporter-tiny        1.002002        pl5321hdfd78af_0    bioconda
+perl-extutils-makemaker   7.64            pl5321hd8ed1ab_0    conda-forge
+perl-io-compress          2.102           pl5321h9722bc1_1    bioconda
+perl-io-zlib              1.11            pl5321hdfd78af_0    bioconda
+perl-json                 4.05            pl5321hdfd78af_0    bioconda
+perl-json-xs              2.34            pl5321hcd10b59_5    bioconda
+perl-list-moreutils       0.430           pl5321hdfd78af_0    bioconda
+perl-list-moreutils-xs    0.430           pl5321ha5712d3_1    bioconda
+perl-parent               0.238           pl5321hd8ed1ab_0    conda-forge
+perl-pathtools            3.75            pl5321ha5712d3_3    bioconda
+perl-scalar-list-utils    1.62            pl5321ha5712d3_0    bioconda
+perl-types-serialiser     1.01            pl5321hdfd78af_0    bioconda
+perl-xsloader             0.24            pl5321hd8ed1ab_0    conda-forge
+pexpect                   4.8.0                    py37_0    conda-forge
+pickleshare               0.7.5                 py37_1000    conda-forge
+pip                       20.0.2                     py_2    conda-forge
+plink                     1.90b6.21            hb4d813b_1    bioconda
+prometheus_client         0.7.1                      py_0    conda-forge
+prompt_toolkit            2.0.10                     py_0    conda-forge
+ptyprocess                0.6.0                   py_1001    conda-forge
+pygments                  2.5.2                      py_0    conda-forge
+pyqt                      5.9.2            py37h2a560b1_4    conda-forge
+pyrsistent                0.15.7           py37h0b31af3_0    conda-forge
+python                    3.7.12          hf3644f1_100_cpython    conda-forge
+python-dateutil           2.8.1                      py_0    conda-forge
+python_abi                3.7                     1_cp37m    conda-forge
+pyvcf                     0.6.8                 py37_1000    conda-forge
+pyzmq                     18.1.1           py37h4bf09a9_0    conda-forge
+qt                        5.9.7                h93ee506_2    conda-forge
+qtconsole                 4.6.0                      py_0    conda-forge
+readline                  8.1                  h05e3726_0    conda-forge
+send2trash                1.5.0                      py_0    conda-forge
+setuptools                45.1.0                   py37_0    conda-forge
+sip                       4.19.8          py37h0a44026_1000    conda-forge
+six                       1.14.0                   py37_0    conda-forge
+snpsift                   4.3.1t                        1    bioconda
+sqlite                    3.37.1               hb516253_0    conda-forge
+structure                 2.3.4                h470a237_1    bioconda
+terminado                 0.8.3                    py37_0    conda-forge
+testpath                  0.4.4                      py_0    conda-forge
+tk                        8.6.12               h5dbffcc_0    conda-forge
+tornado                   6.0.3            py37h0b31af3_0    conda-forge
+traitlets                 4.3.3                    py37_0    conda-forge
+vcftools                  0.1.16               h5c9b4e4_3    bioconda
+wcwidth                   0.1.8                      py_0    conda-forge
+webencodings              0.5.1                      py_1    conda-forge
+wheel                     0.34.2                     py_1    conda-forge
+widgetsnbextension        3.5.1                    py37_0    conda-forge
+xz                        5.2.5                haf1e3a3_1    conda-forge
+zeromq                    4.3.2                h6de7cb9_2    conda-forge
+zipp                      2.1.0                      py_0    conda-forge
+zlib                      1.2.11            h9173be1_1013    conda-forge
 ```
 
+`open3d`
 
+```
+# packages in environment at /Users/kprata/anaconda3/envs/open3d:
+#
+# Name                    Version                   Build  Channel
+addict                    2.4.0                    pypi_0    pypi
+alphashape                1.3.1              pyh44b312d_0    conda-forge
+aom                       3.3.0                h96cf925_1    conda-forge
+attrs                     21.4.0             pyhd8ed1ab_0    conda-forge
+blosc                     1.21.0               he49afe7_0    conda-forge
+boost-cpp                 1.74.0               hdbf7018_7    conda-forge
+brotli                    1.0.9                h0d85af4_6    conda-forge
+brotli-bin                1.0.9                h0d85af4_6    conda-forge
+bzip2                     1.0.8                h0d85af4_4    conda-forge
+c-ares                    1.18.1               h0d85af4_0    conda-forge
+ca-certificates           2021.10.8            h033912b_0    conda-forge
+cairo                     1.16.0            he01c77b_1009    conda-forge
+certifi                   2021.10.8        py39h6e9494a_2    conda-forge
+cfitsio                   4.0.0                hb20e66c_0    conda-forge
+click                     8.0.3            py39h6e9494a_1    conda-forge
+click-log                 0.3.2              pyh9f0ad1d_0    conda-forge
+click-plugins             1.1.1                      py_0    conda-forge
+cligj                     0.7.2              pyhd8ed1ab_1    conda-forge
+curl                      7.81.0               h97da3c1_0    conda-forge
+cycler                    0.11.0             pyhd8ed1ab_0    conda-forge
+descartes                 1.1.0                      py_4    conda-forge
+expat                     2.4.4                he49afe7_0    conda-forge
+ffmpeg                    5.0.1                h9220da4_0    conda-forge
+fiona                     1.8.21           py39haa9df5e_0    conda-forge
+font-ttf-dejavu-sans-mono 2.37                 hab24e00_0    conda-forge
+font-ttf-inconsolata      3.000                h77eed37_0    conda-forge
+font-ttf-source-code-pro  2.038                h77eed37_0    conda-forge
+font-ttf-ubuntu           0.83                 hab24e00_0    conda-forge
+fontconfig                2.13.94              h10f422b_0    conda-forge
+fonts-conda-ecosystem     1                             0    conda-forge
+fonts-conda-forge         1                             0    conda-forge
+fonttools                 4.28.4                   pypi_0    pypi
+freetype                  2.10.4               h4cff582_1    conda-forge
+freexl                    1.0.6                h0d85af4_0    conda-forge
+fribidi                   1.0.10               hbcb3906_0    conda-forge
+future                    0.18.2           py39h6e9494a_5    conda-forge
+gdal                      3.4.1            py39h478c985_3    conda-forge
+geopandas                 0.9.0              pyhd8ed1ab_0    conda-forge
+geos                      3.10.2               he49afe7_0    conda-forge
+geotiff                   1.7.0                h0ca5f94_6    conda-forge
+gettext                   0.19.8.1          hd1a6beb_1008    conda-forge
+giflib                    5.2.1                hbcb3906_2    conda-forge
+gmp                       6.2.1                h2e338ed_0    conda-forge
+gnutls                    3.6.13               h756fd2b_1    conda-forge
+hdf4                      4.2.15               hefd3b78_3    conda-forge
+hdf5                      1.12.1          nompi_hd9e8a45_103    conda-forge
+icu                       69.1                 he49afe7_0    conda-forge
+jbig                      2.1               h0d85af4_2003    conda-forge
+joblib                    1.1.0                    pypi_0    pypi
+jpeg                      9e                   h0d85af4_0    conda-forge
+json-c                    0.15                 hcb556a6_0    conda-forge
+kealib                    1.4.14               ha22a8b1_3    conda-forge
+kiwisolver                1.3.2            py39hf018cea_1    conda-forge
+krb5                      1.19.2               h289aae4_3    conda-forge
+lame                      3.100             h35c211d_1001    conda-forge
+lcms2                     2.12                 h577c468_0    conda-forge
+lerc                      3.0                  he49afe7_0    conda-forge
+libblas                   3.9.0           13_osx64_openblas    conda-forge
+libbrotlicommon           1.0.9                h0d85af4_6    conda-forge
+libbrotlidec              1.0.9                h0d85af4_6    conda-forge
+libbrotlienc              1.0.9                h0d85af4_6    conda-forge
+libcblas                  3.9.0           13_osx64_openblas    conda-forge
+libcurl                   7.81.0               h97da3c1_0    conda-forge
+libcxx                    12.0.1               habf9029_1    conda-forge
+libdap4                   3.20.6               h3e144a0_2    conda-forge
+libdeflate                1.10                 h0d85af4_0    conda-forge
+libedit                   3.1.20191231         h0678c8f_2    conda-forge
+libev                     4.33                 haf1e3a3_1    conda-forge
+libffi                    3.4.2                h0d85af4_5    conda-forge
+libgdal                   3.4.1                h467bfbe_3    conda-forge
+libgfortran               5.0.0           9_3_0_h6c81a4c_23    conda-forge
+libgfortran5              9.3.0               h6c81a4c_23    conda-forge
+libglib                   2.70.2               hf1fb8c0_4    conda-forge
+libiconv                  1.16                 haf1e3a3_0    conda-forge
+libimagequant             2.17.0               h9bde063_1    conda-forge
+libkml                    1.3.0             h8fd9edb_1014    conda-forge
+liblapack                 3.9.0           13_osx64_openblas    conda-forge
+libnetcdf                 4.8.1           nompi_h6609ca0_101    conda-forge
+libnghttp2                1.46.0               hfd382f3_0    conda-forge
+libopenblas               0.3.18          openmp_h3351f45_0    conda-forge
+libpng                    1.6.37               h7cec526_2    conda-forge
+libpq                     14.2                 h8ce7ee7_0    conda-forge
+librttopo                 1.1.0                hec60dd8_9    conda-forge
+libspatialindex           1.9.3                he49afe7_4    conda-forge
+libspatialite             5.0.1               h88e7940_14    conda-forge
+libssh2                   1.10.0               hd3787cc_2    conda-forge
+libtiff                   4.3.0                h17f2ce3_3    conda-forge
+libvpx                    1.11.0               he49afe7_3    conda-forge
+libwebp                   1.2.2                h28dabe5_0    conda-forge
+libwebp-base              1.2.2                h0d85af4_1    conda-forge
+libxcb                    1.13              h0d85af4_1004    conda-forge
+libxml2                   2.9.12               h7e28ab6_1    conda-forge
+libzip                    1.8.0                h7e5727d_1    conda-forge
+libzlib                   1.2.11            h9173be1_1013    conda-forge
+llvm-openmp               13.0.1               hda6cdc1_0    conda-forge
+lz4-c                     1.9.3                he49afe7_1    conda-forge
+matplotlib-base           3.5.1            py39hb07454d_0    conda-forge
+munch                     2.5.0                      py_0    conda-forge
+munkres                   1.1.4              pyh9f0ad1d_0    conda-forge
+ncurses                   6.2                  h2e338ed_4    conda-forge
+nettle                    3.6                  hedd7734_0    conda-forge
+networkx                  2.6.3              pyhd8ed1ab_1    conda-forge
+nspr                      4.32                 hcd9eead_1    conda-forge
+nss                       3.74                 h31e2bf1_0    conda-forge
+numpy                     1.21.4                   pypi_0    pypi
+open3d                    0.14.1                   pypi_0    pypi
+openh264                  2.1.1                hfd3ada9_0    conda-forge
+openjpeg                  2.4.0                h6e7aa92_1    conda-forge
+openssl                   3.0.2                h6c3fc93_1    conda-forge
+packaging                 21.3               pyhd8ed1ab_0    conda-forge
+pandas                    1.3.5                    pypi_0    pypi
+pcre                      8.45                 he49afe7_0    conda-forge
+pillow                    8.4.0                    pypi_0    pypi
+pip                       21.3.1             pyhd8ed1ab_0    conda-forge
+pixman                    0.40.0               hbcb3906_0    conda-forge
+poppler                   22.01.0              h9573804_0    conda-forge
+poppler-data              0.4.11               hd8ed1ab_0    conda-forge
+postgresql                14.2                 h0fd25fa_0    conda-forge
+proj                      8.2.1                h1512c50_0    conda-forge
+pthread-stubs             0.4               hc929b4f_1001    conda-forge
+pyglet                    1.5.16           py39h6e9494a_1    conda-forge
+pyparsing                 3.0.6                    pypi_0    pypi
+pyproj                    3.3.0            py39h074cefc_1    conda-forge
+python                    3.9.7           h38b4d05_3_cpython    conda-forge
+python-dateutil           2.8.2              pyhd8ed1ab_0    conda-forge
+python_abi                3.9                      2_cp39    conda-forge
+pytz                      2021.3             pyhd8ed1ab_0    conda-forge
+pyyaml                    6.0                      pypi_0    pypi
+readline                  8.1                  h05e3726_0    conda-forge
+rtree                     0.9.7            py39h7d0d40a_3    conda-forge
+scikit-learn              1.0.1                    pypi_0    pypi
+scipy                     1.7.3                    pypi_0    pypi
+setuptools                59.6.0           py39h6e9494a_0    conda-forge
+shapely                   1.8.0            py39hbfbc381_5    conda-forge
+six                       1.16.0             pyh6c4a22f_0    conda-forge
+sqlite                    3.37.0               h23a322b_0    conda-forge
+svt-av1                   0.9.1                h96cf925_0    conda-forge
+threadpoolctl             3.0.0                    pypi_0    pypi
+tiledb                    2.6.2                h2a16ea5_1    conda-forge
+tk                        8.6.11               h5dbffcc_1    conda-forge
+tqdm                      4.62.3                   pypi_0    pypi
+trimesh                   3.10.0             pyh6c4a22f_0    conda-forge
+tzcode                    2021e                h0d85af4_0    conda-forge
+tzdata                    2021e                he74cb21_0    conda-forge
+unicodedata2              14.0.0           py39h89e85a6_0    conda-forge
+wheel                     0.37.0             pyhd8ed1ab_1    conda-forge
+x264                      1!161.3030           h0d85af4_1    conda-forge
+x265                      3.5                  hbb4e6a2_3    conda-forge
+xerces-c                  3.2.3                h6564042_4    conda-forge
+xorg-libxau               1.0.9                h35c211d_0    conda-forge
+xorg-libxdmcp             1.1.3                h35c211d_0    conda-forge
+xz                        5.2.5                haf1e3a3_1    conda-forge
+zlib                      1.2.11            h9173be1_1013    conda-forge
+zstd                      1.5.2                h582d3a0_0    conda-forge
+```
 
-### Script descriptions
-
-TODO:
-
-### Filename glossary
-
-TODO:
-
-'all-aga' - all *Agaricia* spp. samples
-
-'ac' - *A. agaricites*
-
-'lm' - A. lamarcki
-
-'hu' - A. humilis
-
-'nc' - no clones
-
-'wc' - with clones
-
-'aa1' - A. agaricites taxon 1
-
-'aa2' -
-
-'ah1' -
-
-'ah2' -
-
-'ah3' -
-
-'al1' -
-
-'al2' -

@@ -30,7 +30,7 @@ pca_plot_species <- function(info, eig, title, int1, int2, colours, n.loc){
           panel.grid = element_blank(),
           legend.background = element_blank(),
           legend.key = element_blank(),
-          panel.border = element_rect(colour = "grey", fill = NA, size = 1),
+          panel.border = element_rect(colour = "grey", fill = NA, linewidth = 1),
           axis.title.x = element_text(size = 12),
           axis.title.y = element_text(size = 12),
           axis.text.x = element_text(size = 8),
@@ -273,18 +273,18 @@ if (DATA_PARAMS[1] == "all-aga") {
   mislabels_AA = c("KP1139_LM_CA20", "KP0361_LM_WP20", "KP0349_LM_WP20","KP0611_LM_SB20",
                    "KP0399_LM_WP20", "KP1146_LM_CA20", "KP0109_LM_SB10", "KP0583_LM_WP20",
                    "KP0244_LM_SQ20", "KP0565_LM_WP20", "KP0406_NA_NANA", "KP0673_NA_NANA")
-  write.csv(mislabels_AA, file = "metadata/mislabels_AA.csv")
+  write.csv(mislabels_AA, file = "../data/mislabels_AA.csv")
   for (a in 1:length(mislabels_AA)) {
     pca_info$Species[pca_info$Individual == mislabels_AA[a]] = "AA"}
   mislabels_AH = c("KP0639_LM_SB20", "KP0899_LM_WP10")
-  write.csv(mislabels_AH, file = "metadata/mislabels_AH.csv")
+  write.csv(mislabels_AH, file = "../data/mislabels_AH.csv")
   for (h in 1:length(mislabels_AH)) {
     pca_info$Species[pca_info$Individual == mislabels_AH[h]] = "AH"}
   mislabels_AL = c("KP1124_AC_CA20", "KP0557_AC_WP20", "KP0203_AC_SQ12", "KP1095_HU_CA20",
                    "KP0186_AC_SQ12", "KP0851_AC_WP10", "KP0605_AC_SB20", "KP0609_AC_SB20",
                    "KP0096_AC_SB10", "KP0765_AC_WP10", "KP0192_AC_SQ12", "KY0578_AC_WP20",
                    "KP0671_AC_SB20", "KP0108_AC_SB10")
-  write.csv(mislabels_AL, file = "metadata/mislabels_AL.csv")
+  write.csv(mislabels_AL, file = "../data/mislabels_AL.csv")
   for (l in 1:length(mislabels_AL)) {
     pca_info$Species[pca_info$Individual == mislabels_AL[l]] = "AL"}
   pca_info$Species <- as.factor(pca_info$Species)
@@ -399,6 +399,8 @@ for (i in 1:(nf/2)) {
                    "#6F1242", #lamarcki1
                    "#B06327", #humilis1
                    "#6652A2") #lamarcki2
+      loc_levels <- c("WP", "CA", "SB", "SQ", "CR")
+      depth_levels <- c("10-12", "20", "15", "50")
       threshold <- 0.8
     } else if (DATA_PARAMS[1] == "ac") {
       admix_k <- nf
@@ -437,13 +439,13 @@ for (i in 1:(nf/2)) {
     pca_info$Depth <- factor(pca_info$Depth, levels = depth_levels)
     clusters <- append(clusters, paste0("Clust", 2:admix_k))
     print(paste0(DATA_PARAMS[1], " dataset set to k=", admix_k, " for admixture assignment and taking from sortedQ"))
-    Q <- read.table(paste0("../2b - Admixture/", DATA_PARAMS[4], "percent_", DATA_PARAMS[1], "_",
+    Q <- read.table(paste0("../results/admix_runs/", DATA_PARAMS[4], "percent_", DATA_PARAMS[1], "_",
                            DATA_PARAMS[2], "_", DATA_PARAMS[3], "/sortedQ/", DATA_PARAMS[1], "_2bi_", DATA_PARAMS[2],
                            "_", DATA_PARAMS[3], "_",DATA_PARAMS[4], ".", admix_k, ".Q"), header = TRUE)
-    taxaQ <- read.table(paste0("../2b - Admixture/", DATA_PARAMS[4], "percent_", DATA_PARAMS[1], "_",
+    taxaQ <- read.table(paste0("../results/admix_runs/", DATA_PARAMS[4], "percent_", DATA_PARAMS[1], "_",
                                DATA_PARAMS[2], "_", DATA_PARAMS[3], "/sortedQ/", DATA_PARAMS[1], "_2bi_", DATA_PARAMS[2],
                                "_", DATA_PARAMS[3], "_",DATA_PARAMS[4], ".", taxa_k, ".Q"), header = TRUE)
-    source('scripts/func-k.R')
+    source('func-k.R')
     admix_data <- cbind(pop, taxaQ)
     sorted_clusters <- sort_clusters(Q, admix_k)
     admix_data <- choose_Qprop(admix_data, taxa_k, threshold)
@@ -453,8 +455,9 @@ for (i in 1:(nf/2)) {
       pca_info[, column] <- as.factor(pca_info[, column])
     }
     pca_info$Q <- Q
+    pca_info$taxaQ <- taxaQ
     print("Writing sorted admix assignments to data ;)")
-    write.csv(pca_info, paste0("../../data/", VCF_NAME, "_", admix_k, ".csv"), quote = FALSE,
+    write.csv(pca_info, paste0("../results/", VCF_NAME, "_", admix_k, ".csv"), quote = FALSE,
               row.names = FALSE)
     pca.plot <- pca_plot_admixture(pca_info, eig, title, j[i], k[i], n.loc)
     plotPATH = paste0(PATH,"_admixture_pca", j[i], k[i], ".pdf")

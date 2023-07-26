@@ -1,0 +1,59 @@
+  !Dataset name
+  !Output file name
+          ! Number of offspring in the sample
+           ! Number of loci
+1234        ! Seed for random number generator
+0           ! 0/1=Not updating/updating allele frequency
+1           ! 2/1=Dioecious/Monoecious species
+1           ! 0/1=No inbreeding/inbreeding
+0           ! 0/1=Diploid species/HaploDiploid species
+0  0        ! 0/1=Polygamy/Monogamy for males & females
+0           ! 0/1=Clone inference =No/Yes
+1           ! 0/1=Full sibship size scaling =No/Yes
+0 1.0 1.0   ! 0,1,2,3=No,weak,medium,strong sibship size prior; mean paternal & meteral sibship size
+0           ! 0/1=Unknown/Known population allele frequency
+10         ! Number of runs
+4         ! Length of run
+0         ! 0/1=Monitor method by Iterate#/Time in second
+10000    ! Monitor interval in Iterate# / in seconds
+0         ! non-Windows version
+1         ! Fulllikelihood
+3         ! 1/2/3=low/medium/high Precision for Fulllikelihood
+
+        !Marker names
+0@        !Marker types, 0/1 = codominant/dominant
+0@       !Allelic dropout rate  
+0@        !false allele rate
+
+
+   
+
+
+     !prob. of dad/mum included in the candidates
+       !numbers of candiadte males & females
+
+  
+
+
+0  3        !#known father-offspring dyads, paternity exclusion threshold
+
+0  3          !#known mother-offspring dyads, maternity exclusion threshold
+
+0             !#known paternal sibship with unknown fathers
+
+
+0             !#known maternal sibship with unknown mothers
+
+
+0             !#known paternity exclusions=
+
+
+0             !#known maternity exclusions
+
+
+0             !#known paternal sibship exclusions
+
+
+0             !#known maternal sibship exclusions
+
+
