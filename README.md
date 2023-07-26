@@ -60,7 +60,7 @@ Some steps are written out instead of all code commands due to utilising databas
    $ conda activate radkat
    ```
 
-1. The initial vcf [found on RDM] was filtered for minimum and maximum depth (> 3x mean depth), minimum allele count, maximum missing SNPs.
+1. The initial vcf [on UQ eSpace] was filtered for minimum and maximum depth (> 3x mean depth), minimum allele count, maximum missing SNPs.
 
 ```bash
 $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac 3 --max-missing 0.5 --min-alleles 2 --max-alleles 2 --recode --stdout > all-aga_1ci.vcf
@@ -118,33 +118,33 @@ These analysis datasets do not include clones (removed during B - Clones), have 
 
 Need to use `vcf_single_snp.py` from www.github.com/pimbongaerts/radseq for creating unlinked datasets when using `admix_4multiple.sh`. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
 
-Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb (larger than the size limit for github).
+Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb.
 
 For creating the combination plots (*e.g.*, Admixture and NJ-tree summary plots) need to use `vcf_gdmatrix.py` & `gdmatrix2tree.py` from www.github.com/pimbongaerts/radseq.
 
 **Steps**
 
-1. Separate and filter species specific datasets
+1. Separate and filter species specific datasets (see *A - Filtered vcf* file section)
 
 2. PCA
 
-   -run using unlinked and neutral data and with depth category for individual species and species category for all-aga dataset.
+   -run `basic_pca.R` with depth category for individual species and species category for all-aga dataset (*e.g.*, points are either coloured by location and depth or species identity)
 
 3. Admixture
 
-   -run admix_4multiple to create CV error and log-likelihood
+   -run `admix_4multiple.sh` to create multiple replicate runs of randomly sampled SNPs
 
-   -make plots for CV error, log-likelihood and Qvalue taxa thresholds
+   -make plots for CV error, log-likelihood and Qvalue taxa thresholds using `compile_logs.R` and `Qvalues.R`	
 
-   -run admix_unlinked to run on analysis dataset (*i.e.*, the sampled dataset used for all other analyses)
+   -run `admix_unlinked.sh` to run on analysis dataset (*i.e.*, the sampled dataset used for all other analyses)
 
    -make admixture plots
 
 4. PCA again
 
-   -run with admixture setting to see concordance and create input files for combination plots
+   -run with admixture category to see concordance and create input files for combination plots
 
-5. Combination plots (with NJ-tree)
+5. Make combination plots with Admixture and neighbour-joining tree.
 
 **Code**
 
@@ -253,10 +253,10 @@ $ Rscript set_distancces.R all_annotations_X_DEPTH_parallel
 
 1. Remove mislabels and outgroups for spatial analyses
 2. Make separate taxa files for Fstatistics and Kinship
-3. Run redundacy analysis
-4. Run isolation-by-distance analysis
+3. Redundancy analysis
+4. Isolation-by-distance
 5. F-statistics
-6. Kinship
+6. Kinship (requires HPC to run quickly)
 
 **Code**
 
