@@ -1,4 +1,4 @@
-# Data accessibility for Prata et al (2023)
+# Data accessibility for Prata et al (202X)
 
 ## raw files and de novo assembly
 
@@ -44,7 +44,9 @@ p, s, v                        ## [27] [output_formats]: Output formats (see doc
 
 # popgen_rad_shallow_agaricia
 
-A repository for analysis datasets, scripts and results for Prata et al., (2023) Metre-scale generational dispersal in dominant Caribbean corals.
+A repository for analysis datasets, scripts and results for *Prata et al., (202X) Metre-scale generational dispersal in dominant Caribbean corals*
+
+For each block of code to run activate the appropriate conda environment or software versions (see *Appendix*) and change to the scripts directory within the appropriate heading directory. Files will either be accessed in data or results (if intermediary step) and will write files into results.
 
 ## A - Filtered vcf file
 
@@ -60,23 +62,31 @@ Some steps are written out instead of all code commands due to utilising databas
    $ conda activate radkat
    ```
 
-1. The initial vcf [on UQ eSpace] was filtered for minimum and maximum depth (> 3x mean depth), minimum allele count, maximum missing SNPs.
+1. The initial VCF [on UQ eSpace]() was filtered for minimum and maximum depth (>3x mean depth), minimum allele count, maximum missing SNPs (50%).
 
 ```bash
 $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac 3 --max-missing 0.5 --min-alleles 2 --max-alleles 2 --recode --stdout > all-aga_1ci.vcf
 ```
 
-2. Symbiont and other contamination was found using blastn tool (see `blast_files/`. The loci file from ipyrad output was converted into a fasta file using `pyrad2fasta.py`. For Symbiodiniacae the Cladocopium spp. genome fasta file was downloaded from https://www.ncbi.nlm.nih.gov/assembly/GCA_003297045.1 and a RAD reference from www.github.com/pimbongaerts/bermuda-rad, reads that matched an e-value of 1e-15 were removed. For the other symbionts and contamination, the web-based software, Galaxy was used and the fasta file was matched with the `nt 17-Apr-2014` database using an e-value of 0.001.
-3. High missing data individuals (see `high-miss-indiv_all-aga_1ci.txt`) were removed, then final filters were applied, 5, 10, 20% maximum missing data, & monomorphic SNPs removed.
-4. Initial PCA, NJ-tree and Admixture analyses were conducted in order to separate into species datasets for outlier removal (see *C - Population structure*). VCF files found within *C - Population structure* already have outliers removed, there were no significant differences among the structure results for these datsets. Individuals that assigned to each of the species were subset from the initial vcf and filtering, using the same steps as above, was repeated.
-5. For all analyses (apart from clone analyses) outliers were removed and datasets were subset to one SNP per RAD contig. Outlier SNPs were discovered per species dataset using pcadapt (see `pcadapt_outliers/`).
+2. Symbiont and other contamination was found using the `blastn` tool (see `blast_files/` for results). The loci file from ipyrad output was converted into a fasta file using `pyrad2fasta.py`. For Symbiodiniacae the *Cladocopium* spp. genome fasta file was downloaded from https://www.ncbi.nlm.nih.gov/assembly/GCA_003297045.1 and a RAD reference from www.github.com/pimbongaerts/bermuda-rad, reads that matched an e-value of 1e^-15^ were removed. For the other symbionts and contamination, the web-based software [Galaxy](https://usegalaxy.org.au/) was used and the fasta file was matched with the `nt 17-Apr-2014` database for non-Scleractinia sequences using an e-value of 0.001 which were then removed.
+3. High missing data individuals (>50% missing data, see `high-miss-indiv_all-aga_1ci.txt`) were removed, then final filters were applied, 5, 10, 20% maximum missing data, & monomorphic SNPs removed.
+4. Initial PCA, Admixture, and genetic distance analyses were conducted in order to separate into species datasets for outlier removal (see *C - Population structure*). VCF files found within *C - Population structure* already have outliers removed, there were no significant differences among the structure results for these datsets. Individuals that assigned to each of the species were subset from the initial VCF and filtering, using the same steps as above, was repeated.
+5. For all analyses (apart from clone analyses) outliers were removed and datasets were subset to one SNP per RAD contig. Outlier SNPs were discovered per species dataset using pcadapt.
+
+**Code:**
+
+```bash
+$ for taxa in ac hu lm;
+		do Rscript pcadapt.R ${taxa};
+		done
+```
 
 **Base datasets for analyses**
 
-| Dataset name               | # individuals | # SNPs  | Conditions                                                   | Use                                           | Locations                                                    |
-| -------------------------- | ------------- | ------- | ------------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
+| Dataset name               | # individuals | # SNPs  |                           Details                            | Use                                           | Locations                                                    |
+| -------------------------- | ------------- | ------- | :----------------------------------------------------------: | --------------------------------------------- | ------------------------------------------------------------ |
 | all-aga_1d_wc-wnr_20.vcf   | 767           | 15659   | All *Agaricia* species samples, linked, no outlier removal, with clones and NextRAD samples and 20% max missing data | Clones                                        | -                                                            |
-| all-aga_1div_nc-wnr_20.vcf | 557           | 751     | All *Agaricia* species samples, unlinked, neutral, no clones with NextRAD samples and 20% max missing data | Population structure                          | C - population structure/data, D - intraspeific analyses/data |
+| all-aga_1div_nc-wnr_20.vcf | 557           | 751     | All *Agaricia* species samples, unlinked, neutral, no clones with NextRAD samples and 20% max missing data | Population structure                          | C - population structure/data                                |
 | ac_1d_wc_20.vcf            | 512           | 22274   | *A. agaricites* samples, linked, no outlier removal, with clones and 20% max missing data | Clones                                        | Distance matrix stored in B - Clones/data                    |
 | ac_1div_nc_20.vcf          | 335           | 1606    | *A. agaricites* samples, unlinked, neutral, no clones and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
 | hu_1d_wc_20.vcf            | 142           | 25380   | *A. humilis* samples, linked, no outlier removal, with clones and 20% max missing data | Clones                                        | Distance matrix stored in B - Clones/data                    |
@@ -85,7 +95,7 @@ $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac
 | lm_1div_nc_20.vcf          | 92            | 941     | *A. lamarcki* samples, unlinked, neutral, no clones and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
 | lm_1div_nc-wnr_20.vcf      | 98            | 940     | *A. lamarcki* samples, unlinked, neutral, no clones with NextRAD samples, and 20% max missing data | Population structure & Intraspecific analyses | C - population strucutre/data, D - intraspeific analyses/data |
 
-For intraspecific analyses these were further filtered see **E - Intraspecific analyses** section for more details.
+For intraspecific analyses these were further filtered see *E - Intraspecific analyses* section for more details.
 
 ## B - Clones
 
@@ -98,7 +108,7 @@ The script `vcf_find_clones.py` from www.github.com/pimbongaerts/radseq makes th
 These datasets were not filtered for unlinked and neutral SNPs.
 
 1. Each separate species dataset was tranformed into a genetic distance matrix (Hamming's distance)
-2. Run make_clone_groups.py to assess similarity distribution threshold, based upon breaks in distribution and similarity to technical replicates
+2. Run `make_clone_groups.py` to assess similarity distribution threshold, based upon breaks in distribution and similarity to technical replicates
 3. Retain one individual per clone groups with the highest number of SNPs to create no clones datasets ('nc')
 
 **Code**
@@ -200,15 +210,15 @@ $ Rscript basic_pca.R lm_1div_nc-wnr_20 4 admixture
 $ Rscript basic_pca.R lm_1div_nc_20 2 admixture
 # Make Neighbour Joining trees
 $ for taxa in ac hu lm;
-do vcf_gdmatrix.py ../data/${taxa}_1div_nc_20.vcf ../data/pop_${taxa}_1div_nc.txt > ../results/${taxa}_1div_nc_20_gdmatrix.tsv; 
-done
+		do vcf_gdmatrix.py ../data/${taxa}_1div_nc_20.vcf ../data/pop_${taxa}_1div_nc.txt > ../results/${taxa}_1div_nc_20_gdmatrix.tsv; 
+		done
 $ for taxa in ac hu lm;
-do gdmatrix2tree.py ../results/${taxa}_1div_nc_20_gdmatrix.tsv ../results/${taxa}_1div_nc_20_tree.nex;
-done
+		do gdmatrix2tree.py ../results/${taxa}_1div_nc_20_gdmatrix.tsv ../results/${taxa}_1div_nc_20_tree.nex;
+		done
 # Run combination plot script
 $ for taxa in ac hu lm;
-do Rscript combining_popstruc.R ${taxa} 1div nc Taxa no;
-done
+		do Rscript combining_popstruc.R ${taxa} 1div nc Taxa no;
+		done
 ```
 
 ## D - Spatial coordinates 
@@ -234,13 +244,13 @@ $ text_file=(`ls *.txt | tr '\n' ' '`)
 # in script directory
 $ cd ../scripts
 $ for ((i=0;i<${#json_file[@]};i++)); 
-do python rotate_annotations_depthoriented.py ${json_file[$i]} ${text_file[$i]};
-done
+		do python rotate_annotations_depthoriented.py ${json_file[$i]} ${text_file[$i]};
+		done
 $ rotate_parallel_depthoriented.py
 # For isolation-by-distance
 $ for ((i=0;i<${#json_file[@]};i++)); 
-do python rotate_annotations_2D.py ${json_file[$i]} ${text_file[$i]};
-done
+		do python rotate_annotations_2D.py ${json_file[$i]} ${text_file[$i]};
+		done
 $ python rotate_annotations_2D.py cur_sna_20m_20200303_subsets.json cur_sna_20m_20200303_decvis_02.txt
 $ python rotate_parallel_2D.py
 $ Rscript set_distances.R all_annotations_X_HORIZ_parallel
@@ -296,10 +306,10 @@ $ vcftools --vcf ac_1div_nc_20.vcf --keep aa2.names.txt --min-alleles 2 --max-al
 
 ## Subsetting A. agaricities 2 for Kinship
 $ for location in WP CA SB SQ;
-do grep ${location} aa2.names.txt > aa2-${location}.names.txt;
-vcftools --vcf ac_1div_nc_20.vcf --keep aa2-${location}.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.2 --maf 0.000000001 --stdout --recode > aa2-${location}_1div_nc_20.vcf;
-zo;
-done
+		do grep ${location} aa2.names.txt > aa2-${location}.names.txt;
+		vcftools --vcf ac_1div_nc_20.vcf --keep aa2-${location}.names.txt --min-alleles 2 --max-alleles 2 --max-missing 0.2 --maf 0.000000001 --stdout --recode > aa2-${location}_1div_nc_20.vcf;
+		tail -n 4;
+		done
 ### WP
 #After filtering, kept 144 out of 335 Individuals
 #After filtering, kept 945 out of a possible 1606 Sites
@@ -340,8 +350,8 @@ $ vcftools --vcf lm_1div_nc_20.vcf --keep al2.names.txt --min-alleles 2 --max-al
 
 ```bash
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-do Rscript rda.R $taxa;
-done
+		do Rscript rda.R $taxa;
+		done
 ```
 
 ### Isolation-by-distance
@@ -349,26 +359,27 @@ done
 ```bash
 # Running genepop across all locations
 $ for taxa in AA1 AA2	AH1 AH2 AH3 AL1 AL2;
-do Rscript genepop.R $taxa all all;
-done
+		do Rscript genepop.R $taxa all all;
+		done
 # Running genepop across all locations, for within 'locations', e.g., all depths at one spatial location 
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-do Rscript genepop.R $taxa all within;
-done
+		do Rscript genepop.R $taxa all within;
+		done
 # create distance matrices for â and ln(geodist)
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
-do ./get_dist_matrix.sh $taxa all
+		do ./get_dist_matrix.sh $taxa all;
+		done
 # Summarise results
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-do ./get_genepop_results.sh $taxa all all;
-done
+		do ./get_genepop_results.sh $taxa all all;
+		done
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-do ./get_genepop_results.sh $taxa all within;
-done
+		do ./get_genepop_results.sh $taxa all within;
+		done
 # Make plots
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-do Rscript ibd_plots.R $taxa all all;
-done
+		do Rscript ibd_plots.R $taxa all all;
+		done
 $ Rscript ibd_plots.R AA1 all within
 ```
 
@@ -376,11 +387,28 @@ $ Rscript ibd_plots.R AA1 all within
 
 ```bash
 $ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
-do Rscript popgen_stats-taxa.R $taxa 20;
-done
+		do Rscript popgen_stats-taxa.R $taxa 20;
+		done
 ```
 
 ### Kinship
+
+Analyses were done using parallel processing on HPC, official results for each datasets can be found in `results/kinship/`. The [COLONY](https://www.zsl.org/about-zsl/resources/software/colony) software (v2.0.6.8) needs to be downloaded to use `./colony2s.out`.
+
+**Dataset details:**
+
+| Taxon                                    | # individuals | # SNP loci |
+| ---------------------------------------- | ------------- | ---------- |
+| aa1 - *A. agarictes* 1                   | 35            | 465        |
+| ah1 - *A. humilis* 1                     | 61            | 803        |
+| ah2 - *A. humilis* 2                     | 29            | 565        |
+| ah3 - *A. humilis* 3                     | 15            | 580        |
+| al1 - *A. lamarcki* 1                    | 28            | 544        |
+| al2 - *A. lamarcki* 2                    | 62            | 734        |
+| aa2-WP - *A. agaricties* 2 at West Point | 144           | 945        |
+| aa2-CA - *A. agaricites* 2 at Cas Abao   | 53            | 887        |
+| aa2-SB - *A. agaricites* 2 at Snake Bay  | 71            | 1005       |
+| aa2-SQ - *A. agaricites* 2 at Seaquarium | 30            | 1052       |
 
 Kinship general settings file:
 
@@ -405,28 +433,19 @@ Kinship general settings file:
 Code:
 
 ```bash
+# Prepare genotypes and loci files for COLONY input
 $ for dataset in aa1 ah1 ah2 ah3 al1 al2 aa2-WP aa2-CA aa2-SB aa2-SQ;
-do Rscript colony_files.R ${dataset}_1div_nc_20;
-done
-# Number of individuals and SNPs for each dataset.
-# aa1: 35 465
-# ah1: 61 803
-# ah2: 29 565
-# ah3: 15 580
-# al1: 28 544
-# al2: 62 734
-# aa2-WP: 144 945
-# aa2-CA: 53 887
-# aa2-SB: 71 1005
-# aa2-SQ: 30 1052
+		do Rscript colony_files.R ${dataset}_1div_nc_20;
+		done
+# EXAMPLE for one dataset
+# Create COLONY input files
 $ for param in 0.5 0.2 0.1 0.05;
-do ./edit_dat_file.sh aa1_1div_nc_20 35 465 $param;
-done
+		do ./edit_dat_file.sh aa1_1div_nc_20 35 465 $param;
+		done
 # Running analyses
 $ for param in 0.5 0.1 0.05;
-do ./colony2s.out IFN:aa1_1div_nc_20_${param}.dat;
-done
-# all other taxa analyses were run the same except AA2 where datafile was split per location for computation time speed up. Analyses were done using parallel processing on HPC, official results for each datasets can be found in results/kinship/
+		do ./colony2s.out IFN:aa1_1div_nc_20_${param}.dat;
+		done
 ```
 
 ### Clone distances
@@ -436,8 +455,8 @@ done
 $ Rscript clone_spatial_plots.R
 # all genotype distances
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2
-do Rscript genotype_spatial_plots.R $taxa;
-done
+		do Rscript genotype_spatial_plots.R $taxa;
+		done
 ```
 
 ## Appendix
