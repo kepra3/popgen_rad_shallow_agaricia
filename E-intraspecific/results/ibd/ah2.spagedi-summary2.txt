@@ -1,0 +1,2 @@
+Taxon Mindist Maxdist Nb Nb_upp Nb_low Sigma_dc Sigma_de
+ah2 NA NA -57.2868635195722 -42.7534302851961 -86.7898717824423 NA NA

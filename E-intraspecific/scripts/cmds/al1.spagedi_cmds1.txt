@@ -1,0 +1,15 @@
+../data/al1.spagedi.txt
+al1.spagedi-results1.txt
+
+1
+34
+
+199
+346
+0.25
+
+3
+
+
+
+

@@ -11,7 +11,7 @@ args = commandArgs(TRUE)
 #taxa = args[1] #"AA2"
 #category = args[2] #"WP05"
 #scale = args[3] # "within"
-taxa = "AA1"
+taxa = "AH3"
 category = "all"
 scale = "within"
 
@@ -111,7 +111,7 @@ ggsave(paste0("../results/ibd/plots/", taxa, "_", category, "_", scale, "_genvdi
 
 # Dispersal kernal ==================================================
 # Density estimate
-if (pvalue <= 0.06) {
+if (pvalue <= 0.5) {
   taxa.depth.pop$Site <- as.factor(taxa.depth.pop$Site)
   summary(taxa.depth.pop$Site)
   total_samples = sum(summary(taxa.depth.pop$Site))
@@ -134,8 +134,11 @@ if (pvalue <= 0.06) {
     annotation_rate = 0.7580645
   }
   N <- N / annotation_rate
-  # discovery rate.. 70%
-  N <- N / 0.7
+  if (any(taxa.depth.pop$Site == "SQ20") | any(taxa.depth.pop$Site == "SQ10") | any(taxa.depth.pop$Depth == "5")) {
+    exhuastive_sample <- sum(taxa.depth.pop$Site == "SQ20", taxa.depth.pop$Site == "SQ10", taxa.depth.pop$Depth == "5")
+    N <- (N - exhuastive_sample) / 0.7 # discovery rate.. 70%
+    N <- N + exhuastive_sample
+  }
   # per site
   plots <- length(levels(taxa.depth.pop$Site))
   N_plot <- N/plots
@@ -175,16 +178,16 @@ if (pvalue <= 0.06) {
   kernelplot <- ggplot(kernel, aes(distance, p.d)) + geom_line() + geom_line(aes(distance, p.d.low), linetype = "dashed", colour = "blue") + 
     geom_line(aes(distance, p.d.high), linetype = "dashed", colour = "red") + 
     theme_bw() +
-    annotate("text", x = 25, y = max(kernel$p.d.high)-0.08,
+    annotate("text", x = 25, y = max(kernel$p.d.high) - 0.08,
              label = Lab, parse = T, size = 2) +
-    annotate("text", x = 18, y = max(kernel$p.d.high)+0.01,
+    annotate("text", x = 18, y = max(kernel$p.d.high) + 0.01,
              label = "Upper 95% CI", colour = "red", size = 2) +
     annotate("text", x = 30, y = mean(kernel$p.d.high),
              label = "Lower 95% CI", colour = "blue", size = 2) +
     ggtitle(paste0("Neighbourhood = ", round(Neighbourhood, 0))) +
-    annotate("text", x = 30, y = min(kernel$p.d)+sd(kernel$p.d*1.5),
+    annotate("text", x = 30, y = min(kernel$p.d) + sd(kernel$p.d*1.5),
              label = expression(paste(sigma, " = ")), size = 2, parse = T) +
-    annotate("text", x = 36, y = min(kernel$p.d)+sd(kernel$p.d*1.5),
+    annotate("text", x = 36, y = min(kernel$p.d) + sd(kernel$p.d*1.5),
              label = paste0(round(sigma, 1)), size = 2) +
     ylab("P(d)") +
     xlab("d (m)") + rib + theme(plot.title = element_text(size = 6),
@@ -195,7 +198,7 @@ if (pvalue <= 0.06) {
   
   dispersal_data <- cbind(taxa, Neighbourhood, Neighbourhood.low, Neighbourhood.high,
                           D, sigma2, sigma)
-  write.csv(dispersal_data, paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results_copy.csv"), quote = FALSE,
+  write.csv(dispersal_data, paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results_new.csv"), quote = FALSE,
             row.names = FALSE)
 }
 
