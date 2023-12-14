@@ -88,15 +88,19 @@ advanced_tree_loc_depth <- function(tree_plot, pop_meta, colours, clusters, k) {
           panel.background = element_blank())
 }
 
+circle_tree <- function()
+
 # Arguments ====
 args = commandArgs(TRUE)
-VCF_NAME = args[1] # "ac" "hu" ""lm"
-STAGE = args[2] # "1div"
-PARAM = args[3] # "nc" or "wc"
-k_selection = args[4] # "Taxa" or "Cluster"
-include.het = args[5] # "yes" or "no"
+VCF_NAME = "ac" # "ac" "hu" ""lm"
+STAGE = "1div" # "1div"
+PARAM = "nc" # "nc" or "wc"
+k_selection = "Taxa" # "Taxa" or "Cluster"
+include.het = "no" # "yes" or "no"
+
 # plot_widths = list(as.numeric(strsplit(args[6], ",")[[1]])) # how spaces the plot widths are (given how many panels)
 # TODO: plot widths
+
 
 # Set specific values here ====
 if (VCF_NAME == "ac") {
@@ -140,7 +144,7 @@ if (VCF_NAME == "ac") {
 } else {
   cluster_k <- 5
   taxa_k <- 3
-  colours_clust <- rainbow(cluster_k)
+  colours_clust <- rainbow(cluster_k, alpha = 1)
   # need to add arbitrary site_colours and site labels - but don't know how many sites,
   # so will have to come later
 }
@@ -188,16 +192,16 @@ colours <- c(site_colours, colours_clust[1:k], loc_colours)
 if (k_selection == "Taxa") {
   if (VCF_NAME == "lm") {
     admix_column_start = which(colnames(pop_meta) == "Q.Clust1")
-    admix_column_end = admix_column_start + (k-1) 
+    admix_column_end = admix_column_start + (k - 1) 
   } else {
   admix_column_start = which(colnames(pop_meta) == "taxaQ.Clust1")
-  admix_column_end = admix_column_start + (k-1)
+  admix_column_end = admix_column_start + (k - 1)
   }
   admix <- organise_data(pop_meta[,admix_column_start:admix_column_end], pop_meta[,1:2], clusters)
 } else if (k_selection == "Clusters") {
   admix_column_start = which(colnames(pop_meta) == "Q.Clust1")
-  admix_column_end = admix_column_start + (k-1)
-  admix <- organise_data(pop_meta[,(11+(k-1)):(11+(k-1))], pop_meta[,1:2], clusters)
+  admix_column_end = admix_column_start + (k - 1)
+  admix <- organise_data(pop_meta[,(11 + (k - 1)):(11 + (k - 1))], pop_meta[,1:2], clusters)
 }
 
 # Heterozygosity ====
@@ -226,3 +230,60 @@ if (PARAM == "nc") {
          dpi = 300, width = 3, height = 10, units = "cm")
 }
 
+# TODO: Circular plot
+# Use basic plot details here...
+p <- ggtree(tree_x, layout = "fan", open.angle = 20) + 
+  geom_tippoint(aes(colour = tree_tibble_group$group), size = 2) +
+  scale_colour_manual(values = colours_clust[1:2])
+
+heatmap_data <- as.data.frame(pop_meta[,1])
+for (sites in c("WP", "CA", "SB", "SQ")) {
+  heatmap_data[[sites]] <- as.character(pop_meta$Loc)
+  heatmap_data[[sites]][heatmap_data[[sites]] != sites] <- 0
+}
+heatmap_data$WP[heatmap_data$WP == "WP"] <- 3
+heatmap_data$CA[heatmap_data$CA == "CA"] <- 4
+heatmap_data$SB[heatmap_data$SB == "SB"] <- 5
+heatmap_data$SQ[heatmap_data$SQ == "SQ"] <- 6
+
+rownames(heatmap_data) <- heatmap_data[,1]
+heatmap_data <- heatmap_data[,-1]
+rn <- rownames(heatmap_data)
+heatmap_data <- as.data.frame(sapply(heatmap_data, as.character))
+rownames(heatmap_data) <- rn
+
+heatmap.colours <- c("transparent", loc_colours)
+names(heatmap.colours) <- c(0, 3:6)
+
+gheatmap(p, heatmap_data, color = NULL, offset = 0.01, width = 0.2,
+         colnames_angle = 90, colnames_offset_y = -1) +
+  scale_fill_manual(values = heatmap.colours,
+                    breaks = names(heatmap.colours)) +
+  theme(legend.position = "none",
+        plot.background = element_blank(),
+        panel.background = element_blank())
+ggsave("../results/ac_1div_nc_circ_plot.pdf", units = "cm", height = 15, width = 15)
+
+### Depth
+heatmap_data <- as.data.frame(pop_meta[,1])
+for (i in 1:3) {
+  heatmap_data[, 1 + i] <- as.character(pop_meta$Depth_values)
+  heatmap_data[, 1 + i][heatmap_data[, 1 + i] != i] <- 0
+}
+rownames(heatmap_data) <- heatmap_data[,1]
+heatmap_data <- heatmap_data[,-1]
+rn <- rownames(heatmap_data)
+heatmap_data <- as.data.frame(sapply(heatmap_data, as.character))
+rownames(heatmap_data) <- rn
+
+heatmap.colours <- c("transparent", "lightblue", "blue", "darkblue")
+names(heatmap.colours) <- c(0, 1:3)
+
+gheatmap(p, heatmap_data, color = NULL, offset = 0.01, width = 0.2,
+         colnames_angle = 90, colnames_offset_y = -1) +
+  scale_fill_manual(values = heatmap.colours,
+                    breaks = names(heatmap.colours)) +
+  theme(legend.position = "none",
+        plot.background = element_blank(),
+        panel.background = element_blank())
+ggsave("../results/ac_1div_nc_circ_plot_depth.pdf", units = "cm", height = 15, width = 15)

@@ -18,8 +18,8 @@ sort_pca <- function(pca, pop, nf) {
   return(pca_info)
 }
 pca_plot_species <- function(info, eig, title, int1, int2, colours, n.loc){
-  ggplot(info, aes_(x = as.name(paste0("PC",int1)), y = as.name(paste0("PC",int2)),
-                    fill= info$Species)) + 
+  ggplot(info, aes_(x = as.name(paste0("PC", int1)), y = as.name(paste0("PC", int2)),
+                    fill = info$Species)) + 
     geom_point(size = 2, shape = 21, colour = "grey") +
     scale_fill_manual(name = "Species", values = colours, breaks = c("AA", "AH", "AL", "AG")) +
     xlab(paste0("PC", int1, " ", eig[int1], "%")) +

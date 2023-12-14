@@ -1,10 +1,14 @@
 # Data accessibility for Prata et al (202X)
 
+This repository contains all scripts and datasets required to run all analyses performed within Prata et al (202X) Some dominant reef-builders disperse only metres per generation. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided.
+
+Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix*) and change to the scripts directory within the appropriate heading directory. Files will either be accessed in data or results and will write files into data or results.
+
 ## raw files and de novo assembly
 
-Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and will be uploaded to NCBI SRA database.
+Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and sequences will be uploaded to NCBI SRA database.
 
-De novo assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPC.
+*De novo* assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPCs provided by the University of Queensland and California Academy Sciences.
 
 Ipyrad settings:
 
@@ -42,12 +46,6 @@ p, s, v                        ## [27] [output_formats]: Output formats (see doc
                                ## [29] [reference_as_filter]: Reads mapped to this reference are removed in step 
 ```
 
-# popgen_rad_shallow_agaricia
-
-A repository for analysis datasets, scripts and results for *Prata et al., (202X) Metre-scale generational dispersal in dominant Caribbean corals*
-
-For each block of code to run activate the appropriate conda environment or software versions (see *Appendix*) and change to the scripts directory within the appropriate heading directory. Files will either be accessed in data or results (if intermediary step) and will write files into results.
-
 ## A - Filtered vcf file
 
 **Notes**
@@ -81,7 +79,7 @@ $ for taxa in ac hu lm;
 		done
 ```
 
-**Base datasets for analyses**
+### Base datasets for analyses
 
 | Dataset name               | # individuals | # SNPs  |                           Details                            | Use                                           | Locations                                                    |
 | -------------------------- | ------------- | ------- | :----------------------------------------------------------: | --------------------------------------------- | ------------------------------------------------------------ |
@@ -357,7 +355,8 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 ### Isolation-by-distance
 
 ```bash
-# Running genepop across all locations
+# Rousset and genepop
+## Running genepop across all locations
 $ for taxa in AA1 AA2	AH1 AH2 AH3 AL1 AL2;
 		do Rscript genepop.R $taxa all all;
 		done
@@ -381,6 +380,28 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do Rscript ibd_plots.R $taxa all all;
 		done
 $ Rscript ibd_plots.R AA1 all within
+# Loiselle and spagedi
+## Convert to spagedi format
+$ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
+		do Rscript vcf2spagedi.R $taxa;
+		done
+## Running spagedi and summarising results
+$ for taxa in aa1 ah1 ah2 ah3;
+		for i in 1 2;
+			do spagedi < cmds/${taxa}.spagedi_cmds${i}.txt;
+			mv ../data/${taxa}.spagedi-results${i}.txt ../results/ibd/${taxa}/;
+			Rscript get_spagedi_results.R ${taxa} ${i};
+		done 
+# NOTE: the aa2 analysis was run on HPC due to memory issues
+$ for i in 1 2;
+			do spagedi < cmds/aa2.spagedi_cmds${i}.txt;
+			mv ../data/aa2.spagedi-results${i}.txt ../results/ibd/AA2/;
+			Rscript get_spagedi_results.R aa2 ${i};
+$ for taxa in al1 al2;
+		do spagedi < cmds/${taxa}.spagedi_cmds1.txt;
+			mv ../data/${taxa}.spagedi-results1.txt ../results/ibd/${taxa}/;
+			Rscript get_spagedi_results.R ${taxa} 1;
+		done
 ```
 
 ### F-statistics
