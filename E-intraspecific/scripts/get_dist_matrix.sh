@@ -7,21 +7,14 @@
 #  
 
 taxa=$1 # "AA1"
-depth=$2 # "all"
-scale=$3 # "within"
-indiv=$4 # number of individuals
+category=$2 # "all"
+scale=$3 # all, within, between
+dimension=$4 # 1D or 2D
 
-count=`echo -n "${scale}" | wc -c`
+indiv=`head -n 1 ../results/ibd/${taxa}/${taxa}_${category}.${scale}.${dimension}.results.txt | cut -d" " -f1`
 
-cat ../results/ibd/${taxa}/${taxa}_${depth}.${scale}.results_copy.txt | head -n $((${indiv} + 2)) | tail -n $((${indiv} - 1)) | tr -s ' ' | tr -s ' ' '\t' | sed 's/^[ \t]*//'> "../results/ibd/${taxa}/${taxa}_${depth}.a_copy.txt"
+cat ../results/ibd/${taxa}/${taxa}_${category}.${scale}.${dimension}.results.txt | head -n $((${indiv} + 2)) | tail -n $((${indiv} - 1)) | cut -d ' ' -f3- | tr -s ' ' '\t' > "../results/ibd/${taxa}/${taxa}_a.txt"
 
-if [ $count -ge 10 ]
-then
 last_lines=27
-else
-last_lines=25
-fi
 
-cat ../results/ibd/${taxa}/${taxa}_${depth}.${scale}.results_copy.txt | tail -n $((${indiv} + ${last_lines})) | head -n $((${indiv} - 1 ))  | tr -s ' ' | tr -s ' ' '\t' | sed 's/^[ \t]*//'> ../results/ibd/${taxa}/${taxa}_${depth}.lndist_copy.txt
-
-
+cat ../results/ibd/${taxa}/${taxa}_${category}.${scale}.${dimension}.results.txt | tail -n $((${indiv} + ${last_lines})) | head -n $((${indiv} - 1 )) | cut -d ' ' -f4- | tr -s ' ' '\t' > ../results/ibd/${taxa}/${taxa}_${dimension}.txt

@@ -11,14 +11,16 @@ args = commandArgs(TRUE)
 #taxa = args[1] #"AA2"
 #category = args[2] #"WP05"
 #scale = args[3] # "within"
-taxa = "AH3"
+taxa = "AH1"
 category = "all"
 scale = "within"
+dimension = "2D"
 
 # Import data ==================================================
-a <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", category, ".a.txt"), header = FALSE)
-lndist <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", category, ".lndist.txt"), header = FALSE)
-results <- read.csv(paste0("../results/ibd/", taxa, "/",taxa, "_", category, ".", scale, ".results_short.txt"))
+a <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", "a.txt"), header = FALSE)
+dist <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", dimension,".txt"), header = FALSE)
+results <- read.csv(paste0("../results/ibd/", taxa, "/",taxa, "_", category,
+                           ".", scale, ".", dimension, ".results_short.txt"))
 if (taxa == "AA1" | taxa == "AA2") {
   vcf = "ac_3b_nc_20"
 } else if (taxa == "AL1" | taxa == "AL2") {
@@ -36,7 +38,7 @@ for (i in 1:7) {
 
 row1 <- rep(NA, nrow(a))
 a <- rbind(row1, a)
-lndist <- rbind(row1, lndist)
+dist <- rbind(row1, dist)
 
 b = results$slope
 b.low = results$s.lowCI
@@ -48,7 +50,7 @@ pvalue = results$p.slope
 sign = "="
 
 # Re-organise data ==================================================
-x <- lndist[lower.tri(lndist)]
+x <- dist[lower.tri(dist)]
 y <- a[lower.tri(a)]
 dat <- as.data.frame(cbind(x, y))
 colnames(dat) <- c("distance", "a")
@@ -98,7 +100,7 @@ p <- ggplot(dat, aes(distance, a)) +
   geom_abline(data = regression, aes(intercept = V1, slope = V2), colour = 'red') +
   geom_line(data = res, aes(x, ymin), colour = 'blue', linetype = "dashed") + 
   geom_line(data = res, aes(x, ymax), colour = 'blue', linetype = "dashed") + rib + theme_bw() + 
-  ggtitle(paste0("Slope = ", slope, " p ", sign, " ", round(pvalue, 4))) +
+  ggtitle(paste0("Slope = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
   ylim(ylim) +
   xlim(xlim) +
   theme(plot.title = element_text(size = 10),
@@ -106,12 +108,13 @@ p <- ggplot(dat, aes(distance, a)) +
         axis.text = element_text(size = 8)) 
 p
 
-ggsave(paste0("../results/ibd/plots/", taxa, "_", category, "_", scale, "_genvdist_copy.pdf"), height = 4, width = 4, units = "cm", dpi = 400)
+ggsave(paste0("../results/ibd/plots/", taxa, "_", category, "_", scale, "_", dimension, "_genvdist.pdf"),
+       height = 4, width = 4, units = "cm", dpi = 400)
 
 
 # Dispersal kernal ==================================================
 # Density estimate
-if (pvalue <= 0.5) {
+if (!is.na(pvalue)) {
   taxa.depth.pop$Site <- as.factor(taxa.depth.pop$Site)
   summary(taxa.depth.pop$Site)
   total_samples = sum(summary(taxa.depth.pop$Site))

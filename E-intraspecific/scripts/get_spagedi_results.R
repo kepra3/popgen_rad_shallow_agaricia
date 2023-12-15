@@ -313,7 +313,7 @@ loiselle <- spagediList$kindist
 x <- spatialdist[lower.tri(spatialdist)]
 y <- loiselle[lower.tri(loiselle)]
 dat <- as.data.frame(cbind(x, y))
-colnames(dat) <- c("distance", "r")
+colnames(dat) <- c("distance", "F")
 
 if (rep == 2 & !is.na(sigma_de)) {
   dat <- dat[dat$distance < sigma_de*20,] # restrict by 20sigma
@@ -323,14 +323,6 @@ if (rep == 2 & !is.na(sigma_de)) {
   dat <- dat[dat$distance > sigma_dc,] # restrict by sigma
 }
 
-dat$log_distance <- log(dat[,1])
-
-ggplot(dat, aes(log_distance, r)) + geom_point() + theme_bw()
-ggplot(dat, aes(distance, r)) + geom_point() + theme_bw()
-# see how it's done in gene pop
-
-p <- plotAutoCor(spagediList, max_dist = max(dat$distance))
-p
 
 results <- data.frame(Taxon = name,
                       Mindist = min(dat$distance),
@@ -344,3 +336,56 @@ results <- data.frame(Taxon = name,
 write.table(results,
             paste0("../results/ibd/", taxa, ".spagedi-summary", rep, ".txt"),
             quote = FALSE, row.names = FALSE)
+
+
+## setting axes & scales ####
+if (rep == 2) { 
+  #ggplot(dat, aes(log_distance, r)) + geom_point() + theme_bw()
+  #ggplot(dat, aes(distance, r)) + geom_point() + theme_bw()
+  
+  dat$log_distance <- log(dat[,1])
+  
+  # Setting up regression details
+  b <- spagediList$perm[3,length(spagediList$perm)]
+  b.low <- spagediList$perm[3,length(spagediList$perm)] + spagediList$perm[6,length(spagediList$perm)]
+  b.high <- spagediList$perm[3,length(spagediList$perm)] + spagediList$perm[7,length(spagediList$perm)]
+  regression <- data.frame(V1 = spagediList$kin[1,(length(spagediList$kin) - 6)], V2 = b)
+  confidence_interval_lower <- c(spagediList$kin[1,(length(spagediList$kin) - 6)], b.low)
+  confidence_interval_upper <- c(spagediList$kin[1,(length(spagediList$kin) - 6)], b.high)
+  pvalue = spagediList$perm[10,length(spagediList$perm)]
+  sign = "="
+  y_lower <- dat$log_distance * confidence_interval_lower[2] + confidence_interval_lower[1]
+  y_mean <- dat$log_distance * regression$V2 + regression$V1
+  y_upper <- dat$log_distance * confidence_interval_upper[2] + confidence_interval_upper[1]
+  
+  
+  # Make plot
+  slope <- round(regression[2], 3)
+  res <- data.frame(cond1 = "regression",
+                    x = dat$log_distance,
+                    y = y_mean,
+                    ymin = y_lower,
+                    ymax = y_upper)
+  
+  rib <- geom_ribbon(data = res, aes(x = x, y = y, ymin = ymin, ymax = ymax,
+                                     fill = cond1), fill = 'blue', alpha = 0.2)
+  xlim <- c(0, 4.01)
+  ylim <- c(-0.25, 0.4)
+  
+  p <- ggplot(dat, aes(log_distance, F)) +
+    geom_point(shape = 21) +
+    ylab("kinship (F)") +
+    xlab("log distance") +
+    geom_abline(data = regression, aes(intercept = V1, slope = V2), colour = 'red') +
+    geom_line(data = res, aes(x, ymin), colour = 'blue', linetype = "dashed") + 
+    geom_line(data = res, aes(x, ymax), colour = 'blue', linetype = "dashed") + rib + theme_bw() + 
+    ggtitle(paste0("Slope = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
+    ylim(ylim) +
+    xlim(xlim) +
+    theme(plot.title = element_text(size = 10),
+          axis.title = element_text(size = 8),
+          axis.text = element_text(size = 8)) 
+  p
+  
+  ggsave(paste0("../results/ibd/plots/", TAXA, "_loisellevdist.pdf"),
+         height = 4, width = 4, units = "cm", dpi = 400) }

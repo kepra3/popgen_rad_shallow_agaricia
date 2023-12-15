@@ -1,3 +1,7 @@
+TODO:
+
+- [ ] Fix get_dist_matrix.sh in E-intraspecific
+
 # Data accessibility for Prata et al (202X)
 
 This repository contains all scripts and datasets required to run all analyses performed within Prata et al (202X) Some dominant reef-builders disperse only metres per generation. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided.
@@ -356,18 +360,32 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 
 ```bash
 # Rousset and genepop
+# NOTE: the AA2 analysis was run on HPC due to memory issues
 ## Running genepop across all locations
 $ for taxa in AA1 AA2	AH1 AH2 AH3 AL1 AL2;
 		do Rscript genepop.R $taxa all all;
 		done
+
 # Running genepop across all locations, for within 'locations', e.g., all depths at one spatial location 
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do Rscript genepop.R $taxa all within;
+		do Rscript quick_genepop.R $taxa all within;
 		done
+
+# Running genepop across all locations, for between 'locations', e.g., min scale 100 
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
+		do Rscript quick_genepop.R $taxa all between;
+		done
+
 # create distance matrices for â and ln(geodist)
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
-		do ./get_dist_matrix.sh $taxa all;
+		do  ./get_dist_matrix.sh ${taxa} all within 2D;
 		done
+		
+# create distance matrices for â and geodist (?)
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
+		do ./get_dist_matrix.sh $taxa all between 1D;
+		done
+
 # Summarise results
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do ./get_genepop_results.sh $taxa all all;
@@ -375,12 +393,19 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do ./get_genepop_results.sh $taxa all within;
 		done
+
 # Make plots
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do Rscript ibd_plots.R $taxa all all;
 		done
 $ Rscript ibd_plots.R AA1 all within
+```
+
+**Using loiselle's kinship and SPAGedI v1.5**
+
+```bash
 # Loiselle and spagedi
+# NOTE: the aa2 analysis was run on HPC due to memory issues
 ## Convert to spagedi format
 $ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
 		do Rscript vcf2spagedi.R $taxa;
@@ -392,11 +417,9 @@ $ for taxa in aa1 ah1 ah2 ah3;
 			mv ../data/${taxa}.spagedi-results${i}.txt ../results/ibd/${taxa}/;
 			Rscript get_spagedi_results.R ${taxa} ${i};
 		done 
-# NOTE: the aa2 analysis was run on HPC due to memory issues
 $ for i in 1 2;
-			do spagedi < cmds/aa2.spagedi_cmds${i}.txt;
-			mv ../data/aa2.spagedi-results${i}.txt ../results/ibd/AA2/;
 			Rscript get_spagedi_results.R aa2 ${i};
+			done
 $ for taxa in al1 al2;
 		do spagedi < cmds/${taxa}.spagedi_cmds1.txt;
 			mv ../data/${taxa}.spagedi-results1.txt ../results/ibd/${taxa}/;

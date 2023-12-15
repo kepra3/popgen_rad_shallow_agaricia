@@ -1,0 +1,2 @@
+slope,s.lowCI,s.highCI,intercept,i.lowCI,i.highCI,p.slope,p.IBD,other.p
+-0.0241682,-0.0442584,-0.00358114,1.59735,1.39313,1.77793,0.989204,=0,=1

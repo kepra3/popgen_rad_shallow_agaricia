@@ -1,0 +1,15 @@
+/scratch/user/uqkprat2/analysis/spagedi/data/aa2.prata.spagedi.txt
+aa2.prata.spagedi-results2.txt
+
+1
+234
+3.50
+70.1
+
+199
+346
+3.28
+
+3
+
+

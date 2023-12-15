@@ -101,7 +101,8 @@ if (vcf_name == "ac_3b_nc_20") {
 }
 
 # sort metadata
-metadata <- metadata %>% separate(Individual, into = c("Sample", "Species", "Site"), sep = "_", remove = FALSE) %>% 
+metadata <- metadata %>% separate(Individual, into = c("Sample", "Species", "Site"),
+                                  sep = "_", remove = FALSE) %>% 
     separate(Site, into = c("Loc", "Depth"), sep = 2, remove = FALSE) %>% 
   unite(Individual, Sample, Species, Site, remove = FALSE) %>% 
   select(Individual, Sample, Species, Site, Depth, x, y, z)
@@ -129,25 +130,30 @@ summary(taxa.pop$Site)
 
 # Convert 2 genepop and export file  ==================================================
 genepop.mat <- genind2genepop(taxa.genind, taxa.pop, category)
-write.table(genepop.mat, file = paste0("../data/", taxa,"_", category, ".genepop_copy.txt"), quote = FALSE, col.names = FALSE, row.names = FALSE)
+write.table(genepop.mat, file = paste0("../data/", taxa,"_", category, ".genepop_copy.txt"),
+            quote = FALSE, col.names = FALSE, row.names = FALSE)
 
 # Gene pop  ==================================================
 if (scale == "all") {
   minD = 1e-03
   maxD = 1e+05
+  dimension = "2D"
 } else if (scale == "within") {
   minD = 1e-03
   maxD = 1e+02
+  dimension = "2D"
 } else if (scale == "between") {
   minD = 1e+02
   maxD = 1e+05
+  dimension = "1D"
 }
-ibd(paste0("../data/", taxa, "_", category, ".genepop_copy.txt"),
-  outputFile = paste0("../results/ibd/", taxa, "/", taxa, "_", category, ".", scale, ".results_copy.txt"),
+ibd(paste0("../data/", taxa, "_", category, ".genepop.txt"),
+  outputFile = paste0("../results/ibd/", taxa, "/", taxa, "_", category, ".",
+                      scale, ".", dimension, ".results.txt"),
   settingsFile = "",
   dataType = "Diploid",
   statistic = "a",
-  geographicScale = "2D",
+  geographicScale = dimension,
   CIcoverage = 0.95,
   testPoint = 0,
   minimalDistance = minD,
