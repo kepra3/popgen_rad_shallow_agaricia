@@ -8,8 +8,9 @@
 taxa=$1 # "AA2"
 cat=$2 # "all"
 scale=$3 # "within"
+dim=$4 # "2D"
 
-results_file="../results/ibd/${taxa}/${taxa}_${cat}.${scale}.results_copy"
+results_file="../results/ibd/${taxa}/${taxa}_${cat}.${scale}.${dim}.results"
 
 touch "${results_file}_short.txt"
 

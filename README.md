@@ -385,13 +385,14 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
 		do ./get_dist_matrix.sh $taxa all between 1D;
 		done
+# Note: may need to open with excel to fix up, TODO: edit script so all lines that start with tab or space the tab or space is removed.
 
 # Summarise results
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do ./get_genepop_results.sh $taxa all all;
+		do ./get_genepop_results.sh $taxa all between 1D;
 		done
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do ./get_genepop_results.sh $taxa all within;
+		do ./get_genepop_results.sh $taxa all within 2D;
 		done
 
 # Make plots
@@ -439,20 +440,23 @@ $ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
 
 Analyses were done using parallel processing on HPC, official results for each datasets can be found in `results/kinship/`. The [COLONY](https://www.zsl.org/about-zsl/resources/software/colony) software (v2.0.6.8) needs to be downloaded to use `./colony2s.out`.
 
-**Dataset details:**
+**Analysis summary:**
 
-| Taxon                                    | # individuals | # SNP loci |
-| ---------------------------------------- | ------------- | ---------- |
-| aa1 - *A. agarictes* 1                   | 35            | 465        |
-| ah1 - *A. humilis* 1                     | 61            | 803        |
-| ah2 - *A. humilis* 2                     | 29            | 565        |
-| ah3 - *A. humilis* 3                     | 15            | 580        |
-| al1 - *A. lamarcki* 1                    | 28            | 544        |
-| al2 - *A. lamarcki* 2                    | 62            | 734        |
-| aa2-WP - *A. agaricties* 2 at West Point | 144           | 945        |
-| aa2-CA - *A. agaricites* 2 at Cas Abao   | 53            | 887        |
-| aa2-SB - *A. agaricites* 2 at Snake Bay  | 71            | 1005       |
-| aa2-SQ - *A. agaricites* 2 at Seaquarium | 30            | 1052       |
+| Taxon                                    | # individuals | # SNP loci | # Kin | Prob | *Ne* | FIS  |
+| ---------------------------------------- | ------------- | ---------- | ----- | ---- | ---- | ---- |
+| aa1-wp - *A. agarictes* 1 at West Point  | 20            | 361        | 7     | 0.2  | 99   | 0    |
+| aa1-sq - *A. agaricites* 1 at Seaquarium | 7             | 314        | 0     | 0.2  | -    | 0    |
+| aa2-wp - *A. agaricties* 2 at West Point | 144           | 938        |       |      |      |      |
+| aa2-ca - *A. agaricites* 2 at Cas Abao   | 53            | 856        |       |      |      |      |
+| aa2-sb - *A. agaricites* 2 at Snake Bay  | 71            | 977        |       |      |      |      |
+| aa2-sq - *A. agaricites* 2 at Seaquarium | 30            | 1044       |       |      |      |      |
+| ah1-wp - *A. humilis* 1 at West Point    | 29            | 644        | 0     | 0.2  | -    | 0.57 |
+| ah1-ca - *A. humilis* 1 at Cas Abao      | 23            | 581        | 2     | 0.2  | 316  | 0.58 |
+| ah2-wp - *A. humilis* 2 at West Point    | 17            | 466        |       |      |      |      |
+| ah2-sb - *A. humilis* 2 at Snake Bay     | 12            | 486        |       |      |      |      |
+| ah3-wp - *A. humilis* 3 at West Point    | 11            | 526        |       |      |      |      |
+| al1 - *A. lamarck*i 1                    | 28            | 544        |       |      |      |      |
+| al2 - *A. lamarcki* 2                    | 62            | 734        |       |      |      |      |
 
 Kinship general settings file:
 
@@ -478,6 +482,7 @@ Code:
 
 ```bash
 # Prepare genotypes and loci files for COLONY input
+
 $ for dataset in aa1 ah1 ah2 ah3 al1 al2 aa2-WP aa2-CA aa2-SB aa2-SQ;
 		do Rscript colony_files.R ${dataset}_1div_nc_20;
 		done

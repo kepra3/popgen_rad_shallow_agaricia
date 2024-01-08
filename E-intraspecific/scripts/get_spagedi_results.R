@@ -235,8 +235,10 @@ calc_sigma <- function(nb, density, dimension) {
 # spagedi data
 # Make outfile an argument
 args <- commandArgs(TRUE)
-taxa <- args[1]
-rep <- as.numeric(args[2])
+#taxa <- args[1]
+#rep <- as.numeric(args[2])
+taxa <- "ah2"
+rep <- 2
 
 if (taxa == "aa1") {
   TAXA <- "AA1"
@@ -276,19 +278,19 @@ print(paste("Neighbourhood size:", round(nb,0) , "upp:", round(nb_upp, 0), "low:
 
 if (name == "aa1") {
   dc <- 0.24
-  de <- 0.27
+  de <- 0.11
 } else if (name == "aa2") {
   dc <- 1.14
-  de <- 3.28
+  de <- 0.37
 } else if (name == "ah1") {
   dc <- 0.36
-  de <- 0.45
+  de <- 0.24
 } else if (name == "ah2") {
   dc <- 0.27
-  de <- 0.79
+  de <- 0.37
 } else if (name == "ah3") {
   dc <- 0.16
-  de <- NA
+  de <- 0.40
 } else if (name == "al1") {
   dc <- 0.25
   de <- NA
@@ -318,9 +320,12 @@ colnames(dat) <- c("distance", "F")
 if (rep == 2 & !is.na(sigma_de)) {
   dat <- dat[dat$distance < sigma_de*20,] # restrict by 20sigma
   dat <- dat[dat$distance > sigma_de,] # restrict by sigma
-} else if (rep == 2 & is.na(sigma_de)) {
+} else if (rep == 2 & is.na(sigma_de) & !is.na(sigma_dc)) {
   dat <- dat[dat$distance < sigma_dc*20,] # restrict by 20sigma
   dat <- dat[dat$distance > sigma_dc,] # restrict by sigma
+} else if (taxa == "ah2") {
+  dat <- dat[dat$distance < 3.96*20,] # restrict by 20sigma
+  dat <- dat[dat$distance > 3.96,] # restrict by sigma
 }
 
 
@@ -339,7 +344,6 @@ write.table(results,
 
 
 ## setting axes & scales ####
-if (rep == 2) { 
   #ggplot(dat, aes(log_distance, r)) + geom_point() + theme_bw()
   #ggplot(dat, aes(distance, r)) + geom_point() + theme_bw()
   
@@ -360,7 +364,7 @@ if (rep == 2) {
   
   
   # Make plot
-  slope <- round(regression[2], 3)
+  slope <- signif(regression[2], 3)
   res <- data.frame(cond1 = "regression",
                     x = dat$log_distance,
                     y = y_mean,
@@ -370,7 +374,9 @@ if (rep == 2) {
   rib <- geom_ribbon(data = res, aes(x = x, y = y, ymin = ymin, ymax = ymax,
                                      fill = cond1), fill = 'blue', alpha = 0.2)
   xlim <- c(0, 4.01)
-  ylim <- c(-0.25, 0.4)
+  ylim <- c(-0.25, 0.5)
+  
+  scaleFUN <- function(x) {sprintf("%.2f", x)}
   
   p <- ggplot(dat, aes(log_distance, F)) +
     geom_point(shape = 21) +
@@ -380,6 +386,7 @@ if (rep == 2) {
     geom_line(data = res, aes(x, ymin), colour = 'blue', linetype = "dashed") + 
     geom_line(data = res, aes(x, ymax), colour = 'blue', linetype = "dashed") + rib + theme_bw() + 
     ggtitle(paste0("Slope = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
+    scale_y_continuous(labels = scaleFUN) +
     ylim(ylim) +
     xlim(xlim) +
     theme(plot.title = element_text(size = 10),
@@ -387,5 +394,5 @@ if (rep == 2) {
           axis.text = element_text(size = 8)) 
   p
   
-  ggsave(paste0("../results/ibd/plots/", TAXA, "_loisellevdist.pdf"),
-         height = 4, width = 4, units = "cm", dpi = 400) }
+  ggsave(paste0("../results/ibd/plots/", TAXA, ".", rep, "_loisellevdist.pdf"),
+         height = 4, width = 4, units = "cm", dpi = 400)

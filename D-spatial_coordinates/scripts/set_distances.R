@@ -57,7 +57,7 @@ dist_SQ <- 42880
 dist_5_10 <- 30
 # 1 - 6 cattle tags
 SBdist_10_20 <- sum(c(13.678, 14.800, 14.777, 15.191, 17.111, 17.083))/6
-WPdist_10_20 <- sum(c(21.12, 19.27, 18.45,18.65, 18.85, 16.88))/6
+WPdist_10_20 <- sum(c(21.12, 19.27, 18.45, 18.65, 18.85, 16.88))/6
 dist_10_20 <- sum(SBdist_10_20, WPdist_10_20)/2
  for (depth in c("05", "10", "20")) {
     metadata$x[metadata$Site == paste0("SB", depth)] <- metadata$x[metadata$Site == paste0("SB", depth)] + dist_SB
