@@ -8,7 +8,7 @@ ah3.spagedi-results2.txt
 
 199
 346
-0.16
+0.40
 
 3
 

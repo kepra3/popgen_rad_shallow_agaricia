@@ -14,8 +14,8 @@ scale = args[3] # "within"
 dimension = args[4] # "2D
 #taxa = "AH1"
 #category = "all"
-#scale = "within"
-#dimension = "2D"
+#scale = "between"
+#dimension = "1D"
 
 # Import data ==================================================
 a <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", "a.txt"), header = FALSE, sep = "\t")
@@ -59,10 +59,7 @@ colnames(dat) <- c("distance", "a")
 ## setting axes & scales ####
 if (scale == "within") {
   dat <- dat[dat$distance < 8,]
-  xlim <- c(-4, 4)
-  if (taxa == "AA1" | taxa == "AA2") {
-    xlim <- c(-4, 4.1)
-  }
+  xlim <- c(-4, 4.01)
 } else if (scale == "all") {
   xlim <- c(-4, 11)
 } else if (scale == "between") {
@@ -72,9 +69,9 @@ if (scale == "within") {
 if (taxa == "AH2" | taxa == "AH1") {
   ylim <- c(0, 4)
 } else if (taxa == "AH3") {
-  ylim <- c(0, 7)
+  ylim <- c(0, 10)
 } else {
-    ylim <- c(-0.45, 0.45)
+    ylim <- c(-0.25, 0.50)
   }
 
 regression <- as.data.frame(cbind(regression[1], regression[2]))
@@ -98,9 +95,9 @@ rib <- geom_ribbon(data = res, aes(x = x, y = y, ymin = ymin, ymax = ymax,
 
 scaleFUN <- function(x) {sprintf("%.2f", x)}
 if (dimension == "1D") {
-  lab <- "distance"
+  lab <- "distance (km)"
 } else if (dimension == "2D") {
-  lab <- "log distance"
+  lab <- "log distance (m)"
 }
 
 p <- ggplot(dat, aes(distance, a)) +
@@ -110,12 +107,13 @@ p <- ggplot(dat, aes(distance, a)) +
   geom_abline(data = regression, aes(intercept = V1, slope = V2), colour = 'red') +
   geom_line(data = res, aes(x, ymin), colour = 'blue', linetype = "dashed") + 
   geom_line(data = res, aes(x, ymax), colour = 'blue', linetype = "dashed") + rib + theme_bw() + 
-  ggtitle(paste0("Slope = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
+  ggtitle(paste0("b = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
   scale_y_continuous(labels = scaleFUN, limits = ylim) +
   xlim(xlim) +
   theme(plot.title = element_text(size = 10),
         axis.title = element_text(size = 8),
-        axis.text = element_text(size = 8)) 
+        axis.text = element_text(size = 8),
+        plot.background = element_blank()) 
 p
 
 ggsave(paste0("../results/ibd/plots/", taxa, "_", category, "_", scale, "_", dimension, "_genvdist.pdf"),
@@ -133,10 +131,18 @@ if (!is.na(pvalue)) {
   # Annotation rate & De effective density - see density_calcs.R
   if (taxa == "AA1") {
     annotation_rate = 0.8571429
-    De <- 0.11
+    if (dimension == "1D") {
+      De <- 0.001
+    } else if (dimension == "2D") {
+      De <- 0.11
+    }
   } else if (taxa == "AA2") {
     annotation_rate = 0.8233333
-    De <- 0.37
+    if (dimension == "1D") {
+      De <- 0.008
+    } else if (dimension == "2D") {
+      De <- 0.37
+    }
   } else if (taxa == "AH1") {
     annotation_rate = 0.5211268
     De <- 0.24
@@ -148,10 +154,18 @@ if (!is.na(pvalue)) {
     De <- 0.40
   } else if (taxa == "AL1") {
     annotation_rate = 0.6896552
-    De <- NA
+    if (dimension == "1D") {
+      De <- 0.036
+    } else if (dimension == "2D") {
+      De <- NA
+    }
   } else if (taxa == "AL2") {
     annotation_rate = 0.7580645
-    De <- NA
+    if (dimension == "1D") {
+      De <- 0.11
+    } else if (dimension == "2D") {
+      De <- NA
+    }
   }
   N <- N / annotation_rate
   if (any(taxa.depth.pop$Site == "SQ20") | any(taxa.depth.pop$Site == "SQ10") | any(taxa.depth.pop$Depth == "5")) {
@@ -223,8 +237,19 @@ if (!is.na(pvalue)) {
   #kernelplot
   #ggsave(paste0("../results/ibd/plots/dispersal_kernel_", taxa, "_", category, "_", scale, ".pdf"), units = "cm", height = 4, width = 4, dpi = 400)
   
-  dispersal_data <- cbind(taxa, Neighbourhood, Neighbourhood.low, Neighbourhood.high, D, sigma2, sigma, De, sigma2.de, sigma.de)
-  write.csv(dispersal_data, paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results_new.csv"), quote = FALSE,
+  dispersal_data <- data.frame(taxa = taxa, 
+                               min.dist = min(dat$distance[dat$distance > xlim[1]]),
+                               max.dist = max(dat$distance[dat$distance < xlim[2]]),
+                               Nb = signif(Neighbourhood, 2), 
+                               Nb.low = signif(Neighbourhood.low, 2), 
+                               Nb.high = signif(Neighbourhood.high, 2),
+                               Dc = signif(D, 2),
+                               sigma2.dc = signif(sigma2, 2), 
+                               sigma.dc = signif(sigma, 2), 
+                               De = De, 
+                               sigma2.de = signif(sigma2.de, 2), 
+                               sigma.de = signif(sigma.de, 2))
+  write.csv(dispersal_data, paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results.csv"), quote = FALSE,
             row.names = FALSE)
 }
 

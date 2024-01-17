@@ -1,2 +1,2 @@
-taxa,Neighbourhood,Neighbourhood.low,Neighbourhood.high,D,sigma2,sigma
-AA1,32.9522949625827,46.2928671950226,25.0700708480202,0.249999987500001,10.4890417834865,3.23867901828607
+taxa,min.dist,max.dist,Nb,Nb.low,Nb.high,Dc,sigma2.dc,sigma.dc,De,sigma2.de,sigma.de
+AA1,-1.39222,3.39823,33,46,25,0.24,11,3.3,0.11,24,4.9

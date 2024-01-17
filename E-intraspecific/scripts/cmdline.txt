@@ -1,5 +1,5 @@
 Genepop
-GenepopInputFile=../data/AL2_all.genepop.txt
+GenepopInputFile=../data/AA2_all.genepop.txt
 MenuOptions=6:5
 EstimationPloidy=Diploid
 IsolationStatistic=a

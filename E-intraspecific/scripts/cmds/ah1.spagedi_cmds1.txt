@@ -6,7 +6,7 @@ ah1.spagedi-results1.txt
 
 199
 346
-0.45
+0.24
 
 3
 

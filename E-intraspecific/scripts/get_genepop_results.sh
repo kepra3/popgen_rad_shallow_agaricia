@@ -14,7 +14,7 @@ results_file="../results/ibd/${taxa}/${taxa}_${cat}.${scale}.${dim}.results"
 
 touch "${results_file}_short.txt"
 
-printf %s "slope,s.lowCI,s.highCI,intercept,i.lowCI,i.highCI,p.slope,p.IBD,other.p" >> "${results_file}_short.txt"
+printf %s "slope,s.lowCI,s.highCI,intercept,i.lowCI,i.highCI,p.slope,p.IBD,other.p" > "${results_file}_short.txt"
 
 echo "" >> "${results_file}_short.txt"
 

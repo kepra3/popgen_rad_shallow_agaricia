@@ -189,14 +189,19 @@ plotAutoCor <- function(spagediList, overlay = FALSE, color = "black", max_dist)
   }
   return(p)
 }
-calcSp <- function(kin, row_name){
-  return( ( -kin[row_name, (length(kin) - 7)]) / (1 - kin[row_name, 2]) )
+calcSp <- function(kin, row_name, column){
+  return( ( -kin[row_name, (length(kin) - column)]) / (1 - kin[row_name, 2]) )
 }
-SpSummary <- function(spagediList){
+SpSummary <- function(spagediList, dim){
+  if (dim == "2d") {
+    column = 7
+  } else if (dim == "1d") {
+    column = 16
+  }
   kin <- spagediList$kin
-  mean <- calcSp(kin, "ALL LOCI")
-  mean_jck <- calcSp(kin, "Mean")
-  se_jck <- calcSp(kin, "SE")
+  mean <- calcSp(kin, "ALL LOCI", column)
+  mean_jck <- calcSp(kin, "Mean", column)
+  se_jck <- calcSp(kin, "SE", column)
   
   cat("\n\n")
   cat("Mean Sp across all loci       == ", mean, "\n")
@@ -214,13 +219,20 @@ SpSummary <- function(spagediList){
   } else{
     loci_rows <- 2:nrow(kin)
   }
-  sp_loci <- calcSp(kin, loci_rows )
+  sp_loci <- calcSp(kin, loci_rows, column)
   names(sp_loci) <- row.names(kin)[loci_rows]
   # ignore all loci estimates...
   
+  slope = kin["ALL_LOCI", (length(kin) - column)]
+  jack_slope = kin["Mean", (length(kin) - column)]
+  se_slope = kin["SE", (length(kin) - column)]
+  
   sp_stats <- data.frame(mean_sp = mean,
                          mean_jack_sp = mean_jck,
-                         se_jack_sp = se_jck)
+                         se_jack_sp = se_jck,
+                         mean_slope = slope,
+                         mean_jack_slope = jack_slope,
+                         se_jack_slope = se_slope)
   return(sp_stats)
 }
 calc_sigma <- function(nb, density, dimension) {
@@ -235,10 +247,8 @@ calc_sigma <- function(nb, density, dimension) {
 # spagedi data
 # Make outfile an argument
 args <- commandArgs(TRUE)
-#taxa <- args[1]
-#rep <- as.numeric(args[2])
-taxa <- "ah2"
-rep <- 2
+taxa <- args[1]
+rep <- as.numeric(args[2])
 
 if (taxa == "aa1") {
   TAXA <- "AA1"
@@ -268,20 +278,37 @@ spagediList$spatialdist <- readSpagediTable(outfile, "spatialdist")
 spagediList$kindist <- readSpagediTable(outfile, "kindist")
 spagediList$sigma_iter <- readSpagediTable(outfile, "sigma_iter")
 
-sum <- SpSummary(spagediList)
+if (((taxa == "al1" | taxa == "al2") & rep == 2) | 
+    ((taxa == "ah1" | taxa == "ah3" | taxa == "aa1" | taxa == "aa2") & rep == 3)) {
+  dim = "1d"
+} else {
+  dim = "2d"
+}
+
+sum <- SpSummary(spagediList, dim)
 
 nb <- 1/sum$mean_jack_sp
 nb_upp <- 1/(sum$mean_jack_sp + sum$se_jack_sp)
 nb_low <- 1/(sum$mean_jack_sp - sum$se_jack_sp)
 
 print(paste("Neighbourhood size:", round(nb,0) , "upp:", round(nb_upp, 0), "low:", round(nb_low, 0)))
+print(paste("Slope is:", signif(sum$mean_jack_slope, 2), "upp:", signif((sum$mean_jack_slope + sum$se_jack_slope), 2),
+      "low:", signif((sum$mean_jack_slope - sum$se_jack_slope), 2)))
 
 if (name == "aa1") {
   dc <- 0.24
-  de <- 0.11
+  if (dim == "2d") {
+    de <- 0.11 
+  } else if (dim == "1d") {
+    de <- 0.001
+  }
 } else if (name == "aa2") {
   dc <- 1.14
-  de <- 0.37
+  if (dim == "2d") {
+    de <- 0.37
+  } else if (dim == "1d") {
+    de <- 0.008
+  }
 } else if (name == "ah1") {
   dc <- 0.36
   de <- 0.24
@@ -293,16 +320,25 @@ if (name == "aa1") {
   de <- 0.40
 } else if (name == "al1") {
   dc <- 0.25
-  de <- NA
+  if (dim == "2d") {
+    de <- NA
+  } else {
+    de <- 0.036
+  }
 } else if (name == "al2") {
   dc <- 0.37
+  if (dim == "2d") {
   de <- NA
+  } else {
+    de <- 0.11
+  }
 }
 
-sigma_dc <- calc_sigma(nb, dc, "2d")
+
+sigma_dc <- calc_sigma(nb, dc, dim)
 print(paste("Census simga is:", round(sigma_dc, 2), "using census of", dc))
 
-sigma_de <- calc_sigma(nb, de, "2d")
+sigma_de <- calc_sigma(nb, de, dim)
 print(paste("Effective simga is:", round(sigma_de, 2), "using effective of", de))
 
 print("Sigma iterations using spagedi")
@@ -317,7 +353,9 @@ y <- loiselle[lower.tri(loiselle)]
 dat <- as.data.frame(cbind(x, y))
 colnames(dat) <- c("distance", "F")
 
-if (rep == 2 & !is.na(sigma_de)) {
+if (dim == "1d") {
+  dat <- dat[dat$distance > 10000,] # restrict by between locations
+} else if (rep == 2 & !is.na(sigma_de)) {
   dat <- dat[dat$distance < sigma_de*20,] # restrict by 20sigma
   dat <- dat[dat$distance > sigma_de,] # restrict by sigma
 } else if (rep == 2 & is.na(sigma_de) & !is.na(sigma_dc)) {
@@ -326,6 +364,9 @@ if (rep == 2 & !is.na(sigma_de)) {
 } else if (taxa == "ah2") {
   dat <- dat[dat$distance < 3.96*20,] # restrict by 20sigma
   dat <- dat[dat$distance > 3.96,] # restrict by sigma
+} else if (taxa == "al1" | taxa == "al2") {
+  dat <- dat[dat$distance < 100,] # restrict by 20sigma
+  dat <- dat[dat$distance > 1,] # restrict by sigma
 }
 
 
@@ -346,53 +387,89 @@ write.table(results,
 ## setting axes & scales ####
   #ggplot(dat, aes(log_distance, r)) + geom_point() + theme_bw()
   #ggplot(dat, aes(distance, r)) + geom_point() + theme_bw()
-  
-  dat$log_distance <- log(dat[,1])
+if (dim == "2d") {
+  dat$x <- log(dat[,1])
+  perm_col <- length(spagediList$perm)
+  column <- 7
+  if (taxa == "ah3") {
+    ylim <- c(-1.2, 1.2)
+  } else {
+    ylim <- c(-0.5, 0.5)
+  }
+  xlim <- c(0, 4.01)
+  xlab <- "log distance (m)"
+} else {
+  dat$x <- dat[,1]
+  perm_col <- length(spagediList$perm) - 1
+  column <- 16
+  if (taxa == "ah3") {
+    ylim <- c(-1.3, 1.3)
+  } else {
+    ylim <- c(-0.5, 0.5)
+  }
+  xlim <- c(10000, 43000)
+  xlab <- "distance (km)"
+}
+
   
   # Setting up regression details
-  b <- spagediList$perm[3,length(spagediList$perm)]
-  b.low <- spagediList$perm[3,length(spagediList$perm)] + spagediList$perm[6,length(spagediList$perm)]
-  b.high <- spagediList$perm[3,length(spagediList$perm)] + spagediList$perm[7,length(spagediList$perm)]
-  regression <- data.frame(V1 = spagediList$kin[1,(length(spagediList$kin) - 6)], V2 = b)
-  confidence_interval_lower <- c(spagediList$kin[1,(length(spagediList$kin) - 6)], b.low)
-  confidence_interval_upper <- c(spagediList$kin[1,(length(spagediList$kin) - 6)], b.high)
-  pvalue = spagediList$perm[10,length(spagediList$perm)]
+  b <- spagediList$perm[3,perm_col]
+  b.low <- spagediList$perm[3,perm_col] + spagediList$perm[6,perm_col]
+  b.high <- spagediList$perm[3,perm_col] + spagediList$perm[7,perm_col]
+  
+  # E.g., intercept, slope
+  # intercept high and low
+  if (taxa == "ah3") {
+    # removing loci with unreasonable estimates - likely due to extreme population structure and inbreeding (this only occurs in the between location analysis)
+    ints <- na.omit(spagediList$kin[,(length(spagediList$kin) - (column - 1))])
+    ints <- ints[ints > -2]
+    ints <- ints[ints < 2]
+    int_high <- spagediList$kin[1,(length(spagediList$kin) - (column - 1))] + stats::sd(ints)
+    int_low <- spagediList$kin[1,(length(spagediList$kin) - (column - 1))] - stats::sd(ints)
+  } else {
+    int_high <- spagediList$kin[1,(length(spagediList$kin) - (column - 1))] + stats::sd((na.omit(spagediList$kin[,(length(spagediList$kin) - (column - 1))])))
+    int_low <- spagediList$kin[1,(length(spagediList$kin) - (column - 1))] - stats::sd((na.omit(spagediList$kin[,(length(spagediList$kin) - (column - 1))])))
+  }
+  regression <- data.frame(V1 = spagediList$kin[1,(length(spagediList$kin) - (column - 1))], V2 = b)
+  confidence_interval_lower <- c(int_high, b.low)
+  confidence_interval_upper <- c(int_low, b.high)
+  pvalue = spagediList$perm[10,perm_col]
   sign = "="
-  y_lower <- dat$log_distance * confidence_interval_lower[2] + confidence_interval_lower[1]
-  y_mean <- dat$log_distance * regression$V2 + regression$V1
-  y_upper <- dat$log_distance * confidence_interval_upper[2] + confidence_interval_upper[1]
+  y_lower <- dat$x * confidence_interval_lower[2] + confidence_interval_lower[1]
+  y_mean <- dat$x * regression$V2 + regression$V1
+  y_upper <- dat$x * confidence_interval_upper[2] + confidence_interval_upper[1]
   
   
   # Make plot
   slope <- signif(regression[2], 3)
   res <- data.frame(cond1 = "regression",
-                    x = dat$log_distance,
+                    x = dat$x,
                     y = y_mean,
                     ymin = y_lower,
                     ymax = y_upper)
   
   rib <- geom_ribbon(data = res, aes(x = x, y = y, ymin = ymin, ymax = ymax,
                                      fill = cond1), fill = 'blue', alpha = 0.2)
-  xlim <- c(0, 4.01)
-  ylim <- c(-0.25, 0.5)
+
   
   scaleFUN <- function(x) {sprintf("%.2f", x)}
   
-  p <- ggplot(dat, aes(log_distance, F)) +
+  p <- ggplot(dat, aes(x, F)) +
     geom_point(shape = 21) +
     ylab("kinship (F)") +
-    xlab("log distance") +
+    xlab(xlab) +
     geom_abline(data = regression, aes(intercept = V1, slope = V2), colour = 'red') +
     geom_line(data = res, aes(x, ymin), colour = 'blue', linetype = "dashed") + 
     geom_line(data = res, aes(x, ymax), colour = 'blue', linetype = "dashed") + rib + theme_bw() + 
-    ggtitle(paste0("Slope = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
-    scale_y_continuous(labels = scaleFUN) +
-    ylim(ylim) +
+    ggtitle(paste0("b = ", slope, " p ", sign, " ", signif(pvalue, 3))) +
+    scale_y_continuous(labels = scaleFUN, limits = ylim) +
     xlim(xlim) +
     theme(plot.title = element_text(size = 10),
           axis.title = element_text(size = 8),
-          axis.text = element_text(size = 8)) 
+          axis.text = element_text(size = 8),
+          plot.background = element_blank()) 
   p
   
   ggsave(paste0("../results/ibd/plots/", TAXA, ".", rep, "_loisellevdist.pdf"),
          height = 4, width = 4, units = "cm", dpi = 400)
+# Not sure what is happening with confidence intervals for 2D

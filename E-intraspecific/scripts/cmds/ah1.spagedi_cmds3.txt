@@ -1,0 +1,17 @@
+../data/ah1.spagedi.txt
+ah1.spagedi-results3.txt
+
+1
+234
+11000
+43000
+
+199
+346
+0.24
+
+3
+
+
+
+

@@ -12,12 +12,12 @@ calc_area <- function(plots) {
   # Rough average distance measure as seen from google maps
   dist_5_10 <- 30
   
-  if ("5" %in% plots & "10" %in% plots) {
+  if (("5" %in% plots) & ("10" %in% plots)) {
     area <- area + (dist_5_10 * 25)
   } else {
     print("No 5 and 10")
   }
-  if ("10" %in% plots & "20" %in% plots) {
+  if (("10" %in% plots) & ("20" %in% plots)) {
     area <- area + (dist_10_20 * 25)
   } else {
     print("No 10 and 20")
@@ -43,6 +43,16 @@ aa2.density1 <- aa2.ne1/aa2.area1
 aa2.density2 <- aa2.ne2/aa2.area2
 aa2.density <- sum(aa2.density1, aa2.density2)/2
 print(paste("aa2 density =", round(aa2.density, 2)))
+
+# 1d harmonic mean
+aa2.pop1.Ne = 349.9 #(prcit = 0.01)
+aa2.pop2.Ne = 243.9 #(pcrit = 0.02)
+aa2.pop3.Ne = 287.8 #(pcrit = 0.02)
+aa2.pop4.Ne = 25.6 #(pcrit= 0.03)
+n = 4
+harm_mean <- n / (sum(1/aa2.pop1.Ne, 1/aa2.pop2.Ne,
+                  1/aa2.pop3.Ne, 1/aa2.pop4.Ne))
+harm_mean
 
 # ah1
 ah1.ne <- 316

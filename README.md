@@ -1,12 +1,8 @@
-TODO:
-
-- [ ] Fix get_dist_matrix.sh in E-intraspecific
-
 # Data accessibility for Prata et al (202X)
 
-This repository contains all scripts and datasets required to run all analyses performed within Prata et al (202X) Some dominant reef-builders disperse only metres per generation. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided.
+This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (202X) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided.
 
-Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix*) and change to the scripts directory within the appropriate heading directory. Files will either be accessed in data or results and will write files into data or results.
+Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix*) and change to the scripts directory within the appropriate heading directory.
 
 ## raw files and de novo assembly
 
@@ -130,7 +126,7 @@ These analysis datasets do not include clones (removed during B - Clones), have 
 
 Need to use `vcf_single_snp.py` from www.github.com/pimbongaerts/radseq for creating unlinked datasets when using `admix_4multiple.sh`. Running admixture will mean results will slightly differ from manuscript results as runs are unseeded and random draws come from `vcf_single_snp.py`.
 
-Haven't not included `all-aga_1diii_nc-wnr_20.vcf` due to being >100Mb.
+ `all-aga_1diii_nc-wnr_20.vcf` is not inlcuded  due to being >100Mb.
 
 For creating the combination plots (*e.g.*, Admixture and NJ-tree summary plots) need to use `vcf_gdmatrix.py` & `gdmatrix2tree.py` from www.github.com/pimbongaerts/radseq.
 
@@ -358,14 +354,10 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 
 ### Isolation-by-distance
 
-```bash
-# Rousset and genepop
-# NOTE: the AA2 analysis was run on HPC due to memory issues
-## Running genepop across all locations
-$ for taxa in AA1 AA2	AH1 AH2 AH3 AL1 AL2;
-		do Rscript genepop.R $taxa all all;
-		done
+**Using Rousset and genepop**
 
+```bash
+# NOTE: the AA2 analysis was run on HPC due to memory issues
 # Running genepop across all locations, for within 'locations', e.g., all depths at one spatial location 
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do Rscript quick_genepop.R $taxa all within;
@@ -381,7 +373,7 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
 		do  ./get_dist_matrix.sh ${taxa} all within 2D;
 		done
 		
-# create distance matrices for â and geodist (?)
+# create distance matrices for â and geodist
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
 		do ./get_dist_matrix.sh $taxa all between 1D;
 		done
@@ -394,12 +386,13 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do ./get_genepop_results.sh $taxa all within 2D;
 		done
-
 # Make plots
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do Rscript ibd_plots.R $taxa all all;
+		do Rscript ibd_plots.R $taxa all within 2D;
 		done
-$ Rscript ibd_plots.R AA1 all within
+$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
+		do Rscript ibd_plots.R $taxa all between 1D;
+		done
 ```
 
 **Using loiselle's kinship and SPAGedI v1.5**
@@ -412,19 +405,11 @@ $ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
 		do Rscript vcf2spagedi.R $taxa;
 		done
 ## Running spagedi and summarising results
-$ for taxa in aa1 ah1 ah2 ah3;
-		for i in 1 2;
+$ for taxa in aa1 aa2 al1 al2 ah1 ah2 ah3;
+		for i in 1 2 3;
 			do spagedi < cmds/${taxa}.spagedi_cmds${i}.txt;
 			mv ../data/${taxa}.spagedi-results${i}.txt ../results/ibd/${taxa}/;
 			Rscript get_spagedi_results.R ${taxa} ${i};
-		done 
-$ for i in 1 2;
-			Rscript get_spagedi_results.R aa2 ${i};
-			done
-$ for taxa in al1 al2;
-		do spagedi < cmds/${taxa}.spagedi_cmds1.txt;
-			mv ../data/${taxa}.spagedi-results1.txt ../results/ibd/${taxa}/;
-			Rscript get_spagedi_results.R ${taxa} 1;
 		done
 ```
 
