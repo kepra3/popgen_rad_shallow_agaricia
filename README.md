@@ -1,6 +1,6 @@
 # Data accessibility for Prata et al (202X)
 
-This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (202X) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided.
+This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (202X) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files will be provided. Raw sequence data will shortly become available on NCBI SRA and the University of Queensland eSpace.
 
 Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix* at bottom of README) and change to the scripts directory within the appropriate heading directory.
 
@@ -221,7 +221,7 @@ $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh ac 1diii nc 10 20 $run;
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh hu 1diii nc 10 20 $run; done
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc 10 20 $run; done
 $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh lm 1diii nc-wnr 10 20 $run; done
-# $ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh all-aga 1diii nc-wnr 10 20 $run; done
+$ for run in 2 3 4 5 6 7 8 9 10; do ./admix_4multiple.sh all-aga 1diii nc-wnr 10 20 $run; done
 ### CV error and log-likelihood plots
 $ Rscript compile_logs.R
 ### Q plots
@@ -229,18 +229,20 @@ $ Rscript Qvalues.R all-aga_2bi_1div_nc-wnr_20 3
 $ Rscript Qvalues.R ac_2bi_1div_nc_20 2
 $ Rscript Qvalues.R hu_2bi_1div_nc_20 3
 $ Rscript Qvalues.R lm_2bi_1div_nc_20 2
-
 # Consensus against missing data thresholds
 $ for percent in 5 10 50;
 	do ./admix_4multiple.sh ac 1civ wc 10 ${percent} 1;
+	Rscript admix_plots2.R ac 1civ wc ${percent} 4 no;
 	done
 $ for percent in 5 10 50;
 	do ./admix_4multiple.sh hu 1civ wc 10 ${percent} 1;
+	Rscript admix_plots2.R hu 1civ wc ${percent} 4 no;
 	done
 $ for percent in 5 10 50;
 	do ./admix_4multiple.sh lm 1civ wc-wnr 10 ${percent} 1;
+	Rscript admix_plots2.R lm 1civ wc-wnr ${percent} 4 no;
 	done
-$ Rscript admix_plots2.R lm 1div nc 20 4 no
+$ 
 ```
 
 ### Combination plots
