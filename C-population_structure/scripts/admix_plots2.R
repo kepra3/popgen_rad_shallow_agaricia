@@ -96,7 +96,7 @@ Clusters <- "Clust1"
 popfile <- read.table(paste0("../data/pop_", VCF_NAME, "_", STAGE, "_", PARAMS, ".txt"), header = FALSE, sep = "\t", stringsAsFactors = FALSE)
 colnames(popfile) <- c("Individual", "pop")
 # Note: altered individual species popfiles to be only at sites and changed NAs to appropriate location
-colours <- c(rainbow(NUM_K))
+colours <- rainbow(NUM_K, alpha = 0.9)
 
 # Specify colours ands levels ===================================================
 if (VCF_NAME == "all-aga") {
@@ -215,10 +215,10 @@ popfile[,2] <- factor(popfile[,2], levels = levels)
 
 for (i in 2:NUM_K) {
   if (sorted == "yes") {
-    Q <- read.table(paste0("results/", MISS_DAT,"percent_", VCF_NAME, "_", STAGE, "_", PARAMS, '/sortedQ/', VCF_NAME, "_2bi_", STAGE, "_", PARAMS, "_",
+    Q <- read.table(paste0("../results/admix_runs/", MISS_DAT, "percent_", VCF_NAME, "_", STAGE, "_", PARAMS, '/sortedQ/', VCF_NAME, "_2bi_", STAGE, "_", PARAMS, "_",
                            MISS_DAT, ".", i, ".Q"), header = TRUE)
   } else {
-    Q <- read.table(paste0("results/", MISS_DAT,"percent_", VCF_NAME, "_", STAGE, "_", PARAMS, '/', VCF_NAME, "_2bi_", STAGE, "_", PARAMS, "_",
+    Q <- read.table(paste0("../results/admix_runs/", MISS_DAT, "percent_", VCF_NAME, "_", STAGE, "_", PARAMS, '/', VCF_NAME, "_2bi_", STAGE, "_", PARAMS, "_",
                            MISS_DAT, ".", i, ".Q"), header = FALSE)
   }
 # Specify clusters ===================================================
@@ -228,7 +228,7 @@ Clusters <- append(Clusters, paste0("Clust", i))
 
 # Data organisation ===================================================
 data <- organise_data(Q, popfile, Clusters)
-write.csv(data, paste0("metadata/", VCF_NAME, "_", STAGE, "_", PARAMS, "_", NUM_K, "_admix_data.csv"), quote = FALSE, row.names = FALSE)
+write.csv(data, paste0("../data/", VCF_NAME, "_", STAGE, "_", PARAMS, "_", NUM_K, "_admix_data.csv"), quote = FALSE, row.names = FALSE)
 title <- paste0(MISS_DAT, "% missing data, K = ", i)
 
 # Plot data ===================================================

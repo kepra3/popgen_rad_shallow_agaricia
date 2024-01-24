@@ -16,7 +16,7 @@ add_plate_wells <- function(dataset, dataset_reads) {
   dataset$well <- NA
   wells <- NA
   for (i in 1:12) {
-    for (j in 1:8){
+    for (j in 1:8) {
       wells[length(wells) + 1] <- paste0(LETTERS[j], i)
     }}
   dataset$well <- wells[-1]
@@ -117,10 +117,26 @@ duplicates <- duplicates[,(c(3, 4, 5, 9))] %>%
 rm(KP01, KP01_reads, KP02, KP02_reads, KP03, KP03_reads, KP04, KP04_reads, KP05, KP05_reads, KP06, KP06_reads, KP07, KP07_reads,
    KP08, KP08_reads, KP09, KP09_reads, KP10, KP10_reads, KP11, KP11_reads, KP12, KP12_reads, KP13, KP13_reads, KP14, KP14_reads,
    earlier_samples, later_samples)
+# Duplicates ...
+# For now skip
+# 23/1/24
+#duplicates$plate <- paste(duplicates$plate1, duplicates$plate2, duplicates$plate3, sep = " | ")
+#duplicates$well <- paste(duplicates$well1, duplicates$well2, duplicates$plate3, sep = " | ")
+#duplicates$reads <- paste(duplicates$Retained1, duplicates$Retained2, duplicates$Retained3, sep = " | ")
 
-duplicates$plate <- paste(duplicates$plate1, duplicates$plate2, duplicates$plate3, sep = " | ")
-duplicates$well <- paste(duplicates$well1, duplicates$well2, duplicates$plate3, sep = " | ")
-duplicates$reads <- paste(duplicates$Retained1, duplicates$Retained2, duplicates$Retained3, sep = " | ")
+# Just taking the entry which has the largest number of reads.
+duplicates <- as.data.frame(duplicates)
+duplicates$reads <- apply(duplicates[,c(8,9)], MARGIN = 1, FUN = max) 
+duplicates$plate <- NA
+duplicates$well <- NA
+for (i in 1:length(duplicates[,1])) {
+  if (duplicates$reads[i] == duplicates$Retained1[i]) {
+    duplicates$plate[i] = duplicates$plate1[i]
+    duplicates$well[i] = duplicates$well1[i]
+} else if (duplicates$reads[i] == duplicates$Retained2[i]) {
+    duplicates$plate[i] = duplicates$plate2[i]
+    duplicates$well[i] = duplicates$well2[i]
+}}
 
 # sort fastq samples ####
 fastq_samples <- fastq_samples %>% separate(V1, into = c("sample", "R", "fq", "gz"), sep = "\\.") %>% 
@@ -150,6 +166,8 @@ denovo_samples$reads1 <- as.character(all_samples$Retained[match(denovo_samples$
 denovo_samples$plateX <- duplicates$plate[match(denovo_samples$tissueID, duplicates$Individual)]
 denovo_samples$wellX <- duplicates$well[match(denovo_samples$tissueID, duplicates$Individual)]
 denovo_samples$readsX <- duplicates$reads[match(denovo_samples$tissueID, duplicates$Individual)]
+
+denovo_samples$readsX <- as.character(denovo_samples$readsX)
 
 denovo_samples <- denovo_samples %>% 
   mutate(plate = coalesce(plateX, plate1)) %>% 
@@ -213,7 +231,7 @@ geome_samples$locality[geome_samples$locationID == "CS"] <- "Seaquarium"
 geome_samples$locality[geome_samples$locationID == "CK"] <- "Playa Kalki"
 geome_samples$locality[geome_samples$locationID == "CR"] <- "CARMABI Buoy 0"
 geome_samples$locality[geome_samples$locationID == "CE"] <- "Eastpoint Piedra Pretu"
-geome_samples$country[geome_samples$locationID == "BR"] <- "Bonaire"
+geome_samples$country[geome_samples$locationID == "BR"] <- "Netherlands"
 geome_samples$island[geome_samples$locationID == "BR"] <- "Bonaire"
 geome_samples$locality[geome_samples$locationID == "BR"] <- "Red Slave"
 
@@ -222,14 +240,14 @@ geome_samples$decimalLatitude[geome_samples$locality == "Playa Kalki"] <- 12.375
 geome_samples$decimalLatitude[geome_samples$locality == "Cas Abao"] <- 12.228482
 geome_samples$decimalLatitude[geome_samples$locality == "Snake Bay"] <- 12.139446
 geome_samples$decimalLatitude[geome_samples$locality == "Seaquarium"] <- 12.085041
-geome_samples$decimalLatitude[geome_samples$locality == "CARMABI Buoy 0"] <- 12.125
+geome_samples$decimalLatitude[geome_samples$locality == "CARMABI Buoy 0"] <- 12.122
 geome_samples$decimalLatitude[geome_samples$locality == "Eastpoint Piedra Pretu"] <- 12.043
 geome_samples$decimalLatitude[geome_samples$locality == "Red Slave"] <- 12.027
 geome_samples$decimalLongitude[geome_samples$locality == "Playa Kalki"] <- -69.157746
 geome_samples$decimalLongitude[geome_samples$locality == "Cas Abao"] <- -69.092073
 geome_samples$decimalLongitude[geome_samples$locality == "Snake Bay"] <- -68.997199
 geome_samples$decimalLongitude[geome_samples$locality == "Seaquarium"] <- -68.898095
-geome_samples$decimalLongitude[geome_samples$locality == "CARMABI Buoy 0"] <- -69.974
+geome_samples$decimalLongitude[geome_samples$locality == "CARMABI Buoy 0"] <- -68.974
 geome_samples$decimalLongitude[geome_samples$locality == "Eastpoint Piedra Pretu"] <- -68.762
 geome_samples$decimalLongitude[geome_samples$locality == "Red Slave"] <- -68.251
 geome_samples$georeferenceProtocol <- "Approximated from Google Maps for Lat and Lon. Relative photogrammetry coordinates for each sample can be found in LocationID"
@@ -264,7 +282,11 @@ geome_samples$yearCollected[963:972]
 # Formatting
 geome_samples$fieldNotes <- gsub(",", "-", geome_samples$fieldNotes)
 
-write.csv(geome_samples, "../results/geome_coralscape_shallow_agaricia.csv", quote = FALSE, row.names = FALSE)
+# Write sheet
+write.csv(geome_samples, "../results/geome_coralscape_shallow_agaricia_UPLOAD.csv", quote = FALSE, row.names = FALSE)
+
+# Fastq smple names
+write.table(geome_samples$materialSampleID, "../results/geome_fastq_names.csv", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 # annotation plot ####
 colours <- c("#FBD1D7", "#EC9C9D", "#AA5459",
@@ -283,3 +305,4 @@ ggplot(annotation_samples[-538,], aes(Annotater, fill = LocDepth)) +
   scale_fill_manual(name = "Location & Depth", values = colours) +
   theme_classic()
 ggsave("../results/annotations.pdf", height = 9, width = 15, units = "cm", dpi = 400)
+

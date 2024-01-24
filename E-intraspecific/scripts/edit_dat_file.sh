@@ -15,12 +15,12 @@ prob=$4
 quote_data_name="'${data_name}'"
 quote_output_name="'${data_name}_${prob}'"
 output_name="${data_name}_$prob"
-genotypes_filename="../data/genotypes_${data_name}.txt"
-loci_filename="../data/loci_${data_name}.txt"
+genotypes_filename="genotypes_${data_name}.txt"
+loci_filename="loci_${data_name}.txt"
 nl=$'\n'
 
 # Name line numbers and number of offspring and loci
-sed -e 1"s/.*/${quote_data_name} &/" ../data/new.dat | sed -e 2"s/.*/${quote_output_name} &/" > ${output_name}_1.dat
+sed -e 1"s/.*/${quote_data_name} &/" new.dat | sed -e 2"s/.*/${quote_output_name} &/" > ${output_name}_1.dat
 
 
 NUMBER_OFFSPRING_LINE=$(grep -n '! Number of offspring' ${output_name}_1.dat | cut -d : -f 1)
@@ -44,7 +44,16 @@ PROB_OF_PARENTS_LINE=$(grep -n '!prob. of dad/mum' ${output_name}_5.dat | cut -d
 sed -e ${PROB_OF_PARENTS_LINE}"s/.*/${prob} ${prob}&/" ${output_name}_5.dat > ${output_name}_6.dat
 
 NUMBERS_OF_CAND_LINE=$(grep -n '!numbers of candiadte' ${output_name}_6.dat | cut -d : -f 1)
-sed -e ${NUMBERS_OF_CAND_LINE}"s/.*/${offspring_numb} ${offspring_numb}&/" ${output_name}_6.dat > ../results/kinship/${output_name}.dat
+sed -e ${NUMBERS_OF_CAND_LINE}"s/.*/${offspring_numb} ${offspring_numb}&/" ${output_name}_6.dat > ${output_name}.dat
 
 
 rm ${output_name}_*
+
+# Insert tips
+#sed -e "4r loci_aa1_1div_nc_50.txt" new.dat
+#sed -e 'N;/\n.*!Marker names/{r loci_aa1_1div_nc_50.txt' -e '};P;D' new.dat
+
+
+
+
+

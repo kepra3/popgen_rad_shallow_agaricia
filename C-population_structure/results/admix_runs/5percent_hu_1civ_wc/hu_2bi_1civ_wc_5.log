@@ -1,0 +1,34 @@
+PLINK v1.90b6.21 64-bit (19 Oct 2020)
+Options in effect:
+  --allow-extra-chr 0
+  --const-fid
+  --make-bed
+  --out ../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5
+  --vcf hu_1civ_wc_5_temp-unlinked.vcf
+
+Hostname: kprata
+Working directory: /Users/kprata/Dropbox/agaricia_project_2019/shalo_ag/gen_project/popgen_rad_shallow_agaricia/C-population_structure/scripts
+Start time: Tue Jan 23 17:21:20 2024
+
+Random number seed: 1705994480
+16384 MB RAM detected; reserving 8192 MB for main workspace.
+--vcf:
+../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5-temporary.bed +
+../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5-temporary.bim +
+../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5-temporary.fam
+written.
+576 variants loaded from .bim file.
+142 people (0 males, 0 females, 142 ambiguous) loaded from .fam.
+Ambiguous sex IDs written to
+../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5.nosex .
+Using 1 thread (no multithreaded calculations invoked).
+Before main variant filters, 142 founders and 0 nonfounders present.
+Calculating allele frequencies... done.
+Total genotyping rate is 0.976245.
+576 variants and 142 people pass filters and QC.
+Note: No phenotypes present.
+--make-bed to ../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5.bed
++ ../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5.bim +
+../results/admix_runs/5percent_hu_1civ_wc_1/hu_2bi_1civ_wc_5.fam ... done.
+
+End time: Tue Jan 23 17:21:20 2024

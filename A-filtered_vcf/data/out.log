@@ -1,0 +1,19 @@
+
+VCFtools - 0.1.16
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--vcf lm-gr_1ciii.vcf
+	--remove gr_names.txt
+	--maf 1e-07
+	--max-alleles 2
+	--min-alleles 2
+	--max-missing 0.95
+	--recode
+	--stdout
+
+Excluding individuals in 'exclude' list
+After filtering, kept 111 out of 113 Individuals
+Outputting VCF file...
+After filtering, kept 6204 out of a possible 21833 Sites
+Run Time = 1.00 seconds

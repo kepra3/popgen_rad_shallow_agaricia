@@ -13,13 +13,13 @@ run=$6
 
 # 1. thin dataset to be unlinked
 # use Pim's random sample script
-vcf_single_snp.py ../vcf/${VCF_NAME}_${STAGE}_${PARAMS}_${percent}.vcf > ${VCF_NAME}_${STAGE}_${PARAMS}_${percent}_temp-unlinked.vcf
+vcf_single_snp.py ../data/${VCF_NAME}_${STAGE}_${PARAMS}_${percent}.vcf > ${VCF_NAME}_${STAGE}_${PARAMS}_${percent}_temp-unlinked.vcf
 
 # 2. make directories for each analysis
-mkdir ../results/admix_runs/${percent}percent_${VCF_NAME}_${STAGE}_${PARAMS}_${run}_copy
+mkdir ../results/admix_runs/${percent}percent_${VCF_NAME}_${STAGE}_${PARAMS}_${run}
 
 # 3. convert to plink
-plink --vcf ${VCF_NAME}_${STAGE}_${PARAMS}_${percent}_temp-unlinked.vcf --const-fid --allow-extra-chr 0 --make-bed --out ../results/admix_runs/${percent}percent_${VCF_NAME}_${STAGE}_${PARAMS}_${run}_copy/${VCF_NAME}_2bi_${STAGE}_${PARAMS}_${percent}
+plink --vcf ${VCF_NAME}_${STAGE}_${PARAMS}_${percent}_temp-unlinked.vcf --const-fid --allow-extra-chr 0 --make-bed --out ../results/admix_runs/${percent}percent_${VCF_NAME}_${STAGE}_${PARAMS}_${run}/${VCF_NAME}_2bi_${STAGE}_${PARAMS}_${percent}
 echo "---------------------------------- Converted to plink ----------------------------------"
 
 # 4. order binary file by population
@@ -39,7 +39,6 @@ grep -h ^Log log*.out
 echo "---------------------------------- Finished admixture ----------------------------------"
 done
 
-cd ../results/admix_runs/${percent}percent_${VCF_NAME}_${STAGE}_${PARAMS}_${run}_copy
 grep -h CV log*.out >> CV_error.txt
 grep -h ^Log log*.out >> loglikelihood.txt
 cd ../../../scripts

@@ -2,11 +2,11 @@
 
 This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (202X) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided.
 
-Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix*) and change to the scripts directory within the appropriate heading directory.
+Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix* at bottom of README) and change to the scripts directory within the appropriate heading directory.
 
 ## raw files and de novo assembly
 
-Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and sequences will be uploaded to NCBI SRA database.
+Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and fastq files are aslo uploaded to the NCBI SRA database.
 
 *De novo* assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPCs provided by the University of Queensland and California Academy Sciences.
 
@@ -74,9 +74,27 @@ $ vcftools --vcf all-aga_min4_renamed.vcf --min-meanDP 5 --max-meanDP 1046 --mac
 **Code:**
 
 ```bash
+# Creating different missing data thresholds for assessing the stability of population structure patterns
+# 5%
+$ for taxa in ac hu;
+			do vcftools --vcf ${taxa}_1ciii.vcf --max-missing 0.95 --min-alleles 2 --max-alleles 2 --maf 0.0000001 --recode --stdout > ../../C-population_structure/data/${taxa}_1civ_wc_5.vcf;
+  done
+# 10%
+$ for taxa in ac hu;
+			do vcftools --vcf ${taxa}_1ciii.vcf --max-missing 0.9 --min-alleles 2 --max-alleles 2 --maf 0.0000001 --recode --stdout > ../../C-population_structure/data/${taxa}_1civ_wc_10.vcf;
+  done
+# 50%
+$ for taxa in ac hu;
+			do vcftools --vcf ${taxa}_1ciii.vcf --max-missing 0.5 --min-alleles 2 --max-alleles 2 --maf 0.0000001 --recode --stdout > ../../C-population_structure/data/${taxa}_1civ_wc_50.vcf;
+  done
+# lm
+$ vcftools --vcf lm-gr_1ciii.vcf --remove gr_names.txt --max-missing 0.5 --min-alleles 2 --max-alleles 2 --maf 0.0000001 --recode --stdout > ../../C-population_structure/data/lm_1civ_wc-wnr_50.vcf
+$ vcftools --vcf lm-gr_1ciii.vcf --remove gr_names.txt --max-missing 0.9 --min-alleles 2 --max-alleles 2 --maf 0.0000001 --recode --stdout > ../../C-population_structure/data/lm_1civ_wc-wnr_10.vcf
+$ vcftools --vcf lm-gr_1ciii.vcf --remove gr_names.txt --max-missing 0.95 --min-alleles 2 --max-alleles 2 --maf 0.0000001 --recode --stdout > ../../C-population_structure/data/lm_1civ_wc-wnr_5.vcf
+# Identifying outliers
 $ for taxa in ac hu lm;
 		do Rscript pcadapt.R ${taxa};
-		done
+	done
 ```
 
 ### Base datasets for analyses
@@ -163,11 +181,26 @@ $ conda activate radkat
 ### PCA
 
 ```bash
+# Need vcf file and popfile in data directory
 $ Rscript basic_pca.R ac_1div_nc_20 4 depth
 $ Rscript basic_pca.R hu_1div_nc_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc-wnr_20 4 depth
 $ Rscript basic_pca.R lm_1div_nc_20 2 depth
 $ Rscript basic_pca.R all-aga_1div_nc-wnr_20 6 species
+
+# Assesing consensus
+# ac
+$ Rscript basic_pca.R ac_1civ_wc_5 4 depth
+$ Rscript basic_pca.R ac_1civ_wc_10 4 depth
+$ Rscript basic_pca.R ac_1civ_wc_50 4 depth
+# hu
+$ Rscript basic_pca.R hu_1civ_wc_5 4 depth
+$ Rscript basic_pca.R hu_1civ_wc_10 4 depth
+$ Rscript basic_pca.R hu_1civ_wc_50 4 depth
+# lm-gr
+$ Rscript basic_pca.R lm_1civ_wc-wnr_5 4 depth
+$ Rscript basic_pca.R lm-gr_1civ_wc-wnr_10 4 depth
+$ Rscript basic_pca.R lm-gr_1civ_wc-wmr_50 4 depth
 ```
 
 ### Admixture
@@ -196,6 +229,18 @@ $ Rscript Qvalues.R all-aga_2bi_1div_nc-wnr_20 3
 $ Rscript Qvalues.R ac_2bi_1div_nc_20 2
 $ Rscript Qvalues.R hu_2bi_1div_nc_20 3
 $ Rscript Qvalues.R lm_2bi_1div_nc_20 2
+
+# Consensus against missing data thresholds
+$ for percent in 5 10 50;
+	do ./admix_4multiple.sh ac 1civ wc 10 ${percent} 1;
+	done
+$ for percent in 5 10 50;
+	do ./admix_4multiple.sh hu 1civ wc 10 ${percent} 1;
+	done
+$ for percent in 5 10 50;
+	do ./admix_4multiple.sh lm 1civ wc-wnr 10 ${percent} 1;
+	done
+$ Rscript admix_plots2.R lm 1div nc 20 4 no
 ```
 
 ### Combination plots
@@ -423,25 +468,7 @@ $ for taxa in aa1 aa2 ah1 ah2 ah3 al1 al2;
 
 ### Kinship
 
-Analyses were done using parallel processing on HPC, official results for each datasets can be found in `results/kinship/`. The [COLONY](https://www.zsl.org/about-zsl/resources/software/colony) software (v2.0.6.8) needs to be downloaded to use `./colony2s.out`.
-
-**Analysis summary:**
-
-| Taxon                                    | # individuals | # SNP loci | # Kin | Prob | *Ne* | FIS  |
-| ---------------------------------------- | ------------- | ---------- | ----- | ---- | ---- | ---- |
-| aa1-wp - *A. agarictes* 1 at West Point  | 20            | 361        | 7     | 0.2  | 99   | 0    |
-| aa1-sq - *A. agaricites* 1 at Seaquarium | 7             | 314        | 0     | 0.2  | -    | 0    |
-| aa2-wp - *A. agaricties* 2 at West Point | 144           | 938        |       |      |      |      |
-| aa2-ca - *A. agaricites* 2 at Cas Abao   | 53            | 856        |       |      |      |      |
-| aa2-sb - *A. agaricites* 2 at Snake Bay  | 71            | 977        |       |      |      |      |
-| aa2-sq - *A. agaricites* 2 at Seaquarium | 30            | 1044       |       |      |      |      |
-| ah1-wp - *A. humilis* 1 at West Point    | 29            | 644        | 0     | 0.2  | -    | 0.57 |
-| ah1-ca - *A. humilis* 1 at Cas Abao      | 23            | 581        | 2     | 0.2  | 316  | 0.58 |
-| ah2-wp - *A. humilis* 2 at West Point    | 17            | 466        |       |      |      |      |
-| ah2-sb - *A. humilis* 2 at Snake Bay     | 12            | 486        |       |      |      |      |
-| ah3-wp - *A. humilis* 3 at West Point    | 11            | 526        |       |      |      |      |
-| al1 - *A. lamarck*i 1                    | 28            | 544        |       |      |      |      |
-| al2 - *A. lamarcki* 2                    | 62            | 734        |       |      |      |      |
+Analyses were done using parallel processing on HPC, official results for each datasets can be found in `results/kinship/`. Using the [COLONY](https://www.zsl.org/about-zsl/resources/software/colony) software (v2.0.6.8).
 
 Kinship general settings file:
 

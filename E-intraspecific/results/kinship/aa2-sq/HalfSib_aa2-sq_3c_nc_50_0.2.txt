@@ -1,2 +1,0 @@
-OffspringID1,OffspringID2,Probability
-KP0153_AC_SQ12,KP0167_AC_SQ12, 1.000

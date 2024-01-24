@@ -1,0 +1,6 @@
+              Method           Parameter                 Est              CI95-L              CI95-U
+              FL_PLS          Inbreeding              0.5333              0.3367              0.7978
+              FL_PLS             Selfing              0.6957              0.5038              0.8875
+            Fis(DHW)          Inbreeding              0.5834
+            Fis(DHW)             Selfing              0.7369
+                  ID             Selfing              0.9235

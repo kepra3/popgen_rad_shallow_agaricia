@@ -1,0 +1,15 @@
+Archived Configurations with corresponding log likelihood
+Config#,1,LogLikelihood,-7.7258593383E+03
+OffspringID,FatherID,MotherID,ClusterIndex
+KP0084_AC_SB10,#1,#1,1
+KP0091_AC_SB10,#2,#2,2
+KP0130_AC_SB05,#3,#3,3
+KP0132_HU_SB05,#4,#4,4
+KP0135_HU_SB05,#5,#12,5
+KP0140_HU_SB05,#6,#6,6
+KP0142_HU_SB05,#7,#13,7
+KP0145_HU_SB05,#8,#8,8
+KP0146_HU_SB05,#9,#9,9
+KP0147_HU_SB05,#10,#14,10
+KP0148_HU_SB05,#10,#15,10
+KP0149_HU_SB05,#11,#11,11

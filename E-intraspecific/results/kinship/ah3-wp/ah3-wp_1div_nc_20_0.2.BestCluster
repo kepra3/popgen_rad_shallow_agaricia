@@ -1,0 +1,12 @@
+ClusterIndex Probability          OffspringID             FatherID             MotherID
+           1      1.0000       KP0744_HU_WP10                   #1                   #1
+           2      1.0000       KP0768_HU_WP10                   #2                   #2
+           3      1.0000       KP0826_AC_WP10                   #3                   #3
+           4      0.7744       KP0888_AC_WP10                   #4                  #12
+           4      0.7744       KP0903_HU_WP10                   #6                   #4
+           5      1.0000       KP0901_HU_WP10                   #5                   #5
+           6      1.0000       KP0954_HU_WP05                   #7                   #7
+           7      1.0000       KP0957_HU_WP05                   #8                   #8
+           8      1.0000       KP0958_HU_WP05                   #9                   #9
+           9      1.0000       KP0961_HU_WP05                  #10                  #10
+          10      1.0000       KP0964_HU_WP05                  #11                  #11

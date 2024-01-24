@@ -95,7 +95,7 @@ pca_plot_depth_facet <- function(info, eig, title, int1, int2, colours){
           axis.title.x = element_text(size = 12),
           axis.title.y = element_text(size = 12),
           axis.text.x = element_text(size = 8),
-          axis.text.y = element_text(size = 8)) + facet_wrap(~ Depth, nrow = 3, ncol = 1)
+          axis.text.y = element_text(size = 8)) + facet_wrap(~ Depth, nrow = 4, ncol = 1)
 }
 # Separate lm_pure fucntions
 pca_plot_depth_lm_pure <- function(info, eig, title, int1, int2, colours, shapes, n.loc){
@@ -119,7 +119,7 @@ pca_plot_depth_lm_pure <- function(info, eig, title, int1, int2, colours, shapes
           axis.text.x = element_text(size = 8),
           axis.text.y = element_text(size = 8))
 }
-pca_plot_depth_lm_pure_facet <- function(info, eig, title, int1, int2, colours, shapes, n.loc){
+pca_plot_depth_lm_pure_facet <- function(info, eig, title, int1, int2, colours, shapes){
   ggplot(info, aes_(x = as.name(paste0("PC", int1)), y = as.name(paste0("PC", int2)),
                     fill = info$Site, shape = info$Depth)) + 
     geom_point(size = 2, shape = 21) +
@@ -295,13 +295,12 @@ if (DATA_PARAMS[1] == "all-aga") {
   pca_info$Depth[pca_info$Individual == "KP0406_NA_NANA"] = "20"
   pca_info$Loc[pca_info$Individual == "KP0406_NA_NANA"] = "WP"
   pca_info$Site[pca_info$Individual == "KP0406_NA_NANA"] = "WP20"
-# pca_info$Depth[pca_info$Individual == "KP0673_NA_NANA"] = "20"
-# pca_info$Loc[pca_info$Individual == "KP0673_NA_NANA"] = "SB" Not assigned to AC?
-# pca_info$Site[pca_info$Individual == "KP0673_NA_NANA"] = "SB20"
+  pca_info$Depth[pca_info$Individual == "KP0673_NA_NANA"] = "20"
+  pca_info$Loc[pca_info$Individual == "KP0673_NA_NANA"] = "SB" # Not assigned to AC?
+  pca_info$Site[pca_info$Individual == "KP0673_NA_NANA"] = "SB20"
   pca_info$Depth[pca_info$Individual == "KP0844_UN_NANA"] = "10"
   pca_info$Loc[pca_info$Individual == "KP0844_UN_NANA"] = "WP"
   pca_info$Site[pca_info$Individual == "KP0844_UN_NANA"] = "WP10"
-  
   pca_info$Depth[pca_info$Depth == "12"] = "10-12"
   pca_info$Depth[pca_info$Depth == "10"] = "10-12"
   shapes = c(2, 6, 17, 4)
@@ -315,7 +314,7 @@ if (DATA_PARAMS[1] == "all-aga") {
 } else if (DATA_PARAMS[1] == "hu") {
   pca_info$Depth[pca_info$Depth == "12"] = "10-12"
   pca_info$Depth[pca_info$Depth == "10"] = "10-12"
-} else if (DATA_PARAMS[1] == "lm" & (DATA_PARAMS[2] == "1d-pure" | DATA_PARAMS[3] == "nc-wnr")) {
+} else if ((DATA_PARAMS[1] == "lm" & (DATA_PARAMS[2] == "1d-pure" | DATA_PARAMS[3] == "nc-wnr" | DATA_PARAMS[3] == "wc-wnr"))) {
   pca_info$Depth[pca_info$Individual == "KP0723_NA_NANA"] = "20"
   pca_info$Loc[pca_info$Individual == "KP0723_NA_NANA"] = "SB"
   pca_info$Site[pca_info$Individual == "KP0723_NA_NANA"] <- "SB20"
@@ -358,7 +357,7 @@ for (i in 1:(nf/2)) {
       pca_info$Site <- as.factor(pca_info$Site)
       pca.plot <- pca_plot_depth_all(pca_info, eig, title, j[i], k[i], colours, shapes, n.loc)
       ggsave(pca.plot, file = paste0(PATH,"_depth_facet_pca-x", j[i], k[i], ".pdf"), width = 8, height = 12, units = "cm", dpi = 400) # TODO: might need to alter this!!!
-    } else if (DATA_PARAMS[1] == "lm" & (DATA_PARAMS[2] == "1d-pure" | DATA_PARAMS[3] == "nc-wnr")) {
+    } else if ((DATA_PARAMS[1] == "lm" & (DATA_PARAMS[2] == "1d-pure" | DATA_PARAMS[3] == "nc-wnr" | DATA_PARAMS[3] == "wc-wnr"))) {
       colours <- c("#EC9C9D", "#AA5459",
                    "#C4AABB", "#8C6C82",
                    "#9BB7DB", "#5179A6",
@@ -375,7 +374,7 @@ for (i in 1:(nf/2)) {
       pca_info$Loc <- as.factor(pca_info$Loc)
       pca_info$Site <- as.factor(pca_info$Site)
       #pca.plot <- pca_plot_depth_lm_pure(pca_info, eig, title, j[i], k[i], colours, shapes, n.loc)
-      pca.plot <- pca_plot_depth_lm_pure_facet(pca_info, eig, title, j[i], k[i], colours)
+      pca.plot <- pca_plot_depth_lm_pure_facet(pca_info, eig, title, j[i], k[i], colours, shapes)
       ggsave(pca.plot, file = paste0(PATH,"_depth_facet_pca-x", j[i], k[i], ".pdf"), width = 8, height = 12, units = "cm", dpi = 400)
       } else {
       colours <- c("#FBD1D7", "#EC9C9D", "#AA5459",
