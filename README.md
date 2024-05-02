@@ -460,6 +460,18 @@ $ for taxa in aa1 aa2 al1 al2 ah1 ah2 ah3;
 		done
 ```
 
+#### Clone affects on IbD
+
+Four pairs of clones are of moderate distances apart in AH1 and one clone pair in AH3. 
+
+IbD analyses were conducted on different combinations of these clone pairs to test the robustness of IbD regressions.
+
+```
+$ 
+```
+
+
+
 ### F-statistics
 
 ```bash
