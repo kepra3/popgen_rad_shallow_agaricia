@@ -254,11 +254,11 @@ if (taxa == "aa1") {
   TAXA <- "AA1"
 } else if (taxa == "aa2") {
   TAXA <- "AA2"
-} else if (taxa == "ah1") {
+} else if (taxa == "ah1" | any(grepl("^ah1-c", taxa))) {
   TAXA <- "AH1"
 } else if (taxa == "ah2") {
   TAXA <- "AH2"
-} else if (taxa == "ah3") {
+} else if (taxa == "ah3" | any(grepl("^ah3-c", taxa))) {
   TAXA <- "AH3"
 } else if (taxa == "al1") {
   TAXA <- "AL1"
@@ -267,7 +267,11 @@ if (taxa == "aa1") {
 }
 
 # Change which outfile you use for the different taxa!
-outfile = paste0("../results/ibd/", TAXA, "/", taxa, ".spagedi-results", rep, ".txt")
+if (any(grepl("^ah1-c", taxa)) | any(grepl("^ah3-c", taxa))) {
+  outfile = paste0("../results/ibd/", taxa, "/", taxa, ".spagedi-results", rep, ".txt") 
+} else {
+  outfile = paste0("../results/ibd/", TAXA, "/", taxa, ".spagedi-results", rep, ".txt")
+}
 name <- str_split(str_split(outfile, "/")[[1]][length(str_split(outfile, "/")[[1]])], "\\.")[[1]][1]
 
 spagediList <- list()
@@ -309,13 +313,13 @@ if (name == "aa1") {
   } else if (dim == "1d") {
     de <- 0.008
   }
-} else if (name == "ah1") {
+} else if (name == "ah1" | any(grepl("^ah1-c", name))) {
   dc <- 0.36
   de <- 0.24
 } else if (name == "ah2") {
   dc <- 0.27
   de <- 0.37
-} else if (name == "ah3") {
+} else if (name == "ah3" | any(grepl("^ah3-c", name))) {
   dc <- 0.16
   de <- 0.40
 } else if (name == "al1") {
@@ -391,7 +395,7 @@ if (dim == "2d") {
   dat$x <- log(dat[,1])
   perm_col <- length(spagediList$perm)
   column <- 7
-  if (taxa == "ah3") {
+  if (taxa == "ah3" | any(grepl("^ah3-c", taxa))) {
     ylim <- c(-1.2, 1.2)
   } else {
     ylim <- c(-0.5, 0.5)
@@ -402,7 +406,7 @@ if (dim == "2d") {
   dat$x <- dat[,1]
   perm_col <- length(spagediList$perm) - 1
   column <- 16
-  if (taxa == "ah3") {
+  if (taxa == "ah3" | any(grepl("^ah3-c", taxa))) {
     ylim <- c(-1.3, 1.3)
   } else {
     ylim <- c(-0.5, 0.5)
@@ -419,8 +423,9 @@ if (dim == "2d") {
   
   # E.g., intercept, slope
   # intercept high and low
-  if (taxa == "ah3") {
-    # removing loci with unreasonable estimates - likely due to extreme population structure and inbreeding (this only occurs in the between location analysis)
+  if (taxa == "ah3" | any(grepl("^ah3-c", taxa))) {
+    # removing loci with unreasonable estimates - likely due to extreme population structure and inbreeding 
+    # (this only occurs in the between location analysis)
     ints <- na.omit(spagediList$kin[,(length(spagediList$kin) - (column - 1))])
     ints <- ints[ints > -2]
     ints <- ints[ints < 2]
@@ -470,6 +475,5 @@ if (dim == "2d") {
           plot.background = element_blank()) 
   p
   
-  ggsave(paste0("../results/ibd/plots/", TAXA, ".", rep, "_loisellevdist.pdf"),
+  ggsave(paste0("../results/ibd/plots/", taxa, ".", rep, "_loisellevdist.pdf"),
          height = 4, width = 4, units = "cm", dpi = 400)
-# Not sure what is happening with confidence intervals for 2D

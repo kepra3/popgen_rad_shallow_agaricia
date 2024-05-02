@@ -242,7 +242,6 @@ $ for percent in 5 10 50;
 	do ./admix_4multiple.sh lm 1civ wc-wnr 10 ${percent} 1;
 	Rscript admix_plots2.R lm 1civ wc-wnr ${percent} 4 no;
 	done
-$ 
 ```
 
 ### Combination plots
@@ -466,11 +465,68 @@ Four pairs of clones are of moderate distances apart in AH1 and one clone pair i
 
 IbD analyses were conducted on different combinations of these clone pairs to test the robustness of IbD regressions.
 
+```bash
+# edit AH1_names & edit AH3_names so have different clone combinations - captialised is for spatial names
+$ sed 's/KP0474_AC_WP20/KP0740_HU_WP10/g' AH1_names.txt > AH1_names-c3.txt #740
+$ sed 's/KP0417_HU_CA05/KP0442_HU_CA05/g' AH1_names.txt > AH1_names-c4.txt #442
+$ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names.txt > AH1_names-c5.txt #421
+$ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names.txt > AH1_names-c6.txt #425
+$ sed 's/KP0417_HU_CA05/KP0442_HU_CA05/g' AH1_names-c3.txt > AH1_names-c7.txt #740,442
+$ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names-c3.txt > AH1_names-c8.txt #740,421
+$ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names-c3.txt > AH1_names-c9.txt #740,425
+$ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names-c4.txt > AH1_names-c10.txt #442,421
+$ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names-c4.txt > AH1_names-c11.txt ##442,425
+$ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names-c8.txt > AH1_names-c1.txt #740,442,421
+$ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names-c8.txt > AH1_names-c2.txt #740,442,425
+$ sed 's/KP0954_HU_WP05/KP0770_AC_WP10/g' AH3_names.txt > AH3_names-c1.txt
+# re-filter clone vcf
+$ for clone_file in {1..11}; do vcftools --vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf --exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt --thin 400 --max-missing 0.8 --maf 0.0000001 --min-alleles 2 --max-alleles 2 --keep AH1_names-c${clone_file}.txt --recode --stdout > ah1-c${clone_file}_1div_nc_20.vcf; zo; done
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 952 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 952 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 970 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 966 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 950 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 969 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 966 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 952 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 970 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 945 out of a possible 4257 Sites
+#After filtering, kept 37 out of 142 Individuals
+#After filtering, kept 965 out of a possible 4257 Sites
+$ vcftools --vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf --exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt --thin 400 --max-missing 0.8 --maf 0.0000001 --min-alleles 2 --max-alleles 2 --keep AH3_names-c1.txt --recode --stdout > ah3-c1_1div_nc_20.vcf
+#After filtering, kept 13 out of 142 Individuals
+#After filtering, kept 767 out of a possible 4257 Sites
+# Make spagedi files
+$ for clone_files in {1..11}; do Rscript vcf2spagedi.R ah1-c${clone_files}; done
+$ Rscript vcf2spagedi.R ah3-c1
+# Copy spagedi cmds files
+$ for clone_files in {1..11}; do
+    sed "s/ah1/ah1-c${clone_files}/g" cmds/ah1.spagedi_cmds2.txt > cmds/ah1-c${clone_files}_cmds2.txt; done
+$ sed "s/ah3/ah3-c1/g" cmds/ah3.spagedi_cmds2.txt > cmds/ah3-c1_cmds2.txt
+# Run spagedi
+for clone_files in {1..11}; do
+		mkdir ../results/ibd/ah1-c${clone_files}; done
+for clone_files in {1..11}; do
+		spagedi < cmds/ah1-c${clone_files}_cmds2.txt; done
+for clone_files in {1..11}; do
+		mv ../data/ah1-c${clone_files}.spagedi-results2.txt ../results/ibd/ah1-c${clone_files}/; done
+for clone_files in {1..11}; do
+		Rscript get_spagedi_results.R ah1-c${clone_files} 2; done
+$ mkdir ../results/ibd/ah3-c1
+$ spagedi < cmds/ah3-c1_cmds2.txt
+$ mv ../data/ah3-c1.spagedi-results2.txt ../results/ibd/ah3-c1/
+$ Rscript get_spagedi_results.R ah3-c1 2
 ```
-$ 
-```
-
-
 
 ### F-statistics
 

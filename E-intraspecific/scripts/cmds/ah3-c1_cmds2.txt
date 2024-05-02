@@ -1,0 +1,17 @@
+../data/ah3-c1.spagedi.txt
+ah3-c1.spagedi-results2.txt
+
+1
+234
+3.43
+68.6
+
+199
+346
+0.40
+
+3
+
+
+
+
