@@ -590,6 +590,27 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2
 		done
 ```
 
+### Distributions
+
+#### Census density
+
+```bash
+$ Rscript census_density.R
+```
+
+#### Effective density
+
+```bash
+$ Rscript effective_density.R
+```
+
+#### Propagating error for sigma estimates
+
+```bash
+$ Rscript dispersal_modeling.R
+$ Rscript prob_quantiles_sigma.R # to fill out table 1 and supp table S12
+```
+
 ## Appendix
 
 ### Python packages
