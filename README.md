@@ -409,35 +409,18 @@ $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do Rscript quick_genepop.R $taxa all within;
 		done
 
-# Running genepop across all locations, for between 'locations', e.g., min scale 100 
-$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do Rscript quick_genepop.R $taxa all between;
-		done
-
 # create distance matrices for â and ln(geodist)
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
 		do  ./get_dist_matrix.sh ${taxa} all within 2D;
 		done
-		
-# create distance matrices for â and geodist
-$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 Al2;
-		do ./get_dist_matrix.sh $taxa all between 1D;
-		done
-# Note: may need to open with excel to fix up, TODO: edit script so all lines that start with tab or space the tab or space is removed.
 
 # Summarise results
-$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do ./get_genepop_results.sh $taxa all between 1D;
-		done
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do ./get_genepop_results.sh $taxa all within 2D;
 		done
 # Make plots
 $ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
 		do Rscript ibd_plots.R $taxa all within 2D;
-		done
-$ for taxa in AA1 AA2 AH1 AH2 AH3 AL1 AL2;
-		do Rscript ibd_plots.R $taxa all between 1D;
 		done
 ```
 
@@ -466,7 +449,7 @@ Four pairs of clones are of moderate distances apart in AH1 and one clone pair i
 IbD analyses were conducted on different combinations of these clone pairs to test the robustness of IbD regressions.
 
 ```bash
-# edit AH1_names & edit AH3_names so have different clone combinations - captialised is for spatial names
+# edited AH1_names & AH3_names so have different clone combinations
 $ sed 's/KP0474_AC_WP20/KP0740_HU_WP10/g' AH1_names.txt > AH1_names-c3.txt #740
 $ sed 's/KP0417_HU_CA05/KP0442_HU_CA05/g' AH1_names.txt > AH1_names-c4.txt #442
 $ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names.txt > AH1_names-c5.txt #421
@@ -480,7 +463,7 @@ $ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names-c8.txt > AH1_names-c1.txt #7
 $ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names-c8.txt > AH1_names-c2.txt #740,442,425
 $ sed 's/KP0954_HU_WP05/KP0770_AC_WP10/g' AH3_names.txt > AH3_names-c1.txt
 # re-filter clone vcf
-$ for clone_file in {1..11}; do vcftools --vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf --exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt --thin 400 --max-missing 0.8 --maf 0.0000001 --min-alleles 2 --max-alleles 2 --keep AH1_names-c${clone_file}.txt --recode --stdout > ah1-c${clone_file}_1div_nc_20.vcf; zo; done
+$ for clone_file in {1..11}; do vcftools --vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf --exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt --thin 400 --max-missing 0.8 --maf 0.0000001 --min-alleles 2 --max-alleles 2 --keep AH1_names-c${clone_file}.txt --recode --stdout > ah1-c${clone_file}_1div_nc_20.vcf; done
 #After filtering, kept 37 out of 142 Individuals
 #After filtering, kept 952 out of a possible 4257 Sites
 #After filtering, kept 37 out of 142 Individuals
@@ -608,7 +591,7 @@ $ Rscript effective_density.R
 
 ```bash
 $ Rscript dispersal_modeling.R
-$ Rscript prob_quantiles_sigma.R # to fill out table 1 and supp table S12
+$ Rscript prob_quantiles_sigma.R # results in table 1 and supp table S12
 ```
 
 ## Appendix
