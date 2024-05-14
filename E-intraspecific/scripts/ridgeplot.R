@@ -79,5 +79,51 @@ p + geom_point(data = quantiles, aes(x = q10, y = Taxa), color = "black") +
         strip.text = element_text(size = 10),  # Set facet labels (taxa labels) size to 10 pt
         legend.title = element_text(size = 10),  # Set legend title size to 10 pt
         )
-ggsave("../results/distributions/agaricia_ridge_colour.pdf",
+ggsave("../results/distributions/agaricia_ridge_colour_cp.pdf",
+       units = "cm", height = 10, width = 16, dpi = 400)
+
+# Re-calculate quantiles
+quantiles <- combined_data %>%
+  group_by(Taxa, Density, TDensity) %>%
+  summarize(q10 = quantile(V1, probs = 0.10),
+            q25 = quantile(V1, probs = 0.25),
+            q50 = quantile(V1, probs = 0.50),
+            q75 = quantile(V1, probs = 0.75),
+            q90 = quantile(V1, probs = 0.90))
+
+# Metre scale
+combined_data <- combined_data[combined_data$V1 < 10^2,]
+
+# Create ridge plot
+p <- ggplot(combined_data, aes(x = V1, y = Taxa, fill = TDensity)) +
+  geom_density_ridges() +
+  theme_ridges() +
+  #scale_fill_manual(values = c("census" = "black", "effective" = "lightgray")) +
+  scale_fill_manual(values = all_colours) +
+  xlab(expression(sigma ~ "(m)"))
+
+quantiles <- quantiles[quantiles$Density == "census",]
+quantiles$q90[quantiles$Taxa == "AA2"] <- NA
+
+# Add vertical lines for quantiles
+p + geom_point(data = quantiles, aes(x = q10, y = Taxa), color = "black") +
+  geom_point(data = quantiles, aes(x = q50, y = Taxa), color = "black") +
+  geom_point(data = quantiles, aes(x = q90, y = Taxa), color = "black") +
+  geom_text(data = quantiles, aes(x = q10, label = round(q10, 0),
+                                  y = Taxa), color = "black",
+            vjust = -0.8, hjust = 0.8, size = 2, fontface = "bold") +
+  geom_text(data = quantiles, aes(x = q50, label = round(q50, 0),
+                                  y = Taxa), color = "black",
+            vjust = -0.8, hjust = -0.1, size = 2, fontface = "bold") +
+  geom_text(data = quantiles, aes(x = q90, label = round(q90, 0),
+                                  y = Taxa), color = "black",
+            vjust = -0.8, hjust = -0.1, size = 2, fontface = "bold") +
+  theme(text = element_text(size = 9), # Set default text size to 8 pt
+        axis.title = element_text(size = 10),  # Set axis title size to 10 pt
+        axis.text.y = element_text(size = 10),  # Set y-axis label size to 10 pt
+        axis.text.x = element_text(size = 10),  # Set x-axis label size to 10 pt
+        strip.text = element_text(size = 10),  # Set facet labels (taxa labels) size to 10 pt
+        legend.title = element_text(size = 10),  # Set legend title size to 10 pt
+  )
+ggsave("../results/distributions/agaricia_ridge_colour_metres.pdf",
        units = "cm", height = 10, width = 16, dpi = 400)

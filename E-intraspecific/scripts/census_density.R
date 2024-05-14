@@ -59,4 +59,6 @@ for (taxa in c("AA1", "AA2", "AH1", "AH2", "AH3", "AL1", "AL2")) {
   print(mean(D))
   write.csv(D, paste0("../data/", taxa,
                       ".census.txt"), quote = FALSE, row.names = FALSE)
+  print(round(N, 1))
+  print(round(D, 2))
 }
