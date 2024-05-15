@@ -3,17 +3,19 @@ VCFtools - 0.1.16
 (C) Adam Auton and Anthony Marcketta 2009
 
 Parameters as interpreted:
-	--vcf ac_1div_nc_20.vcf
-	--keep aa2-SQ.names.txt
-	--maf 1e-09
+	--vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf
+	--exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt
+	--keep AH3_names-c1.txt
+	--maf 1e-07
 	--max-alleles 2
 	--min-alleles 2
-	--max-missing 0.2
+	--thin 400
+	--max-missing 0.8
 	--recode
 	--stdout
 
 Keeping individuals in 'keep' list
-After filtering, kept 30 out of 335 Individuals
+After filtering, kept 13 out of 142 Individuals
 Outputting VCF file...
-After filtering, kept 1052 out of a possible 1606 Sites
+After filtering, kept 767 out of a possible 4257 Sites
 Run Time = 0.00 seconds

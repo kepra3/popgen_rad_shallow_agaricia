@@ -3,7 +3,8 @@
 # Last edit: 14/12/23
 
 # Packages ####
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(vcfR) # 1.12.0
 library(adegenet) # 2.1.7
 
@@ -87,7 +88,7 @@ gen2spagedi <- function(gendata, distance_classes) {
 }
 
 # Arguments
-commandArgs(TRUE)
+args = commandArgs(TRUE)
 taxa <- args[1]
 
 # Load data
@@ -108,12 +109,12 @@ if (taxa == "aa1") {
   distances <- seq(5, 75, 5)
 } else if (taxa == "aa2") {
   distances <- seq(5, 75, 5)
-} else if (taxa == "ah1") {
+} else if (taxa == "ah1" | any(grepl("^ah1-c", taxa))) {
   distances <- seq(10, 70, 10)
   distances <- c(5, distances)
 } else if (taxa == "ah2") {
   distances <- seq(10, 60, 10)
-} else if (taxa == "ah3") {
+} else if (taxa == "ah3" | any(grepl("^ah3-c", taxa))) {
   distances <- seq(10, 50, 10)
 } else if (taxa == "al1") {
   distances <- seq(5, 75, 5)
