@@ -1,12 +1,12 @@
-# Data accessibility for Prata et al (202X)
+# Data accessibility for Prata et al (2024) 'Some reef-building corals disperse only metres per generation'
 
-This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (202X) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files will be provided. Raw sequence data will shortly become available on NCBI SRA and the University of Queensland eSpace.
+This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (2024) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided. Raw sequence data on NCBI SRA: PRJ and the University of Queensland eSpace. Initial vcf is also found the University of Queensland eSpace data repository.
 
 Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix* at bottom of README) and change to the scripts directory within the appropriate heading directory.
 
 ## raw files and de novo assembly
 
-Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and fastq files are aslo uploaded to the NCBI SRA database.
+Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and fastq files are also uploaded to the NCBI SRA database.
 
 *De novo* assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPCs provided by the University of Queensland and California Academy Sciences.
 
