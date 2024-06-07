@@ -1,12 +1,12 @@
 # Data accessibility for Prata et al (2024) 'Some reef-building corals disperse only metres per generation'
 
-This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (2024) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided. Raw sequence data on NCBI SRA: PRJ and the University of Queensland eSpace. Initial vcf is also found the University of Queensland eSpace data repository.
+This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (2024) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided. Raw sequence data on NCBI SRA database BioProject PRJNA1120949. Raw sequences and initial vcf is found on [University of Queensland eSpace data repository.](https://doi.org/10.48610/62bc9a5)
 
 Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix* at bottom of README) and change to the scripts directory within the appropriate heading directory.
 
 ## raw files and de novo assembly
 
-Raw fastq files and initial vcf output from ipyrad are stored on the University of Queensland eSpace repository and fastq files are also uploaded to the NCBI SRA database.
+Raw fastq files and initial vcf output from ipyrad are stored on[University of Queensland eSpace data repository.](https://doi.org/10.48610/62bc9a5) and fastq files are also uploaded to the NCBI SRA database BioProject PRJNA1120949.
 
 *De novo* assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPCs provided by the University of Queensland and California Academy Sciences.
 
@@ -462,7 +462,7 @@ $ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names-c4.txt > AH1_names-c11.txt #
 $ sed 's/KP0438_HU_CA05/KP0421_HU_CA05/g' AH1_names-c8.txt > AH1_names-c1.txt #740,442,421
 $ sed 's/KP0438_HU_CA05/KP0425_HU_CA05/g' AH1_names-c8.txt > AH1_names-c2.txt #740,442,425
 $ sed 's/KP0954_HU_WP05/KP0770_AC_WP10/g' AH3_names.txt > AH3_names-c1.txt
-# re-filter clone vcf
+# Re-filter each clone group vcf for AH1
 $ for clone_file in {1..11}; do vcftools --vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf --exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt --thin 400 --max-missing 0.8 --maf 0.0000001 --min-alleles 2 --max-alleles 2 --keep AH1_names-c${clone_file}.txt --recode --stdout > ah1-c${clone_file}_1div_nc_20.vcf; done
 #After filtering, kept 37 out of 142 Individuals
 #After filtering, kept 952 out of a possible 4257 Sites
@@ -486,6 +486,7 @@ $ for clone_file in {1..11}; do vcftools --vcf ../../C-population_structure/data
 #After filtering, kept 945 out of a possible 4257 Sites
 #After filtering, kept 37 out of 142 Individuals
 #After filtering, kept 965 out of a possible 4257 Sites
+# One group for AH3
 $ vcftools --vcf ../../C-population_structure/data/hu_1civ_wc_50.vcf --exclude-positions ../../A-filtered_vcf/results/pcadapt_outliers/hu_pcadapt_outliers.txt --thin 400 --max-missing 0.8 --maf 0.0000001 --min-alleles 2 --max-alleles 2 --keep AH3_names-c1.txt --recode --stdout > ah3-c1_1div_nc_20.vcf
 #After filtering, kept 13 out of 142 Individuals
 #After filtering, kept 767 out of a possible 4257 Sites
@@ -547,7 +548,6 @@ Code:
 
 ```bash
 # Prepare genotypes and loci files for COLONY input
-
 $ for dataset in aa1 ah1 ah2 ah3 al1 al2 aa2-WP aa2-CA aa2-SB aa2-SQ;
 		do Rscript colony_files.R ${dataset}_1div_nc_20;
 		done
@@ -939,6 +939,7 @@ zstd                      1.5.2                h582d3a0_0    conda-forge
 | RColorBrewer | 1.1-3   | [https://CRAN.R-project.org/package=RColorBrewer](https://cran.r-project.org/package=RColorBrewer) |
 | readxl       | 1.4.0   | [https://CRAN.R-project.org/package=readxl](https://cran.r-project.org/package=readxl) |
 | reshape2     | 1.4.4   | http://www.jstatsoft.org/v21/i12/                            |
+| rethinking   | 2.40    | https://github.com/rmcelreath/rethinking                     |
 | sjmisc       | 2.8.9   | 10.21105/joss.00754                                          |
 | spaa         | 0.2.2   | [https://CRAN.R-project.org/package=spaa](https://cran.r-project.org/package=spaa) |
 | stringr      | 1.4.0   | [https://CRAN.R-project.org/package=stringr](https://cran.r-project.org/package=stringr) |

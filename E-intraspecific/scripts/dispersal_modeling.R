@@ -1,5 +1,9 @@
-# Libaries
-library(rethinking)
+# Title: Distributions
+# Authors: Cynthia Riginos & Katharine Prata
+
+# Required packages
+# R v4.2.0
+library(rethinking) # v2.4
 
 # Functions ---------------------------------------------------------------
 
@@ -44,7 +48,7 @@ for (taxa in c("AA1", "AA2", "AH1", "AH2", "AH3")) {
   intercept_m <- ulam(
     alist( 
       DNC_log ~ dnorm(mu, error), 
-      mu<-a,
+      mu <-a,
       a ~ dnorm(1 , 1),
       error ~ dexp(1)
     ), data=freqs , chains=4 , log_lik=TRUE )

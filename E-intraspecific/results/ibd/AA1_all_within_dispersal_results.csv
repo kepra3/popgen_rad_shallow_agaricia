@@ -1,2 +1,2 @@
-taxa,min.dist,max.dist,Nb,Nb.low,Nb.high,Dc,sigma2.dc,sigma.dc,De,sigma2.de,sigma.de
-AA1,-1.39222,3.39823,33,46,25,0.24,11,3.3,0.11,24,4.9
+taxa,min.dist,max.dist,Nb,Nb.low,Nb.high
+AA1,-1.39222,3.39823,33,46,25

@@ -12,10 +12,6 @@ taxa = args[1] #"AA2"
 category = args[2] #"WP05"
 scale = args[3] # "within"
 dimension = args[4] # "2D
-#taxa = "AH1"
-#category = "all"
-#scale = "between"
-#dimension = "1D"
 
 # Import data ==================================================
 a <- read.delim(paste0("../results/ibd/", taxa, "/", taxa, "_", "a.txt"), header = FALSE, sep = "\t")
@@ -119,137 +115,16 @@ p
 ggsave(paste0("../results/ibd/plots/", taxa, "_", category, "_", scale, "_", dimension, "_genvdist.pdf"),
        height = 4, width = 4, units = "cm", dpi = 400)
 
+Neighbourhood <- 1 / b
+Neighbourhood.low <- 1 / b.low
+Neighbourhood.high <- 1 / b.high
 
-# Dispersal kernal ==================================================
-# Density estimate
-if (!is.na(pvalue)) {
-  taxa.depth.pop$Site <- as.factor(taxa.depth.pop$Site)
-  summary(taxa.depth.pop$Site)
-  total_samples = sum(summary(taxa.depth.pop$Site))
-  # genotyping rate = 2/3
-  N <- total_samples / (2/3)
-  # Annotation rate & De effective density - see density_calcs.R
-  if (taxa == "AA1") {
-    annotation_rate = 0.8571429
-    if (dimension == "1D") {
-      De <- 0.001
-    } else if (dimension == "2D") {
-      De <- 0.11
-    }
-  } else if (taxa == "AA2") {
-    annotation_rate = 0.8233333
-    if (dimension == "1D") {
-      De <- 0.008
-    } else if (dimension == "2D") {
-      De <- 0.37
-    }
-  } else if (taxa == "AH1") {
-    annotation_rate = 0.5211268
-    De <- 0.24
-  } else if (taxa == "AH2") {
-    annotation_rate = 0.7241379
-    De <- 0.37
-  } else if (taxa == "AH3") {
-    annotation_rate = 0.7647059
-    De <- 0.40
-  } else if (taxa == "AL1") {
-    annotation_rate = 0.6896552
-    if (dimension == "1D") {
-      De <- 0.036
-    } else if (dimension == "2D") {
-      De <- NA
-    }
-  } else if (taxa == "AL2") {
-    annotation_rate = 0.7580645
-    if (dimension == "1D") {
-      De <- 0.11
-    } else if (dimension == "2D") {
-      De <- NA
-    }
-  }
-  N <- N / annotation_rate
-  if (any(taxa.depth.pop$Site == "SQ20") | any(taxa.depth.pop$Site == "SQ10") | any(taxa.depth.pop$Depth == "5")) {
-    exhuastive_sample <- sum(taxa.depth.pop$Site == "SQ20", taxa.depth.pop$Site == "SQ10", taxa.depth.pop$Depth == "5")
-    N <- (N - exhuastive_sample) / 0.7 # discovery rate.. 70%
-    N <- N + exhuastive_sample
-  }
-  # per site
-  plots <- length(levels(taxa.depth.pop$Site))
-  N_plot <- N/plots
-  # D individuals within 25 x 2 = 50m2
-  D <- N_plot / 50 # individuals per m2
-
-  Neighbourhood <- 1 / b
-  Neighbourhood.low <- 1 / b.low
-  Neighbourhood.high <- 1 / b.high
-  
-  sigma2 <- (1 / (4*D*pi*b))
-  sigma <- sqrt((1 / (4*D*pi*b)))
-  sigma.low <-  sqrt((1 / (4*D*pi*b.low)))
-  sigma.high <-  sqrt((1 / (4*D*pi*b.high)))
-  
-  
-  sigma2.de <- (1 / (4*De*pi*b))
-  sigma.de <- sqrt((1 / (4*De*pi*b)))
-  sigma.low.de <-  sqrt((1 / (4*De*pi*b.low)))
-  sigma.high.de <-  sqrt((1 / (4*De*pi*b.high)))
-  
-  
-  #distance <- seq(0, 50, 5)
-  #p.d <- (1/sigma) * exp(-distance/sigma)
-  #p.d.low <- (1/sigma.low) * exp(-distance/sigma.low)
-  #p.d.high <- (1/sigma.high) * exp(-distance/sigma.high)
-  #plot(p.d ~ distance)
-  #kernel <- as.data.frame(cbind(distance,p.d,p.d.low,p.d.high))
-  
-  #Lab <- expression(P(d) == paste(frac(1, sigma),
-  #                                " ", e^{frac(-d, sigma)}))
-  
-  
-  #res <- data.frame(cond1 = "regression",
-  #                  x = distance,
-  #                  y = p.d,
-  #                  ymin = p.d.low,
-  #                  ymax = p.d.high)
-  
-  #rib <- geom_ribbon(data = res, aes(x = x, y = y, ymin = ymin, ymax = ymax,
-  #                                   fill = cond1), fill = 'darkgrey', alpha = 0.8)
-  
-  
-  #kernelplot <- ggplot(kernel, aes(distance, p.d)) + geom_line() + geom_line(aes(distance, p.d.low), linetype = "dashed", colour = "blue") + 
-  #  geom_line(aes(distance, p.d.high), linetype = "dashed", colour = "red") + 
-  #  theme_bw() +
-  #  annotate("text", x = 25, y = max(kernel$p.d.high) - 0.08,
-  #           label = Lab, parse = T, size = 2) +
-  #  annotate("text", x = 18, y = max(kernel$p.d.high) + 0.01,
-  #           label = "Upper 95% CI", colour = "red", size = 2) +
-  #  annotate("text", x = 30, y = mean(kernel$p.d.high),
-  #           label = "Lower 95% CI", colour = "blue", size = 2) +
-  #  ggtitle(paste0("Neighbourhood = ", round(Neighbourhood, 0))) +
-  #  annotate("text", x = 30, y = min(kernel$p.d) + sd(kernel$p.d*1.5),
-  #           label = expression(paste(sigma, " = ")), size = 2, parse = T) +
-  #  annotate("text", x = 36, y = min(kernel$p.d) + sd(kernel$p.d*1.5),
-  #           label = paste0(round(sigma, 1)), size = 2) +
-  #  ylab("P(d)") +
-  #  xlab("d (m)") + rib + theme(plot.title = element_text(size = 6),
-  #                              axis.title = element_text(size = 8),
-  #                              axis.text = element_text(size = 6)) 
-  #kernelplot
-  #ggsave(paste0("../results/ibd/plots/dispersal_kernel_", taxa, "_", category, "_", scale, ".pdf"), units = "cm", height = 4, width = 4, dpi = 400)
-  
-  dispersal_data <- data.frame(taxa = taxa, 
-                               min.dist = min(dat$distance[dat$distance > xlim[1]]),
-                               max.dist = max(dat$distance[dat$distance < xlim[2]]),
-                               Nb = signif(Neighbourhood, 2), 
-                               Nb.low = signif(Neighbourhood.low, 2), 
-                               Nb.high = signif(Neighbourhood.high, 2),
-                               Dc = signif(D, 2),
-                               sigma2.dc = signif(sigma2, 2), 
-                               sigma.dc = signif(sigma, 2), 
-                               De = De, 
-                               sigma2.de = signif(sigma2.de, 2), 
-                               sigma.de = signif(sigma.de, 2))
-  write.csv(dispersal_data, paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results.csv"), quote = FALSE,
-            row.names = FALSE)
-}
-
+dispersal_data <- data.frame(taxa = taxa, 
+                             min.dist = min(dat$distance[dat$distance > xlim[1]]),
+                             max.dist = max(dat$distance[dat$distance < xlim[2]]),
+                             Nb = signif(Neighbourhood, 2), 
+                             Nb.low = signif(Neighbourhood.low, 2), 
+                             Nb.high = signif(Neighbourhood.high, 2))
+write.csv(dispersal_data,
+          paste0("../results/ibd/", taxa, "_", category, "_", scale, "_dispersal_results.csv"),
+          quote = FALSE, row.names = FALSE)
