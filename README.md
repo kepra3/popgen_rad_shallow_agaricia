@@ -1,6 +1,6 @@
 # Data accessibility for Prata et al (2024) 'Some reef-building corals disperse only metres per generation'
 
-This repository contains all scripts and datafiles required to run all analyses performed within 'Prata et al (2024) Some reef-building corals disperse only metres per generation'. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided. Raw sequence data on NCBI SRA database BioProject PRJNA1120949. Raw sequences and initial vcf is found on [University of Queensland eSpace data repository.](https://doi.org/10.48610/62bc9a5)
+This repository contains all scripts and datafiles required to run all analyses performed within Prata et al (2024) Some reef-building corals disperse only metres per generation. Proceedings of the Royal Society B: Biological Sciences. Large files such as raw sequence data and intial vcf files are not present within the repository but links to the sources to access these files are provided. Raw sequence data on NCBI SRA database BioProject PRJNA1120949. Raw sequences and initial vcf is found on [University of Queensland eSpace data repository.](https://doi.org/10.48610/62bc9a5)
 
 Blocks of code are provided in README on how to perform analyses for each section. For each block of code to run activate the appropriate conda environment or software versions (see *Appendix* at bottom of README) and change to the scripts directory within the appropriate heading directory.
 
