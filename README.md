@@ -6,7 +6,7 @@ Blocks of code are provided in README on how to perform analyses for each sectio
 
 ## raw files and de novo assembly
 
-Raw fastq files and initial vcf output from ipyrad are stored on[University of Queensland eSpace data repository.](https://doi.org/10.48610/62bc9a5) and fastq files are also uploaded to the NCBI SRA database BioProject PRJNA1120949.
+Raw fastq files and initial vcf output from ipyrad are stored on [University of Queensland eSpace data repository.](https://doi.org/10.48610/62bc9a5) and fastq files are also uploaded to the NCBI SRA database BioProject PRJNA1120949.
 
 *De novo* assembly of RAD contigs was conducted using ipyrad (v.09.67) and performed on HPCs provided by the University of Queensland and California Academy Sciences.
 
